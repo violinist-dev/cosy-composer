@@ -2,10 +2,8 @@
 
 namespace eiriksm\CosyComposer;
 
-use Composer\Command\InstallCommand;
 use Composer\Command\OutdatedCommand;
 use Composer\Console\Application;
-use Composer\IO\BufferIO;
 use Github\Client;
 use Symfony\Component\Console\Input\ArrayInput;
 use Composer\Command\ShowCommand;
