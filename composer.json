@@ -1,0 +1,17 @@
+{
+    "require-dev": {
+        "phpunit/phpunit": "^5.0",
+        "satooshi/php-coveralls": "^1.0"
+    },
+    "require": {
+        "composer/composer": "^1.4",
+        "knplabs/github-api": "^2.0",
+        "php-http/guzzle6-adapter": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {"eiriksm\\CosyComposer\\": "src"}
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}
