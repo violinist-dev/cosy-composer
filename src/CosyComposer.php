@@ -62,7 +62,11 @@ class CosyComposer {
     $user_repo = $repo_parts[1];
     $tmpdir = uniqid();
     $this->tmpDir = sprintf('/tmp/%s', $tmpdir);
-    $this->execCommand('git clone --depth=1 git@github.com:' . $repo . '.git ' . $this->tmpDir);
+    $clone_result = $this->execCommand('git clone --depth=1 git@github.com:' . $repo . '.git ' . $this->tmpDir);
+    if ($clone_result) {
+      // We had a problem.
+      throw new \Exception('Problem with the execCommand git clone. Exit code was ' . $clone_result);
+    }
     chdir($this->tmpDir);
     $outdated = new OutdatedCommand();
     $show = new ShowCommand();
