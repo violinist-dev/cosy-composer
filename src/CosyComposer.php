@@ -49,6 +49,26 @@ class CosyComposer {
    */
   private $slug;
 
+  /**
+   * @var string
+   */
+  private $githubUser;
+
+  /**
+   * @var string
+   */
+  private $githubPass;
+
+  /**
+   * @var string
+   */
+  private $forkUser;
+
+  /**
+   * CosyComposer constructor.
+   * @param string $token
+   * @param string $slug
+   */
   public function __construct($token, $slug) {
     $this->token = $token;
     $this->slug = $slug;
@@ -58,6 +78,16 @@ class CosyComposer {
     $this->verbose = $verbose;
   }
 
+  public function setGithubAuth($user, $pass) {
+    $this->githubUser = $user;
+    $this->forkUser = $user;
+    $this->githubPass = $pass;
+  }
+
+  public function setForkUser($user) {
+    $this->forkUser = $user;
+  }
+
   public function run() {
     $repo = $this->slug;
     $repo_parts = explode('/', $repo);
@@ -65,7 +95,8 @@ class CosyComposer {
     $user_repo = $repo_parts[1];
     $tmpdir = uniqid();
     $this->tmpDir = sprintf('/tmp/%s', $tmpdir);
-    $clone_result = $this->execCommand('git clone --depth=1 git@github.com:' . $repo . '.git ' . $this->tmpDir);
+    $url = sprintf('https://%s:%s@github.com/%s', $this->githubUser, $this->githubPass, $repo);
+    $clone_result = $this->execCommand('git clone --depth=1 ' . $url . ' ' . $this->tmpDir);
     if ($clone_result) {
       // We had a problem.
       throw new GitCloneException('Problem with the execCommand git clone. Exit code was ' . $clone_result);
@@ -96,11 +127,18 @@ class CosyComposer {
     $outdated->setInputBound(TRUE);
     $outdated->run($i, $b);
     $data = $b->fetch();
+    if (empty($data)) {
+      $this->cleanup();
+      return;
+    }
     $client = new Client();
     $client->authenticate($this->token, NULL, Client::AUTH_URL_TOKEN);
+    $fork = $client->api('repo')->forks()->create($user_name, $user_repo, [
+      'organization' => $this->forkUser,
+    ]);
     foreach ($data as $item) {
       // @todo: Fix this properly.
-      if ($item[0] == '<warning>You are running composer with xdebug enabled. This has a major impact on runtime performance. See https://getcomposer.org/xdebug</warning>') {
+      if (strpos($item[0], '<warning>') === 0) {
         continue;
       }
       // @todo: Fix this properly.
@@ -110,14 +148,16 @@ class CosyComposer {
       // Create a new branch.
       $branch_name = $this->createBranchName($item);
       $this->execCommand('git checkout -b ' . $branch_name);
+      $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUser, $this->githubPass, $this->forkUser, $user_repo);
+      $this->execCommand('git remote add fork ' . $fork_url);
       $command = 'composer update --with-dependencies ' . $item[0];
       $this->execCommand($command);
       $this->execCommand('git commit composer.* -m "Update ' . $item[0] . '"');
-      $this->execCommand('git push origin ' . $branch_name);
+      $this->execCommand('git push fork ' . $branch_name);
       $this->execCommand('git checkout master');
       $pullRequest = $client->api('pull_request')->create($user_name, $user_repo, array(
         'base'  => 'master',
-        'head'  => $branch_name,
+        'head'  => $this->forkUser . ':' . $branch_name,
         'title' => $this->createTitle($item),
         'body'  => $this->createBody($item),
       ));
