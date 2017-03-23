@@ -4,6 +4,9 @@ namespace eiriksm\CosyComposer;
 
 use Composer\Command\OutdatedCommand;
 use Composer\Console\Application;
+use eiriksm\CosyComposer\Exceptions\ChdirException;
+use eiriksm\CosyComposer\Exceptions\ComposerInstallException;
+use eiriksm\CosyComposer\Exceptions\GitCloneException;
 use Github\Client;
 use Symfony\Component\Console\Input\ArrayInput;
 use Composer\Command\ShowCommand;
@@ -65,9 +68,11 @@ class CosyComposer {
     $clone_result = $this->execCommand('git clone --depth=1 git@github.com:' . $repo . '.git ' . $this->tmpDir);
     if ($clone_result) {
       // We had a problem.
-      throw new \Exception('Problem with the execCommand git clone. Exit code was ' . $clone_result);
+      throw new GitCloneException('Problem with the execCommand git clone. Exit code was ' . $clone_result);
     }
-    chdir($this->tmpDir);
+    if (!chdir($this->tmpDir)) {
+      throw new ChdirException('Problem with changing dir to the clone dir.');
+    }
     $outdated = new OutdatedCommand();
     $show = new ShowCommand();
     $this->app = new Application();
@@ -175,6 +180,9 @@ class CosyComposer {
   }
 
   protected function doComposerInstall() {
-    $this->execCommand('composer install');
+    if ($code = $this->execCommand('composer install')) {
+      // Other status code than 0.
+      throw new ComposerInstallException('Composer install failed with exit code ' . $code);
+    }
   }
 }
