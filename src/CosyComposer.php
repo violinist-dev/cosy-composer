@@ -8,6 +8,7 @@ use eiriksm\CosyComposer\Exceptions\ChdirException;
 use eiriksm\CosyComposer\Exceptions\ComposerInstallException;
 use eiriksm\CosyComposer\Exceptions\GitCloneException;
 use Github\Client;
+use Github\Exception\ValidationFailedException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Composer\Command\ShowCommand;
 use Symfony\Component\Console\Input\InputOption;
@@ -136,38 +137,61 @@ class CosyComposer {
     $fork = $client->api('repo')->forks()->create($user_name, $user_repo, [
       'organization' => $this->forkUser,
     ]);
+    $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUser, $this->githubPass, $this->forkUser, $user_repo);
+    $this->execCommand('git remote add fork ' . $fork_url);
+    // @todo: Check for result of this? Could fail if it was a newly created
+    // fork...
+    $this->execCommand('git push fork master');
     foreach ($data as $item) {
       // @todo: Fix this properly.
       if (strpos($item[0], '<warning>') === 0) {
         continue;
       }
-      // @todo: Fix this properly.
-      $item[2] = str_replace('<highlight>!', '', $item[2]);
-      $item[2] = str_replace('</highlight>', '', $item[2]);
-      $item[2] = trim($item[2]);
-      // Create a new branch.
-      $branch_name = $this->createBranchName($item);
-      $this->execCommand('git checkout -b ' . $branch_name);
-      $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUser, $this->githubPass, $this->forkUser, $user_repo);
-      $this->execCommand('git remote add fork ' . $fork_url);
-      $command = 'composer update --with-dependencies ' . $item[0];
-      $this->execCommand($command);
-      $this->execCommand('git commit composer.* -m "Update ' . $item[0] . '"');
-      $this->execCommand('git push fork ' . $branch_name);
+      try {
+        // @todo: Fix this properly.
+        $item[2] = str_replace('<highlight>!', '', $item[2]);
+        $item[2] = str_replace('</highlight>', '', $item[2]);
+        $item[2] = trim($item[2]);
+        // Create a new branch.
+        $branch_name = $this->createBranchName($item);
+        $this->execCommand('git checkout -b ' . $branch_name);
+        $command = 'composer update --with-dependencies ' . $item[0];
+        $this->execCommand($command);
+        $this->execCommand('git commit composer.* -m "Update ' . $item[0] . '"');
+        if (!$this->execCommand('git push fork ' . $branch_name)) {
+          throw new \Exception('Could not push to ' . $branch_name);
+        }
+
+        $this->debug('Creating pull request from ' . $branch_name);
+        $pullRequest = $client->api('pull_request')->create($user_name, $user_repo, array(
+          'base'  => 'master',
+          'head'  => $this->forkUser . ':' . $branch_name,
+          'title' => $this->createTitle($item),
+          'body'  => $this->createBody($item),
+        ));
+      }
+      catch (ValidationFailedException $e) {
+        // @todo: Do some better checking. Could be several things, this.
+        $this->debug([
+          'Had a problem with creating the pull request.',
+          $e->getMessage(),
+        ]);
+      }
+      catch (\Exception $e) {
+        // @todo: Should probably handle this in some way.
+        $this->debug('Caught an exception: ' . $e->getMessage());
+      }
       $this->execCommand('git checkout master');
-      $pullRequest = $client->api('pull_request')->create($user_name, $user_repo, array(
-        'base'  => 'master',
-        'head'  => $this->forkUser . ':' . $branch_name,
-        'title' => $this->createTitle($item),
-        'body'  => $this->createBody($item),
-      ));
     }
     // Clean up.
     $this->cleanUp();
   }
 
   public function getOutput() {
-    return $this->consoleOutput;
+    return [
+      'console' => $this->consoleOutput,
+      'debug' => $this->messages,
+    ];
   }
 
   private function cleanUp() {
