@@ -111,6 +111,10 @@ class CosyComposer {
     if (!chdir($this->tmpDir)) {
       throw new ChdirException('Problem with changing dir to the clone dir.');
     }
+    // @todo: Check for the file as well.
+    if (!$cdata = json_decode(file_get_contents($this->tmpDir . '/composer.json'))) {
+      throw new \Exception('No composer in here');
+    }
     $outdated = new OutdatedCommand();
     $show = new ShowCommand();
     $this->app = new Application();
@@ -166,9 +170,16 @@ class CosyComposer {
         $item[2] = str_replace('<highlight>!', '', $item[2]);
         $item[2] = str_replace('</highlight>', '', $item[2]);
         $item[2] = trim($item[2]);
+        // See where this package is.
+        $req_command = 'require';
+        if ($cdata->{'require-dev'}->{$item[0]}) {
+          $req_command = 'require --dev';
+        }
         // Create a new branch.
         $branch_name = $this->createBranchName($item);
         $this->execCommand('git checkout -b ' . $branch_name);
+        $command = sprintf('composer %s %s:~%s', $req_command, $item[0], $item[2]);
+        $this->execCommand($command);
         $command = 'composer update --with-dependencies ' . $item[0];
         $this->execCommand($command);
         $this->execCommand('git commit composer.* -m "Update ' . $item[0] . '"');
