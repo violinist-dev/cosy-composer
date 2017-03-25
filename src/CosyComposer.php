@@ -9,6 +9,7 @@ use eiriksm\CosyComposer\Exceptions\ComposerInstallException;
 use eiriksm\CosyComposer\Exceptions\GitCloneException;
 use Github\Client;
 use Github\Exception\ValidationFailedException;
+use Github\HttpClient\Builder;
 use Symfony\Component\Console\Input\ArrayInput;
 use Composer\Command\ShowCommand;
 use Symfony\Component\Console\Input\InputOption;
@@ -96,6 +97,11 @@ class CosyComposer {
     $user_repo = $repo_parts[1];
     $tmpdir = uniqid();
     $this->tmpDir = sprintf('/tmp/%s', $tmpdir);
+    // First set working dir to /tmp (since we might be in the directory of the
+    // last processed item, which may be deleted.
+    if (!chdir('/tmp')) {
+      throw new ChdirException('Problem with changing dir to /tmp');
+    }
     $url = sprintf('https://%s:%s@github.com/%s', $this->githubUser, $this->githubPass, $repo);
     $clone_result = $this->execCommand('git clone --depth=1 ' . $url . ' ' . $this->tmpDir);
     if ($clone_result) {
@@ -128,19 +134,27 @@ class CosyComposer {
     $outdated->setInputBound(TRUE);
     $outdated->run($i, $b);
     $data = $b->fetch();
+    foreach ($data as $delta => $item) {
+      // @todo: Fix this properly.
+      if (strpos($item[0], '<warning>') === 0) {
+        unset($data[$delta]);
+        continue;
+      }
+    }
     if (empty($data)) {
       $this->cleanup();
       return;
     }
-    $client = new Client();
+    $client = new Client(new Builder(), 'polaris-preview');
     $client->authenticate($this->token, NULL, Client::AUTH_URL_TOKEN);
     $fork = $client->api('repo')->forks()->create($user_name, $user_repo, [
       'organization' => $this->forkUser,
     ]);
     $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUser, $this->githubPass, $this->forkUser, $user_repo);
+    // Unshallow the repo, for syncing it.
+    $this->execCommand('git pull --unshallow');
     $this->execCommand('git remote add fork ' . $fork_url);
-    // @todo: Check for result of this? Could fail if it was a newly created
-    // fork...
+    // Sync the fork.
     $this->execCommand('git push fork master');
     foreach ($data as $item) {
       // @todo: Fix this properly.
@@ -158,7 +172,7 @@ class CosyComposer {
         $command = 'composer update --with-dependencies ' . $item[0];
         $this->execCommand($command);
         $this->execCommand('git commit composer.* -m "Update ' . $item[0] . '"');
-        if (!$this->execCommand('git push fork ' . $branch_name)) {
+        if ($this->execCommand('git push fork ' . $branch_name)) {
           throw new \Exception('Could not push to ' . $branch_name);
         }
 
