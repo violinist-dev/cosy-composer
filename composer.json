@@ -13,6 +13,11 @@
     "autoload": {
         "psr-4": {"eiriksm\\CosyComposer\\": "src"}
     },
+    "autoload-dev": {
+        "psr-4": {
+            "eiriksm\\CosyComposerTest\\": "test"
+        }
+    },
     "scripts": {
         "test": "phpunit"
     }
