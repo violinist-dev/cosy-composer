@@ -210,7 +210,7 @@ class CosyComposer {
       }
       catch (ValidationFailedException $e) {
         // @todo: Do some better checking. Could be several things, this.
-        $this->log('Had a problem with creating the pull request: ' . $e->getMessage())
+        $this->log('Had a problem with creating the pull request: ' . $e->getMessage());
       }
       catch (\Exception $e) {
         // @todo: Should probably handle this in some way.
