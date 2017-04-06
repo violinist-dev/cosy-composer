@@ -67,6 +67,19 @@ class CosyComposer {
   private $forkUser;
 
   /**
+   * @var mixed
+   */
+  private $chdirCommand = 'chdir';
+
+  private $proc_open = 'proc_open';
+
+  private $proc_close = 'proc_close';
+
+  private $pipes = [];
+
+  private $contentGetter = 'stream_get_contents';
+
+  /**
    * CosyComposer constructor.
    * @param string $token
    * @param string $slug
@@ -99,7 +112,7 @@ class CosyComposer {
     $this->tmpDir = sprintf('/tmp/%s', $tmpdir);
     // First set working dir to /tmp (since we might be in the directory of the
     // last processed item, which may be deleted.
-    if (!chdir('/tmp')) {
+    if (!$this->chdir('/tmp')) {
       throw new ChdirException('Problem with changing dir to /tmp');
     }
     $url = sprintf('https://%s:%s@github.com/%s', $this->githubUser, $this->githubPass, $repo);
@@ -108,7 +121,7 @@ class CosyComposer {
       // We had a problem.
       throw new GitCloneException('Problem with the execCommand git clone. Exit code was ' . $clone_result);
     }
-    if (!chdir($this->tmpDir)) {
+    if (!$this->chdir($this->tmpDir)) {
       throw new ChdirException('Problem with changing dir to the clone dir.');
     }
     // @todo: Check for the file as well.
@@ -187,7 +200,7 @@ class CosyComposer {
           throw new \Exception('Could not push to ' . $branch_name);
         }
 
-        $this->debug('Creating pull request from ' . $branch_name);
+        $this->log('Creating pull request from ' . $branch_name);
         $pullRequest = $client->api('pull_request')->create($user_name, $user_repo, array(
           'base'  => 'master',
           'head'  => $this->forkUser . ':' . $branch_name,
@@ -197,14 +210,11 @@ class CosyComposer {
       }
       catch (ValidationFailedException $e) {
         // @todo: Do some better checking. Could be several things, this.
-        $this->debug([
-          'Had a problem with creating the pull request.',
-          $e->getMessage(),
-        ]);
+        $this->log('Had a problem with creating the pull request: ' . $e->getMessage());
       }
       catch (\Exception $e) {
         // @todo: Should probably handle this in some way.
-        $this->debug('Caught an exception: ' . $e->getMessage());
+        $this->log('Caught an exception: ' . $e->getMessage());
       }
       $this->execCommand('git checkout master');
     }
@@ -233,34 +243,77 @@ class CosyComposer {
   }
 
   protected function createBranchName($item) {
-    $this->debug(['Creating branch name based on', $item]);
+    $this->log('Creating branch name based on ' . print_r($item, TRUE));
     $item_string = sprintf('%s%s%s', $item[0], $item[1], $item[2]);
     // @todo: Fix this properly.
     $result = preg_replace('/[^a-zA-Z0-9]+/', '', $item_string);
-    $this->debug('Creating branch named', $result);
+    $this->log('Creating branch named', $result);
     return $result;
   }
 
   protected function execCommand($command) {
-    $this->debug(['Creating command', $command]);
+    $this->log("Creating command $command");
     $descriptor_spec = [
       0 => ['pipe', 'r'],
       1 => ['pipe', 'w'],
       2 => ['pipe', 'w'],
     ];
-    $pipes = [];
-    $process = proc_open($command, $descriptor_spec, $pipes, getcwd(), NULL);
-    $stdout = stream_get_contents($pipes[1]);
-    $stderr = stream_get_contents($pipes[2]);
-    $this->debug([
-      'stdout' => $stdout,
-      'stderr' => $stderr,
-    ]);
-    $returnCode = proc_close($process);
+    $pipes = $this->getPipes();
+    $func = $this->proc_open;
+    $process = $func($command, $descriptor_spec, $pipes, getcwd(), NULL);
+    $stdout = $this->getContents($pipes[1]);
+    $stderr = $this->getContents($pipes[2]);
+    $this->log("stderr: $stderr");
+    $this->log("stdout: $stdout");
+    $returnCode = call_user_func_array($this->proc_close, [$process]);
     return $returnCode;
   }
 
+  public function setContentGetter($callable) {
+    $this->contentGetter = $callable;
+  }
+
+  protected function getContents($res) {
+    $func = $this->contentGetter;
+    return $func($res);
+  }
+
+  public function setPipes(array $pipes) {
+    $this->pipes = $pipes;
+  }
+
+  public function getPipes() {
+    return $this->pipes;
+  }
+
+  /**
+   * @param string $chdirCommand
+   */
+  public function setChdirCommand($chdirCommand) {
+    $this->chdirCommand = $chdirCommand;
+  }
+
+  /**
+   * @param string $proc_close
+   */
+  public function setProcClose($proc_close) {
+    $this->proc_close = $proc_close;
+  }
+
+  /**
+   * @param string $proc_open
+   */
+  public function setProcOpen($proc_open) {
+    $this->proc_open = $proc_open;
+  }
+
   protected function debug() {
+    if ($this->verbose) {
+      $this->log(func_get_args());
+    }
+  }
+
+  protected function log() {
     $message = func_get_args();
     if ($this->verbose) {
       print_r($message);
@@ -273,5 +326,13 @@ class CosyComposer {
       // Other status code than 0.
       throw new ComposerInstallException('Composer install failed with exit code ' . $code);
     }
+  }
+
+  private function chdir($dir) {
+    return call_user_func($this->chdirCommand, $dir);
+  }
+
+  public function getTmpDir() {
+    return $this->tmpDir;
   }
 }
