@@ -144,11 +144,11 @@ class CosyComposer {
     $outdated->setApplication($app);
     $show->setApplication($app);
     $def = $outdated->getDefinition();
-    $i = new ArrayInput([], $def);
-    $i->setOption('direct', TRUE);
-    $i->setOption('minor-only', TRUE);
+    $i = new ArrayInput([
+      '--direct' => TRUE,
+      '--minor-only' => TRUE,
+    ], $def);
     $b = new ArrayOutput();
-    $outdated->setInputBound(TRUE);
     $outdated->run($i, $b);
     $data = $b->fetch();
     foreach ($data as $delta => $item) {
