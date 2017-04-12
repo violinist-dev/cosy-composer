@@ -99,6 +99,7 @@ class CosyComposer {
   }
 
   public function run() {
+    $this->log(sprintf('Starting update check for %s', $this->slug));
     $repo = $this->slug;
     $repo_parts = explode('/', $repo);
     $user_name = $repo_parts[0];
@@ -312,9 +313,9 @@ class CosyComposer {
    */
   protected function log($message) {
     if ($this->verbose) {
-      print_r($message);
+      print_r("$message\n");
     }
-    $this->messages[] = $message;
+    $this->messages[] = new Message($message);
   }
 
   protected function doComposerInstall() {
