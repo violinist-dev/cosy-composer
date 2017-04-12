@@ -32,11 +32,6 @@ class CosyComposer {
   protected $tmpDir;
 
   /**
-   * @var array
-   */
-  private $consoleOutput = [];
-
-  /**
    * @var Application
    */
   private $app;
@@ -223,10 +218,7 @@ class CosyComposer {
   }
 
   public function getOutput() {
-    return [
-      'console' => $this->consoleOutput,
-      'debug' => $this->messages,
-    ];
+    return $this->messages;
   }
 
   private function cleanUp() {
@@ -313,8 +305,12 @@ class CosyComposer {
     }
   }
 
-  protected function log() {
-    $message = func_get_args();
+  /**
+   * Log a message.
+   *
+   * @param string $message
+   */
+  protected function log($message) {
     if ($this->verbose) {
       print_r($message);
     }
