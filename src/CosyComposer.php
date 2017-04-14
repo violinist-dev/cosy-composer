@@ -122,7 +122,7 @@ class CosyComposer {
       throw new ChdirException('Problem with changing dir to /tmp');
     }
     $url = sprintf('https://%s:%s@github.com/%s', $this->githubUser, $this->githubPass, $repo);
-    $clone_result = $this->execCommand('git clone --depth=1 ' . $url . ' ' . $this->tmpDir);
+    $clone_result = $this->execCommand('git clone --depth=1 ' . $url . ' ' . $this->tmpDir, FALSE);
     if ($clone_result) {
       // We had a problem.
       throw new GitCloneException('Problem with the execCommand git clone. Exit code was ' . $clone_result);
@@ -201,7 +201,14 @@ class CosyComposer {
         $this->execCommand($command);
         $command = 'composer update --with-dependencies ' . $item[0];
         $this->execCommand($command);
-        $this->execCommand('GIT_COMMITTER_NAME="' . $this->githubUserName . '" GIT_COMMITTER_EMAIL="' . $this->githubEmail . '" git commit composer.* -m "Update ' . $item[0] . '"', FALSE);
+        $command = sprintf('GIT_AUTHOR_NAME="%s" GIT_AUTHOR_EMAIL="%s" GIT_COMMITTER_NAME="%s" GIT_COMMITTER_EMAIL="%s" git commit composer.* -m "Update %s"',
+          $this->githubUserName,
+          $this->githubEmail,
+          $this->githubUserName,
+          $this->githubEmail,
+          $item[0]
+        );
+        $this->execCommand($command, FALSE);
         if ($this->execCommand('git push fork ' . $branch_name)) {
           throw new \Exception('Could not push to ' . $branch_name);
         }
@@ -250,7 +257,7 @@ class CosyComposer {
     $item_string = sprintf('%s%s%s', $item[0], $item[1], $item[2]);
     // @todo: Fix this properly.
     $result = preg_replace('/[^a-zA-Z0-9]+/', '', $item_string);
-    $this->log('Creating branch named', $result);
+    $this->log('Creating branch named ' . $result);
     return $result;
   }
 
