@@ -74,6 +74,10 @@ class CosyComposer {
 
   private $contentGetter = 'stream_get_contents';
 
+  private $githubUserName;
+  private $githubUserPass;
+  private $githubEmail;
+
   /**
    * CosyComposer constructor.
    * @param string $token
@@ -92,6 +96,12 @@ class CosyComposer {
     $this->githubUser = $user;
     $this->forkUser = $user;
     $this->githubPass = $pass;
+  }
+
+  public function setGithubForkAuth($user, $pass, $mail) {
+    $this->githubUserName = $user;
+    $this->githubUserPass = $pass;
+    $this->githubEmail = $mail;
   }
 
   public function setForkUser($user) {
@@ -163,10 +173,10 @@ class CosyComposer {
     $fork = $client->api('repo')->forks()->create($user_name, $user_repo, [
       'organization' => $this->forkUser,
     ]);
-    $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUser, $this->githubPass, $this->forkUser, $user_repo);
+    $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUserName, $this->githubUserPass, $this->forkUser, $user_repo);
     // Unshallow the repo, for syncing it.
     $this->execCommand('git pull --unshallow');
-    $this->execCommand('git remote add fork ' . $fork_url);
+    $this->execCommand('git remote add fork ' . $fork_url, FALSE);
     // Sync the fork.
     $this->execCommand('git push fork master');
     foreach ($data as $item) {
@@ -191,7 +201,7 @@ class CosyComposer {
         $this->execCommand($command);
         $command = 'composer update --with-dependencies ' . $item[0];
         $this->execCommand($command);
-        $this->execCommand('git commit composer.* -m "Update ' . $item[0] . '"');
+        $this->execCommand('GIT_COMMITTER_NAME="' . $this->githubUserName . '" GIT_COMMITTER_EMAIL="' . $this->githubEmail . '" git commit composer.* -m "Update ' . $item[0] . '"', FALSE);
         if ($this->execCommand('git push fork ' . $branch_name)) {
           throw new \Exception('Could not push to ' . $branch_name);
         }
@@ -244,8 +254,10 @@ class CosyComposer {
     return $result;
   }
 
-  protected function execCommand($command) {
-    $this->log("Creating command $command");
+  protected function execCommand($command, $log = TRUE) {
+    if ($log) {
+      $this->log("Creating command $command");
+    }
     $descriptor_spec = [
       0 => ['pipe', 'r'],
       1 => ['pipe', 'w'],
@@ -256,8 +268,12 @@ class CosyComposer {
     $process = $func($command, $descriptor_spec, $pipes, getcwd(), NULL);
     $stdout = $this->getContents($pipes[1]);
     $stderr = $this->getContents($pipes[2]);
-    $this->log("stderr: $stderr");
-    $this->log("stdout: $stdout");
+    if (!empty($stdout)) {
+      $this->log("stdout: $stdout");
+    }
+    if (!empty($stderr)) {
+      $this->log("stderr: $stderr");
+    }
     $returnCode = call_user_func_array($this->proc_close, [$process]);
     return $returnCode;
   }
