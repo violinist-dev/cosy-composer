@@ -170,6 +170,9 @@ class CosyComposer {
     }
     $client = new Client(new Builder(), 'polaris-preview');
     $client->authenticate($this->token, NULL, Client::AUTH_URL_TOKEN);
+    // Get the default branch of the repo.
+    $repo = $client->api('repo')->show($user_name, $user_repo);
+    $default_branch = $repo['default_branch'];
     $fork = $client->api('repo')->forks()->create($user_name, $user_repo, [
       'organization' => $this->forkUser,
     ]);
@@ -178,7 +181,7 @@ class CosyComposer {
     $this->execCommand('git pull --unshallow');
     $this->execCommand('git remote add fork ' . $fork_url, FALSE);
     // Sync the fork.
-    $this->execCommand('git push fork master');
+    $this->execCommand('git push fork ' . $default_branch);
     foreach ($data as $item) {
       // @todo: Fix this properly.
       if (strpos($item[0], '<warning>') === 0) {
@@ -215,7 +218,7 @@ class CosyComposer {
 
         $this->log('Creating pull request from ' . $branch_name);
         $pullRequest = $client->api('pull_request')->create($user_name, $user_repo, array(
-          'base'  => 'master',
+          'base'  => $default_branch,
           'head'  => $this->forkUser . ':' . $branch_name,
           'title' => $this->createTitle($item),
           'body'  => $this->createBody($item),
@@ -229,7 +232,7 @@ class CosyComposer {
         // @todo: Should probably handle this in some way.
         $this->log('Caught an exception: ' . $e->getMessage());
       }
-      $this->execCommand('git checkout master');
+      $this->execCommand('git checkout ' . $default_branch);
     }
     // Clean up.
     $this->cleanUp();
