@@ -171,17 +171,26 @@ class CosyComposer {
     $client = new Client(new Builder(), 'polaris-preview');
     $client->authenticate($this->token, NULL, Client::AUTH_URL_TOKEN);
     // Get the default branch of the repo.
-    $repo = $client->api('repo')->show($user_name, $user_repo);
+    $private_client = new Client();
+    $private_client->authenticate($this->githubUser, NULL, Client::AUTH_HTTP_TOKEN);
+    $repo = $private_client->api('repo')->show($user_name, $user_repo);
+    $private = FALSE;
+    if ($repo['private']) {
+      $private = TRUE;
+    }
     $default_branch = $repo['default_branch'];
-    $fork = $client->api('repo')->forks()->create($user_name, $user_repo, [
-      'organization' => $this->forkUser,
-    ]);
-    $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUserName, $this->githubUserPass, $this->forkUser, $user_repo);
+    // If the repo is private, we need to push directly to the repo.
     // Unshallow the repo, for syncing it.
     $this->execCommand('git pull --unshallow');
-    $this->execCommand('git remote add fork ' . $fork_url, FALSE);
-    // Sync the fork.
-    $this->execCommand('git push fork ' . $default_branch);
+    if (!$private) {
+      $fork = $client->api('repo')->forks()->create($user_name, $user_repo, [
+        'organization' => $this->forkUser,
+      ]);
+      $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUserName, $this->githubUserPass, $this->forkUser, $user_repo);
+      $this->execCommand('git remote add fork ' . $fork_url, FALSE);
+      // Sync the fork.
+      $this->execCommand('git push fork ' . $default_branch);
+    }
     foreach ($data as $item) {
       // @todo: Fix this properly.
       if (strpos($item[0], '<warning>') === 0) {
@@ -212,14 +221,23 @@ class CosyComposer {
           $item[0]
         );
         $this->execCommand($command, FALSE);
-        if ($this->execCommand('git push fork ' . $branch_name)) {
+        $origin = 'fork';
+        if ($private) {
+          $origin = 'origin';
+        }
+        if ($this->execCommand("git push $origin $branch_name")) {
           throw new \Exception('Could not push to ' . $branch_name);
         }
-
         $this->log('Creating pull request from ' . $branch_name);
-        $pullRequest = $client->api('pull_request')->create($user_name, $user_repo, array(
+        $head = $this->forkUser . ':' . $branch_name;
+        $pr_client = $client;
+        if ($private) {
+          $head = $branch_name;
+          $pr_client = $private_client;
+        }
+        $pullRequest = $pr_client->api('pull_request')->create($user_name, $user_repo, array(
           'base'  => $default_branch,
-          'head'  => $this->forkUser . ':' . $branch_name,
+          'head'  => $head,
           'title' => $this->createTitle($item),
           'body'  => $this->createBody($item),
         ));
@@ -251,8 +269,8 @@ class CosyComposer {
   }
 
   protected function createBody($item) {
-    // @todo: Change this to something different.
-    return $this->createTitle($item);
+    // @todo: Make configurable.
+    return sprintf("%s\n***\nThis is an automated pull request from [Violinist](https://violinist.io/): Continuously and automatically monitor and update your composer dependencies.", $this->createTitle($item));
   }
 
   protected function createBranchName($item) {
