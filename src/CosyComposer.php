@@ -122,11 +122,13 @@ class CosyComposer {
       throw new ChdirException('Problem with changing dir to /tmp');
     }
     $url = sprintf('https://%s:%s@github.com/%s', $this->githubUser, $this->githubPass, $repo);
+    $this->log('Cloning repository');
     $clone_result = $this->execCommand('git clone --depth=1 ' . $url . ' ' . $this->tmpDir, FALSE);
     if ($clone_result) {
       // We had a problem.
       throw new GitCloneException('Problem with the execCommand git clone. Exit code was ' . $clone_result);
     }
+    $this->log('Repository cloned');
     if (!$this->chdir($this->tmpDir)) {
       throw new ChdirException('Problem with changing dir to the clone dir.');
     }
@@ -179,6 +181,40 @@ class CosyComposer {
       $private = TRUE;
     }
     $default_branch = $repo['default_branch'];
+    // Try to see if we have already dealt with this (i.e already have a branch
+    // for all the updates.
+    $pr_client = $client;
+    $branch_user = $this->forkUser;
+    if ($private) {
+      $pr_client = $private_client;
+      $branch_user = $user_name;
+    }
+    $branches = $pr_client->api('repo')->branches($branch_user, $user_repo);
+    $branches_flattened = [];
+    foreach ($branches as $branch) {
+      $branches_flattened[] = $branch['name'];
+    }
+    foreach ($data as $delta => $item) {
+      // @todo: Fix this properly.
+      if (strpos($item[0], '<warning>') === 0) {
+        unset($data[$delta]);
+        continue;
+      }
+      // @todo: Fix this properly.
+      $item[2] = str_replace('<highlight>!', '', $item[2]);
+      $item[2] = str_replace('</highlight>', '', $item[2]);
+      $item[2] = trim($item[2]);
+      $branch_name = $this->createBranchName($item);
+      if (in_array($branch_name, $branches_flattened)) {
+        unset($data[$delta]);
+      }
+    }
+    if (empty($data)) {
+      $this->log('No updates that have not already been pushed.');
+      $this->cleanup();
+      return;
+    }
+
     // If the repo is private, we need to push directly to the repo.
     // Unshallow the repo, for syncing it.
     $this->execCommand('git pull --unshallow');
@@ -230,10 +266,8 @@ class CosyComposer {
         }
         $this->log('Creating pull request from ' . $branch_name);
         $head = $this->forkUser . ':' . $branch_name;
-        $pr_client = $client;
         if ($private) {
           $head = $branch_name;
-          $pr_client = $private_client;
         }
         $pullRequest = $pr_client->api('pull_request')->create($user_name, $user_repo, array(
           'base'  => $default_branch,
@@ -256,14 +290,33 @@ class CosyComposer {
     $this->cleanUp();
   }
 
+  /**
+   * Get the messages that are logged
+   *
+   * @return array
+   *   The logged messages.
+   */
   public function getOutput() {
     return $this->messages;
   }
 
+  /**
+   * Cleans up after the run.
+   */
   private function cleanUp() {
-    $this->execCommand('rm -rf ' . $this->tmpDir);
+    $this->log('Cleaning up after update check.');
+    $this->execCommand('rm -rf ' . $this->tmpDir, FALSE);
   }
 
+  /**
+   * Creates a title for a PR.
+   *
+   * @param $item
+   *   The item in question.
+   *
+   * @return string
+   *   A string ready to use.
+   */
   protected function createTitle($item) {
     return sprintf('Update %s from %s to %s', $item[0], $item[1], $item[2]);
   }
@@ -296,16 +349,22 @@ class CosyComposer {
     $process = $func($command, $descriptor_spec, $pipes, getcwd(), NULL);
     $stdout = $this->getContents($pipes[1]);
     $stderr = $this->getContents($pipes[2]);
-    if (!empty($stdout)) {
+    if (!empty($stdout) && $log) {
       $this->log("stdout: $stdout");
     }
-    if (!empty($stderr)) {
+    if (!empty($stderr) && $log) {
       $this->log("stderr: $stderr");
     }
     $returnCode = call_user_func_array($this->proc_close, [$process]);
     return $returnCode;
   }
 
+  /**
+   * Sets the function to call for getting the contents.
+   *
+   * @param $callable
+   *   A callable function.
+   */
   public function setContentGetter($callable) {
     $this->contentGetter = $callable;
   }
