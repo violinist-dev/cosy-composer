@@ -8,6 +8,7 @@ use eiriksm\CosyComposer\Exceptions\ChdirException;
 use eiriksm\CosyComposer\Exceptions\ComposerInstallException;
 use eiriksm\CosyComposer\Exceptions\GitCloneException;
 use Github\Client;
+use Github\Exception\RuntimeException;
 use Github\Exception\ValidationFailedException;
 use Github\HttpClient\Builder;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -189,10 +190,16 @@ class CosyComposer {
       $pr_client = $private_client;
       $branch_user = $user_name;
     }
-    $branches = $pr_client->api('repo')->branches($branch_user, $user_repo);
     $branches_flattened = [];
-    foreach ($branches as $branch) {
-      $branches_flattened[] = $branch['name'];
+    try {
+      $branches = $pr_client->api('repo')->branches($branch_user, $user_repo);
+
+      foreach ($branches as $branch) {
+        $branches_flattened[] = $branch['name'];
+      }
+    }
+    catch (RuntimeException $e) {
+      // Safe to ignore.
     }
     foreach ($data as $delta => $item) {
       // @todo: Fix this properly.
@@ -284,7 +291,8 @@ class CosyComposer {
         // @todo: Should probably handle this in some way.
         $this->log('Caught an exception: ' . $e->getMessage());
       }
-      $this->execCommand('git checkout ' . $default_branch);
+      $this->log('Checkout out default branch - ' . $default_branch);
+      $this->execCommand('git checkout ' . $default_branch, FALSE);
     }
     // Clean up.
     $this->cleanUp();
@@ -326,12 +334,17 @@ class CosyComposer {
     return sprintf("%s\n***\nThis is an automated pull request from [Violinist](https://violinist.io/): Continuously and automatically monitor and update your composer dependencies.", $this->createTitle($item));
   }
 
+  /**
+   * @param $item
+   *
+   * @return mixed
+   */
   protected function createBranchName($item) {
-    $this->log('Creating branch name based on ' . print_r($item, TRUE));
+    $this->debug('Creating branch name based on ' . print_r($item, TRUE));
     $item_string = sprintf('%s%s%s', $item[0], $item[1], $item[2]);
     // @todo: Fix this properly.
     $result = preg_replace('/[^a-zA-Z0-9]+/', '', $item_string);
-    $this->log('Creating branch named ' . $result);
+    $this->debug('Creating branch named ' . $result);
     return $result;
   }
 
@@ -403,9 +416,9 @@ class CosyComposer {
     $this->proc_open = $proc_open;
   }
 
-  protected function debug() {
+  protected function debug($message) {
     if ($this->verbose) {
-      $this->log(func_get_args());
+      $this->log($message);
     }
   }
 
@@ -422,7 +435,7 @@ class CosyComposer {
   }
 
   protected function doComposerInstall() {
-    if ($code = $this->execCommand('composer install')) {
+    if ($code = $this->execCommand('composer install', FALSE)) {
       // Other status code than 0.
       throw new ComposerInstallException('Composer install failed with exit code ' . $code);
     }
