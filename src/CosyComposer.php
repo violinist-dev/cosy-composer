@@ -287,7 +287,7 @@ class CosyComposer {
         if ($private) {
           $origin = 'origin';
         }
-        if ($this->execCommand("git push $origin $branch_name")) {
+        if ($this->execCommand("git push $origin $branch_name --force")) {
           throw new \Exception('Could not push to ' . $branch_name);
         }
         $this->log('Creating pull request from ' . $branch_name);
