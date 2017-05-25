@@ -87,6 +87,8 @@ class CosyComposer {
   public function __construct($token, $slug) {
     $this->token = $token;
     $this->slug = $slug;
+    $tmpdir = uniqid();
+    $this->tmpDir = sprintf('/tmp/%s', $tmpdir);
   }
 
   public function setVerbose($verbose) {
@@ -115,8 +117,6 @@ class CosyComposer {
     $repo_parts = explode('/', $repo);
     $user_name = $repo_parts[0];
     $user_repo = $repo_parts[1];
-    $tmpdir = uniqid();
-    $this->tmpDir = sprintf('/tmp/%s', $tmpdir);
     // First set working dir to /tmp (since we might be in the directory of the
     // last processed item, which may be deleted.
     if (!$this->chdir('/tmp')) {
@@ -445,7 +445,17 @@ class CosyComposer {
     return call_user_func($this->chdirCommand, $dir);
   }
 
+  /**
+   * @return string
+   */
   public function getTmpDir() {
     return $this->tmpDir;
+  }
+
+  /**
+   * @param string $tmpDir
+   */
+  public function setTmpDir(string $tmpDir) {
+    $this->tmpDir = $tmpDir;
   }
 }
