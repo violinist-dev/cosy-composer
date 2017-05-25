@@ -191,11 +191,21 @@ class CosyComposer {
       $branch_user = $user_name;
     }
     $branches_flattened = [];
+    $prs_named = [];
+    $default_base = NULL;
     try {
       $branches = $pr_client->api('repo')->branches($branch_user, $user_repo);
+      $prs = $private_client->api('pr')->all($user_name, $user_repo);
 
       foreach ($branches as $branch) {
         $branches_flattened[] = $branch['name'];
+        if ($branch['name'] == $default_branch) {
+          $default_base = $branch['commit']['sha'];
+        }
+      }
+
+      foreach ($prs as $pr) {
+        $prs_named[$pr['head']['ref']] = $pr;
       }
     }
     catch (RuntimeException $e) {
@@ -213,7 +223,16 @@ class CosyComposer {
       $item[2] = trim($item[2]);
       $branch_name = $this->createBranchName($item);
       if (in_array($branch_name, $branches_flattened)) {
-        unset($data[$delta]);
+        // Is there a PR for this?
+        if (array_key_exists($branch_name, $prs_named)) {
+          if (!$default_base) {
+            unset($data[$delta]);
+          }
+          // Is the pr up to date?
+          if ($prs_named[$branch_name]['base']['sha'] == $default_base) {
+            unset($data[$delta]);
+          }
+        }
       }
     }
     if (empty($data)) {
