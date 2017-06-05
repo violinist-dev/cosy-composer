@@ -244,9 +244,9 @@ class CosyComposer {
       return;
     }
 
-    // If the repo is private, we need to push directly to the repo.
     // Unshallow the repo, for syncing it.
     $this->execCommand('git pull --unshallow');
+    // If the repo is private, we need to push directly to the repo.
     if (!$private) {
       $fork = $client->api('repo')->forks()->create($user_name, $user_repo, [
         'organization' => $this->forkUser,
@@ -291,6 +291,7 @@ class CosyComposer {
           $origin = 'origin';
         }
         if ($this->execCommand("git push $origin $branch_name --force")) {
+          // @todo: Should be its own exception, probably?
           throw new \Exception('Could not push to ' . $branch_name);
         }
         $this->log('Creating pull request from ' . $branch_name);
