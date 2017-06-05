@@ -482,7 +482,7 @@ class CosyComposer {
   /**
    * @param string $tmpDir
    */
-  public function setTmpDir(string $tmpDir) {
+  public function setTmpDir($tmpDir) {
     $this->tmpDir = $tmpDir;
   }
 }
