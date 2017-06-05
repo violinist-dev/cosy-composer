@@ -7,6 +7,7 @@ use Composer\Console\Application;
 use eiriksm\CosyComposer\Exceptions\ChdirException;
 use eiriksm\CosyComposer\Exceptions\ComposerInstallException;
 use eiriksm\CosyComposer\Exceptions\GitCloneException;
+use eiriksm\ViolinistMessages\ViolinistMessages;
 use Github\Client;
 use Github\Exception\RuntimeException;
 use Github\Exception\ValidationFailedException;
@@ -78,6 +79,7 @@ class CosyComposer {
   private $githubUserName;
   private $githubUserPass;
   private $githubEmail;
+  private $messageFactory;
 
   /**
    * CosyComposer constructor.
@@ -89,6 +91,7 @@ class CosyComposer {
     $this->slug = $slug;
     $tmpdir = uniqid();
     $this->tmpDir = sprintf('/tmp/%s', $tmpdir);
+    $this->messageFactory = new ViolinistMessages();
   }
 
   public function setVerbose($verbose) {
@@ -345,12 +348,16 @@ class CosyComposer {
    *   A string ready to use.
    */
   protected function createTitle($item) {
-    return sprintf('Update %s from %s to %s', $item[0], $item[1], $item[2]);
+    return $this->messageFactory->getPullRequestTitleLegacy($item);
   }
 
+  /**
+   * @param $item
+   *
+   * @return string
+   */
   protected function createBody($item) {
-    // @todo: Make configurable.
-    return sprintf("%s\n***\nThis is an automated pull request from [Violinist](https://violinist.io/): Continuously and automatically monitor and update your composer dependencies.", $this->createTitle($item));
+    return $this->messageFactory->getPullRequestBodyLegacy($item);
   }
 
   /**
