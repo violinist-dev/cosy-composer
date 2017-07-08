@@ -373,7 +373,23 @@ class CosyComposer {
    */
   private function cleanUp() {
     $this->log('Cleaning up after update check.');
+    $this->log('Storing custom composer cache for later');
+    $this->execCommand(sprintf('rsync -az --exclude "composer.*" %s/* %s', $this->tmpDir, $this->createCacheDir()));
     $this->execCommand('rm -rf ' . $this->tmpDir, FALSE);
+  }
+
+  /**
+   * Returns the cache directory, and creates it if necessary.
+   *
+   * @return string
+   */
+  public function createCacheDir() {
+    $dir_name = md5($this->slug);
+    $path = '/tmp/' . $dir_name;
+    if (!file_exists($path)) {
+      mkdir($path);
+    }
+    return $path;
   }
 
   /**
@@ -498,7 +514,18 @@ class CosyComposer {
     $this->messages[] = new Message($message);
   }
 
+  /**
+   * Does a composer install.
+   *
+   * @throws \eiriksm\CosyComposer\Exceptions\ComposerInstallException
+   */
   protected function doComposerInstall() {
+    // First copy the custom cache in here.
+    if (file_exists($this->createCacheDir())) {
+      $this->log('Found custom cache using this for vendor folder.');
+      $this->execCommand(sprintf('rsync -a %s/* %s/', $this->createCacheDir(), $this->tmpDir));
+    }
+    // @todo: Should probably use composer install command programatically.
     if ($code = $this->execCommand('composer install', FALSE)) {
       // Other status code than 0.
       throw new ComposerInstallException('Composer install failed with exit code ' . $code);
