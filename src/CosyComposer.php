@@ -68,6 +68,9 @@ class CosyComposer {
    */
   private $chdirCommand = 'chdir';
 
+  /**
+   * @var mixed
+   */
   private $proc_open = 'proc_open';
 
   private $proc_close = 'proc_close';
@@ -110,6 +113,11 @@ class CosyComposer {
     $this->githubEmail = $mail;
   }
 
+  /**
+   * Set a user to fork to.
+   *
+   * @param string $user
+   */
   public function setForkUser($user) {
     $this->forkUser = $user;
   }
