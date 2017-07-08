@@ -275,13 +275,32 @@ class CosyComposer {
         $item[2] = trim($item[2]);
         // See where this package is.
         $req_command = 'require';
-        if ($cdata->{'require-dev'}->{$item[0]}) {
+        if (!empty($cdata->{'require-dev'}->{$item[0]})) {
           $req_command = 'require --dev';
+          $req_item = $cdata->{'require-dev'}->{$item[0]};
+        }
+        else {
+          $req_item = $cdata->{'require'}->{$item[0]};
         }
         // Create a new branch.
         $branch_name = $this->createBranchName($item);
         $this->execCommand('git checkout -b ' . $branch_name);
-        $command = sprintf('composer %s %s:~%s', $req_command, $item[0], $item[2]);
+        // Try to use the same version constraint.
+        $version = (string) $req_item;
+        switch ($version[0]) {
+          case '^':
+            $constraint = '^';
+            break;
+
+          case '~':
+            $constraint = '~';
+            break;
+
+          default:
+            $constraint = '';
+            break;
+        }
+        $command = sprintf('composer %s %s:%s%s', $req_command, $item[0], $constraint, $item[2]);
         $this->execCommand($command);
         $command = 'composer update --with-dependencies ' . $item[0];
         $this->execCommand($command);
