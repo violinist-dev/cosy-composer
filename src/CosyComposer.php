@@ -198,10 +198,17 @@ class CosyComposer {
     $default_base = NULL;
     try {
       $branches = $pr_client->api('repo')->branches($branch_user, $user_repo);
+      $branches_upstream = $private_client->api('repo')->branches($user_name, $user_repo);
       $prs = $private_client->api('pr')->all($user_name, $user_repo);
 
       foreach ($branches as $branch) {
         $branches_flattened[] = $branch['name'];
+        if ($branch['name'] == $default_branch) {
+          $default_base = $branch['commit']['sha'];
+        }
+      }
+
+      foreach ($branches_upstream as $branch) {
         if ($branch['name'] == $default_branch) {
           $default_base = $branch['commit']['sha'];
         }
