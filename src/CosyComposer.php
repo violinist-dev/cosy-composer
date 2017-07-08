@@ -144,9 +144,12 @@ class CosyComposer {
     if (!$this->chdir($this->tmpDir)) {
       throw new ChdirException('Problem with changing dir to the clone dir.');
     }
-    // @todo: Check for the file as well.
-    if (!$cdata = json_decode(file_get_contents($this->tmpDir . '/composer.json'))) {
-      throw new \Exception('No composer in here');
+    $composer_file = $this->tmpDir . '/composer.json';
+    if (!file_exists($composer_file)) {
+      throw new \Exception('No composer.json file found.');
+    }
+    if (!$cdata = json_decode(file_get_contents($composer_file))) {
+      throw new \Exception('Invalid composer.json file');
     }
     $outdated = new OutdatedCommand();
     $show = new ShowCommand();
