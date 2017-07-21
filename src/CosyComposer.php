@@ -7,7 +7,10 @@ use Composer\Console\Application;
 use eiriksm\CosyComposer\Exceptions\ChdirException;
 use eiriksm\CosyComposer\Exceptions\ComposerInstallException;
 use eiriksm\CosyComposer\Exceptions\GitCloneException;
+use eiriksm\CosyComposer\Exceptions\GitPushException;
+use eiriksm\GitLogFormat\ChangeLogData;
 use eiriksm\ViolinistMessages\ViolinistMessages;
+use eiriksm\ViolinistMessages\ViolinistUpdate;
 use Github\Client;
 use Github\Exception\RuntimeException;
 use Github\Exception\ValidationFailedException;
@@ -85,6 +88,44 @@ class CosyComposer {
   private $messageFactory;
 
   /**
+   * @var string
+   */
+  private $lastStdErr = '';
+
+  /**
+   * @var string
+   */
+  private $lastStdOut = '';
+
+  /**
+   * @return string
+   */
+  public function getLastStdErr() {
+    return $this->lastStdErr;
+  }
+
+  /**
+   * @param string $lastStdErr
+   */
+  public function setLastStdErr($lastStdErr) {
+    $this->lastStdErr = $lastStdErr;
+  }
+
+  /**
+   * @return string
+   */
+  public function getLastStdOut(): string {
+    return $this->lastStdOut;
+  }
+
+  /**
+   * @param string $lastStdOut
+   */
+  public function setLastStdOut(string $lastStdOut) {
+    $this->lastStdOut = $lastStdOut;
+  }
+
+  /**
    * CosyComposer constructor.
    * @param string $token
    * @param string $slug
@@ -122,6 +163,10 @@ class CosyComposer {
     $this->forkUser = $user;
   }
 
+  /**
+   * @throws \eiriksm\CosyComposer\Exceptions\ChdirException
+   * @throws \eiriksm\CosyComposer\Exceptions\GitCloneException
+   */
   public function run() {
     $this->log(sprintf('Starting update check for %s', $this->slug));
     $repo = $this->slug;
@@ -146,10 +191,10 @@ class CosyComposer {
     }
     $composer_file = $this->tmpDir . '/composer.json';
     if (!file_exists($composer_file)) {
-      throw new \Exception('No composer.json file found.');
+      throw new \InvalidArgumentException('No composer.json file found.');
     }
     if (!$cdata = json_decode(file_get_contents($composer_file))) {
-      throw new \Exception('Invalid composer.json file');
+      throw new \InvalidArgumentException('Invalid composer.json file');
     }
     $outdated = new OutdatedCommand();
     $show = new ShowCommand();
@@ -274,6 +319,8 @@ class CosyComposer {
       // Sync the fork.
       $this->execCommand('git push fork ' . $default_branch);
     }
+    // Now read the lockfile.
+    $lockdata = json_decode(file_get_contents($this->tmpDir . '/composer.lock'));
     foreach ($data as $item) {
       // @todo: Fix this properly.
       if (strpos($item[0], '<warning>') === 0) {
@@ -284,14 +331,17 @@ class CosyComposer {
         $item[2] = str_replace('<highlight>!', '', $item[2]);
         $item[2] = str_replace('</highlight>', '', $item[2]);
         $item[2] = trim($item[2]);
+        $package_name = $item[0];
+        $version_from = $item[1];
+        $version_to = $item[2];
         // See where this package is.
         $req_command = 'require';
-        if (!empty($cdata->{'require-dev'}->{$item[0]})) {
+        if (!empty($cdata->{'require-dev'}->{$package_name})) {
           $req_command = 'require --dev';
-          $req_item = $cdata->{'require-dev'}->{$item[0]};
+          $req_item = $cdata->{'require-dev'}->{$package_name};
         }
         else {
-          $req_item = $cdata->{'require'}->{$item[0]};
+          $req_item = $cdata->{'require'}->{$package_name};
         }
         // Create a new branch.
         $branch_name = $this->createBranchName($item);
@@ -311,36 +361,47 @@ class CosyComposer {
             $constraint = '';
             break;
         }
-        $command = sprintf('composer %s %s:%s%s', $req_command, $item[0], $constraint, $item[2]);
+        $command = sprintf('composer %s %s:%s%s', $req_command, $package_name, $constraint, $version_to);
         $this->execCommand($command);
-        $command = 'composer update --with-dependencies ' . $item[0];
+        $command = 'composer update --with-dependencies ' . $package_name;
         $this->execCommand($command);
         $command = sprintf('GIT_AUTHOR_NAME="%s" GIT_AUTHOR_EMAIL="%s" GIT_COMMITTER_NAME="%s" GIT_COMMITTER_EMAIL="%s" git commit composer.* -m "Update %s"',
           $this->githubUserName,
           $this->githubEmail,
           $this->githubUserName,
           $this->githubEmail,
-          $item[0]
+          $package_name
         );
-        $this->execCommand($command, FALSE);
+        if ($this->execCommand($command, FALSE)) {
+          throw new \Exception('Error commiting the composer files. They are probably not changed.');
+        }
         $origin = 'fork';
         if ($private) {
           $origin = 'origin';
         }
         if ($this->execCommand("git push $origin $branch_name --force")) {
-          // @todo: Should be its own exception, probably?
-          throw new \Exception('Could not push to ' . $branch_name);
+          throw new GitPushException('Could not push to ' . $branch_name);
+        }
+        $this->log('Trying to retrieve change log for ' . $package_name);
+        $changelog = NULL;
+        try {
+          $changelog = $this->retrieveChangeLog($package_name, $lockdata, $version_from, $version_to);
+        }
+        catch (\Exception $e) {
+          // New feature. Just log it.
+          $this->log('Exception for changelog: ' . $e->getMessage());
         }
         $this->log('Creating pull request from ' . $branch_name);
         $head = $this->forkUser . ':' . $branch_name;
         if ($private) {
           $head = $branch_name;
         }
+        $body = $this->createBody($item, $changelog);
         $pullRequest = $pr_client->api('pull_request')->create($user_name, $user_repo, array(
           'base'  => $default_branch,
           'head'  => $head,
           'title' => $this->createTitle($item),
-          'body'  => $this->createBody($item),
+          'body'  => $body,
         ));
       }
       catch (ValidationFailedException $e) {
@@ -351,7 +412,7 @@ class CosyComposer {
         // @todo: Should probably handle this in some way.
         $this->log('Caught an exception: ' . $e->getMessage());
       }
-      $this->log('Checkout out default branch - ' . $default_branch);
+      $this->log('Checking out default branch - ' . $default_branch);
       $this->execCommand('git checkout ' . $default_branch, FALSE);
     }
     // Clean up.
@@ -359,7 +420,7 @@ class CosyComposer {
   }
 
   /**
-   * Get the messages that are logged
+   * Get the messages that are logged.
    *
    * @return array
    *   The logged messages.
@@ -410,8 +471,13 @@ class CosyComposer {
    *
    * @return string
    */
-  protected function createBody($item) {
-    return $this->messageFactory->getPullRequestBodyLegacy($item);
+  public function createBody($item, $changelog = NULL) {
+    $update = ViolinistUpdate::fromLegacyFormat($item);
+    if ($changelog) {
+      /** @var \eiriksm\GitLogFormat\ChangeLogData $changelog */
+      $update->setChangelog($changelog->getAsMarkdown());
+    }
+    return $this->messageFactory->getPullRequestBody($update);
   }
 
   /**
@@ -441,7 +507,9 @@ class CosyComposer {
     $func = $this->proc_open;
     $process = $func($command, $descriptor_spec, $pipes, getcwd(), NULL);
     $stdout = $this->getContents($pipes[1]);
+    $this->setLastStdOut($stdout);
     $stderr = $this->getContents($pipes[2]);
+    $this->setLastStdErr($stderr);
     if (!empty($stdout) && $log) {
       $this->log("stdout: $stdout");
     }
@@ -532,6 +600,9 @@ class CosyComposer {
     }
   }
 
+  /**
+   * Changes to a different directory.
+   */
   private function chdir($dir) {
     return call_user_func($this->chdirCommand, $dir);
   }
@@ -548,5 +619,64 @@ class CosyComposer {
    */
   public function setTmpDir($tmpDir) {
     $this->tmpDir = $tmpDir;
+  }
+
+  /**
+   * @param $package_name
+   * @param $lockdata
+   */
+  public function retrieveChangeLog($package_name, $lockdata, $version_from, $version_to) {
+    $data = $this->getPackageData($package_name, $lockdata);
+    $clone_path = $this->retrieveDependencyRepo($data);
+    // Then try to get the changelog.
+    $command = sprintf('git -C %s log %s..%s --oneline', $clone_path, $version_from, $version_to);
+    $this->execCommand($command);
+    $changelog_string = $this->getLastStdOut();
+    if (empty($changelog_string)) {
+      throw new \Exception('The changelog string was empty');
+    }
+    // Then split it into lines that makes sense.
+    $log = ChangeLogData::createFromString($changelog_string);
+    // Then assemble the git source.
+    $git_url = preg_replace('/.git$/', '', 'https://github.com/Seldaek/monolog.git');
+    $log->setGitSource($git_url);
+    return $log;
+  }
+
+  private function retrieveDependencyRepo($data) {
+    // First find the repo source.
+    if (!isset($data->source) || $data->source->type != 'git') {
+      throw new \Exception('Unknown source or non-git source. Aborting.');
+    }
+    // We could have this cached in the md5 of the package name.
+    $clone_path = '/tmp/' . md5($data->name);
+    $repo_path = $data->source->reference;
+    if (!file_exists($clone_path)) {
+      $this->execCommand(sprintf('git clone %s %s', $repo_path, $clone_path));
+    }
+    else {
+      $this->execCommand(sprintf('git -C %s pull', $clone_path));
+    }
+    return $clone_path;
+  }
+
+  private function getPackageData($package_name, $lockdata) {
+    $lockfile_key = 'packages';
+    $key = $this->getPackagesKey($package_name, $lockfile_key, $lockdata);
+    if ($key === FALSE) {
+      // Well, could be a dev req.
+      $lockfile_key = 'packages-dev';
+      $key = $this->getPackagesKey($package_name, $lockfile_key, $lockdata);
+      // If the key still is false, then this is not looking so good.
+      if ($key === FALSE) {
+        throw new \Exception('Did not find the requested package in the lockfile. This is probably an error');
+      }
+    }
+    return $lockdata->{$lockfile_key}[$key];
+  }
+
+  private function getPackagesKey($package_name, $lockfile_key, $lockdata) {
+    $names = array_column($lockdata->{$lockfile_key}, 'name');
+    return array_search($package_name, $names);
   }
 }

@@ -9,7 +9,8 @@
         "composer/composer": "^1.4",
         "knplabs/github-api": "^2.0",
         "php-http/guzzle6-adapter": "^1.1",
-        "eiriksm/violinist-messages": "dev-master"
+        "eiriksm/violinist-messages": "dev-master",
+        "eiriksm/git-log-format": "dev-master"
     },
     "autoload": {
         "psr-4": {"eiriksm\\CosyComposer\\": "src"}
