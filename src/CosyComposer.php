@@ -114,14 +114,14 @@ class CosyComposer {
   /**
    * @return string
    */
-  public function getLastStdOut(): string {
+  public function getLastStdOut() {
     return $this->lastStdOut;
   }
 
   /**
    * @param string $lastStdOut
    */
-  public function setLastStdOut(string $lastStdOut) {
+  public function setLastStdOut($lastStdOut) {
     $this->lastStdOut = $lastStdOut;
   }
 
