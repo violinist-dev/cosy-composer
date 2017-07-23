@@ -373,7 +373,7 @@ class CosyComposer {
           $package_name
         );
         if ($this->execCommand($command, FALSE)) {
-          throw new \Exception('Error commiting the composer files. They are probably not changed.');
+          throw new \Exception('Error committing the composer files. They are probably not changed.');
         }
         $origin = 'fork';
         if ($private) {
@@ -382,7 +382,7 @@ class CosyComposer {
         if ($this->execCommand("git push $origin $branch_name --force")) {
           throw new GitPushException('Could not push to ' . $branch_name);
         }
-        $this->log('Trying to retrieve change log for ' . $package_name);
+        $this->log('Trying to retrieve changelog for ' . $package_name);
         $changelog = NULL;
         try {
           $changelog = $this->retrieveChangeLog($package_name, $lockdata, $version_from, $version_to);
