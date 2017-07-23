@@ -660,7 +660,7 @@ class CosyComposer {
     }
     // We could have this cached in the md5 of the package name.
     $clone_path = '/tmp/' . md5($data->name);
-    $repo_path = $data->source->reference;
+    $repo_path = $data->source->url;
     if (!file_exists($clone_path)) {
       $this->execCommand(sprintf('git clone %s %s', $repo_path, $clone_path));
     }
