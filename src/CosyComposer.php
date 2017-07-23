@@ -648,7 +648,7 @@ class CosyComposer {
     // Then split it into lines that makes sense.
     $log = ChangeLogData::createFromString($changelog_string);
     // Then assemble the git source.
-    $git_url = preg_replace('/.git$/', '', 'https://github.com/Seldaek/monolog.git');
+    $git_url = preg_replace('/.git$/', '', $data->source->url);
     $log->setGitSource($git_url);
     return $log;
   }
