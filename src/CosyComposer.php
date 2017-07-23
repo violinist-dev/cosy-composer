@@ -629,6 +629,16 @@ class CosyComposer {
     $data = $this->getPackageData($package_name, $lockdata);
     $clone_path = $this->retrieveDependencyRepo($data);
     // Then try to get the changelog.
+    if ($data->{'notification-url'} == 'https://packages.drupal.org/8/downloads') {
+      // Convert it, slightly.
+      $version_from = $this->convertComposerVersionToDrupalTag($version_from);
+      $version_to = $this->convertComposerVersionToDrupalTag($version_to);
+    }
+    if ($data->{'notification-url'} == 'https://packages.drupal.org/7/downloads') {
+      // Convert it, slightly.
+      $version_from = $this->convertComposerVersionToDrupalTag($version_from, 7);
+      $version_to = $this->convertComposerVersionToDrupalTag($version_to, 7);
+    }
     $command = sprintf('git -C %s log %s..%s --oneline', $clone_path, $version_from, $version_to);
     $this->execCommand($command);
     $changelog_string = $this->getLastStdOut();
