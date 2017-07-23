@@ -689,4 +689,15 @@ class CosyComposer {
     $names = array_column($lockdata->{$lockfile_key}, 'name');
     return array_search($package_name, $names);
   }
+
+  /**
+   * Converts a composer version to a drupal tag.
+   *
+   * Like for example:
+   * Composer tag 1.19.0 becomes 8.x-1.19
+   */
+  private function convertComposerVersionToDrupalTag($version, $drupal_version = 8) {
+    $parts = explode('.', $version);
+    return sprintf('%d.x-%d.%d', $drupal_version, $parts[0], $parts[1]);
+  }
 }
