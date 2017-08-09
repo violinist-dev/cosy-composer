@@ -365,6 +365,8 @@ class CosyComposer {
         $this->execCommand($command);
         $command = 'composer update --with-dependencies ' . $package_name;
         $this->execCommand($command);
+        // Clean away the lock file if we are not supposed to use it.
+        $this->execCommand('git clean -f composer.*');
         $command = sprintf('GIT_AUTHOR_NAME="%s" GIT_AUTHOR_EMAIL="%s" GIT_COMMITTER_NAME="%s" GIT_COMMITTER_EMAIL="%s" git commit composer.* -m "Update %s"',
           $this->githubUserName,
           $this->githubEmail,
