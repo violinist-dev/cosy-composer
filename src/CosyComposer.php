@@ -196,6 +196,12 @@ class CosyComposer {
     if (!$cdata = json_decode(file_get_contents($composer_file))) {
       throw new \InvalidArgumentException('Invalid composer.json file');
     }
+    $lock_file = $this->tmpDir . '/composer.lock';
+    $lock_file_contents = FALSE;
+    if (@file_exists($lock_file)) {
+      // We might want to know whats in here.
+      $lock_file_contents = json_decode(file_get_contents($lock_file));
+    }
     $outdated = new OutdatedCommand();
     $show = new ShowCommand();
     $this->app = new Application();
@@ -332,11 +338,14 @@ class CosyComposer {
         $item[2] = str_replace('</highlight>', '', $item[2]);
         $item[2] = trim($item[2]);
         $package_name = $item[0];
+        $pre_update_data = $this->getPackageData($package_name, $lockdata);
         $version_from = $item[1];
         $version_to = $item[2];
         // See where this package is.
         $req_command = 'require';
+        $lockfile_key = 'require';
         if (!empty($cdata->{'require-dev'}->{$package_name})) {
+          $lockfile_key = 'require-dev';
           $req_command = 'require --dev';
           $req_item = $cdata->{'require-dev'}->{$package_name};
         }
@@ -361,11 +370,22 @@ class CosyComposer {
             $constraint = '';
             break;
         }
-        $command = sprintf('composer %s %s:%s%s', $req_command, $package_name, $constraint, $version_to);
-        $this->execCommand($command);
-        $command = 'composer update --with-dependencies ' . $package_name;
-        $this->execCommand($command);
-        // Clean away the lock file if we are not supposed to use it.
+        if (!$lock_file_contents) {
+          $command = sprintf('composer %s %s:%s%s', $req_command, $package_name, $constraint, $version_to);
+          $this->execCommand($command);
+        }
+        else {
+          $command = 'composer update --with-dependencies ' . $package_name;
+          $this->execCommand($command);
+        }
+        // Clean away the lock file if we are not supposed to use it. But first
+        // read it for use later.
+        $new_lockdata = json_decode(file_get_contents($this->tmpDir . '/composer.lock'));
+        $post_update_data = $this->getPackageData($package_name, $new_lockdata);
+        if (isset($post_update_data->source) || $post_update_data->source->type == 'git') {
+          $version_from = $pre_update_data->source->reference;
+          $version_to = $post_update_data->source->reference;
+        }
         $this->execCommand('git clean -f composer.*');
         $command = sprintf('GIT_AUTHOR_NAME="%s" GIT_AUTHOR_EMAIL="%s" GIT_COMMITTER_NAME="%s" GIT_COMMITTER_EMAIL="%s" git commit composer.* -m "Update %s"',
           $this->githubUserName,
