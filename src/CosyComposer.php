@@ -651,16 +651,6 @@ class CosyComposer {
     $data = $this->getPackageData($package_name, $lockdata);
     $clone_path = $this->retrieveDependencyRepo($data);
     // Then try to get the changelog.
-    if ($data->{'notification-url'} == 'https://packages.drupal.org/8/downloads') {
-      // Convert it, slightly.
-      $version_from = $this->convertComposerVersionToDrupalTag($version_from);
-      $version_to = $this->convertComposerVersionToDrupalTag($version_to);
-    }
-    if ($data->{'notification-url'} == 'https://packages.drupal.org/7/downloads') {
-      // Convert it, slightly.
-      $version_from = $this->convertComposerVersionToDrupalTag($version_from, 7);
-      $version_to = $this->convertComposerVersionToDrupalTag($version_to, 7);
-    }
     $command = sprintf('git -C %s log %s..%s --oneline', $clone_path, $version_from, $version_to);
     $this->execCommand($command);
     $changelog_string = $this->getLastStdOut();
@@ -710,16 +700,5 @@ class CosyComposer {
   private function getPackagesKey($package_name, $lockfile_key, $lockdata) {
     $names = array_column($lockdata->{$lockfile_key}, 'name');
     return array_search($package_name, $names);
-  }
-
-  /**
-   * Converts a composer version to a drupal tag.
-   *
-   * Like for example:
-   * Composer tag 1.19.0 becomes 8.x-1.19
-   */
-  private function convertComposerVersionToDrupalTag($version, $drupal_version = 8) {
-    $parts = explode('.', $version);
-    return sprintf('%d.x-%d.%d', $drupal_version, $parts[0], $parts[1]);
   }
 }
