@@ -342,6 +342,9 @@ class CosyComposer {
         $pre_update_data = $this->getPackageData($package_name, $lockdata);
         $version_from = $item[1];
         $version_to = $item[2];
+        // First see if we can update this at all?
+        // @todo: Just logging this for now, but this would be nice to have.
+        $this->execCommand(sprintf('composer why-not %s:%s', $package_name, $version_to));
         // See where this package is.
         $req_command = 'require';
         $lockfile_key = 'require';
