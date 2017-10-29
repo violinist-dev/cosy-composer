@@ -358,7 +358,10 @@ class CosyComposer {
         }
         // Create a new branch.
         $branch_name = $this->createBranchName($item);
-        $this->execCommand('git checkout -b ' . $branch_name);
+        $this->log('Checking out new branch');
+        $this->execCommand('git checkout -b ' . $branch_name, FALSE);
+        // Make sure we do not have any uncommitted changes.
+        $this->execCommand('git checkout .', FALSE);
         // Try to use the same version constraint.
         $version = (string) $req_item;
         switch ($version[0]) {
