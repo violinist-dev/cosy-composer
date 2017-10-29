@@ -8,6 +8,7 @@ use eiriksm\CosyComposer\Exceptions\ChdirException;
 use eiriksm\CosyComposer\Exceptions\ComposerInstallException;
 use eiriksm\CosyComposer\Exceptions\GitCloneException;
 use eiriksm\CosyComposer\Exceptions\GitPushException;
+use eiriksm\CosyComposer\Exceptions\NotUpdatedException;
 use eiriksm\GitLogFormat\ChangeLogData;
 use eiriksm\ViolinistMessages\ViolinistMessages;
 use eiriksm\ViolinistMessages\ViolinistUpdate;
@@ -385,6 +386,13 @@ class CosyComposer {
         if (isset($post_update_data->source) || $post_update_data->source->type == 'git') {
           $version_from = $pre_update_data->source->reference;
           $version_to = $post_update_data->source->reference;
+        }
+        if ($version_to === $version_from) {
+          // Nothing has happened here. Although that can be alright (like we
+          // have updated some dependencies of this package) this is not what
+          // this service does, currently, and also the title of the PR would be
+          // wrong.
+          throw new NotUpdatedException('The version installed is still the same after trying to update.');
         }
         $this->execCommand('git clean -f composer.*');
         $command = sprintf('GIT_AUTHOR_NAME="%s" GIT_AUTHOR_EMAIL="%s" GIT_COMMITTER_NAME="%s" GIT_COMMITTER_EMAIL="%s" git commit composer.* -m "Update %s"',
