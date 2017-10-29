@@ -384,6 +384,12 @@ class CosyComposer {
         else {
           $command = 'composer update --with-dependencies ' . $package_name;
           $this->execCommand($command);
+          // If the constraint is empty, we also try to require the new version.
+          if ($constraint == '') {
+            // @todo: Duplication from like 6 lines earlier.
+            $command = sprintf('composer %s %s:%s%s', $req_command, $package_name, $constraint, $version_to);
+            $this->execCommand($command);
+          }
         }
         // Clean away the lock file if we are not supposed to use it. But first
         // read it for use later.
