@@ -477,7 +477,7 @@ class CosyComposer {
   private function cleanUp() {
     $this->log('Cleaning up after update check.');
     $this->log('Storing custom composer cache for later');
-    $this->execCommand(sprintf('rsync -az --exclude "composer.*" %s/* %s', $this->tmpDir, $this->createCacheDir()));
+    $this->execCommand(sprintf('rsync -az --exclude "composer.*" %s/* %s', $this->tmpDir, $this->createCacheDir()), FALSE);
     $this->execCommand('rm -rf ' . $this->tmpDir, FALSE);
   }
 
@@ -632,8 +632,8 @@ class CosyComposer {
   protected function doComposerInstall() {
     // First copy the custom cache in here.
     if (file_exists($this->createCacheDir())) {
-      $this->log('Found custom cache using this for vendor folder.');
-      $this->execCommand(sprintf('rsync -a %s/* %s/', $this->createCacheDir(), $this->tmpDir));
+      $this->log('Found custom cache. using this for vendor folder.');
+      $this->execCommand(sprintf('rsync -a %s/* %s/', $this->createCacheDir(), $this->tmpDir), FALSE);
     }
     // @todo: Should probably use composer install command programatically.
     if ($code = $this->execCommand('composer install', FALSE)) {
