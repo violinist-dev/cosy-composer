@@ -232,6 +232,14 @@ class CosyComposer {
         unset($data[$delta]);
         continue;
       }
+      if (count($item) == 7) {
+        // @todo: This cant be the best way.
+        $data[$delta] = array(
+          $item[4],
+          $item[5],
+          $item[6],
+        );
+      }
     }
     if (empty($data)) {
       $this->cleanup();
