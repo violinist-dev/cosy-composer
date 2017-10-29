@@ -390,10 +390,10 @@ class CosyComposer {
           $this->execCommand($command);
         }
         else {
-          $command = 'composer update --with-dependencies ' . $package_name;
+          $command = 'COMPOSER_DISCARD_CHANGES=true composer update -n --with-dependencies ' . $package_name;
           $this->execCommand($command);
           // If the constraint is empty, we also try to require the new version.
-          if ($constraint == '') {
+          if ($constraint == '' && strpos($version, 'dev') === FALSE) {
             // @todo: Duplication from like 6 lines earlier.
             $command = sprintf('composer %s %s:%s%s', $req_command, $package_name, $constraint, $version_to);
             $this->execCommand($command);
