@@ -483,6 +483,7 @@ class CosyComposer {
    * Cleans up after the run.
    */
   private function cleanUp() {
+    $this->chdir('/tmp');
     $this->log('Cleaning up after update check.');
     $this->log('Storing custom composer cache for later');
     $this->execCommand(sprintf('rsync -az --exclude "composer.*" %s/* %s', $this->tmpDir, $this->createCacheDir()), FALSE);
