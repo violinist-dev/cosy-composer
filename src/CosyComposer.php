@@ -390,7 +390,7 @@ class CosyComposer {
           $this->execCommand($command);
         }
         else {
-          $command = 'COMPOSER_DISCARD_CHANGES=true composer update -n --with-dependencies ' . $package_name;
+          $command = 'COMPOSER_DISCARD_CHANGES=true composer update -n --ignore-platform-reqs --no-scripts --with-dependencies ' . $package_name;
           $this->execCommand($command);
           // If the constraint is empty, we also try to require the new version.
           if ($constraint == '' && strpos($version, 'dev') === FALSE) {
@@ -645,7 +645,7 @@ class CosyComposer {
       $this->execCommand(sprintf('rsync -a %s/* %s/', $this->createCacheDir(), $this->tmpDir), FALSE);
     }
     // @todo: Should probably use composer install command programatically.
-    if ($code = $this->execCommand('composer install', FALSE)) {
+    if ($code = $this->execCommand('composer install --no-scripts --ignore-platform-reqs', FALSE)) {
       // Other status code than 0.
       throw new ComposerInstallException('Composer install failed with exit code ' . $code);
     }
