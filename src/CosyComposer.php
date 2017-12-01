@@ -720,7 +720,7 @@ class CosyComposer {
       $key = $this->getPackagesKey($package_name, $lockfile_key, $lockdata);
       // If the key still is false, then this is not looking so good.
       if ($key === FALSE) {
-        throw new \Exception('Did not find the requested package in the lockfile. This is probably an error');
+        throw new \Exception(sprintf('Did not find the requested package (%s) in the lockfile. This is probably an error', $package_name));
       }
     }
     return $lockdata->{$lockfile_key}[$key];
