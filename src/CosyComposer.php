@@ -491,7 +491,7 @@ class CosyComposer {
   /**
    * Get the messages that are logged.
    *
-   * @return array
+   * @return \eiriksm\CosyComposer\Message[]
    *   The logged messages.
    */
   public function getOutput() {
