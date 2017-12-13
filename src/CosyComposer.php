@@ -472,6 +472,9 @@ class CosyComposer {
           'title' => $this->createTitle($item),
           'body'  => $body,
         ));
+        if (!empty($pullRequest['html_url'])) {
+          $this->messages[] = new Message($pullRequest['html_url'], 'pr');
+        }
       }
       catch (ValidationFailedException $e) {
         // @todo: Do some better checking. Could be several things, this.
