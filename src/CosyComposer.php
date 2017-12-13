@@ -28,6 +28,25 @@ class CosyComposer {
   private $messages = [];
 
   /**
+   * @return string
+   */
+  public function getCacheDir() {
+    return $this->cacheDir;
+  }
+
+  /**
+   * @param string $cacheDir
+   */
+  public function setCacheDir($cacheDir) {
+    $this->cacheDir = $cacheDir;
+  }
+
+  /**
+   * @var string
+   */
+  private $cacheDir = '/tmp';
+
+  /**
    * @var bool
    */
   private $verbose = FALSE;
@@ -497,9 +516,9 @@ class CosyComposer {
    */
   public function createCacheDir() {
     $dir_name = md5($this->slug);
-    $path = '/tmp/' . $dir_name;
+    $path = sprintf('%s/%s', $this->cacheDir, $dir_name);
     if (!file_exists($path)) {
-      mkdir($path);
+      mkdir($path, TRUE);
     }
     return $path;
   }
