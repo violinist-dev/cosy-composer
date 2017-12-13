@@ -521,7 +521,7 @@ class CosyComposer {
     $dir_name = md5($this->slug);
     $path = sprintf('%s/%s', $this->cacheDir, $dir_name);
     if (!file_exists($path)) {
-      mkdir($path, TRUE);
+      mkdir($path, 0777, TRUE);
     }
     return $path;
   }
