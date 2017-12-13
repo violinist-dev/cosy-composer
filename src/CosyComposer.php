@@ -700,7 +700,7 @@ class CosyComposer {
     $clone_path = $this->retrieveDependencyRepo($data);
     // Then try to get the changelog.
     $command = sprintf('git -C %s log %s..%s --oneline', $clone_path, $version_from, $version_to);
-    $this->execCommand($command);
+    $this->execCommand($command, FALSE);
     $changelog_string = $this->getLastStdOut();
     if (empty($changelog_string)) {
       throw new \Exception('The changelog string was empty');
