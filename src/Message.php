@@ -15,11 +15,17 @@ class Message {
   protected $timestamp;
 
   /**
+   * @var string
+   */
+  protected $type;
+
+  /**
    * Message constructor.
    * @param $message
    */
-  public function __construct($message) {
+  public function __construct($message, $type = 'message') {
     $this->message = $message;
+    $this->type = $type;
     $this->timestamp = time();
   }
 
@@ -32,6 +38,10 @@ class Message {
 
   public function getTimestamp() {
     return $this->timestamp;
+  }
+
+  public function getType() {
+    return $this->type;
   }
 
 }
