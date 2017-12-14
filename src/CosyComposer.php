@@ -667,12 +667,14 @@ class CosyComposer {
       $this->execCommand(sprintf('rsync -a %s/* %s/', $this->createCacheDir(), $this->tmpDir), FALSE);
     }
     // @todo: Should probably use composer install command programatically.
+    $this->log('Running composer install');
     if ($code = $this->execCommand('composer install -n --no-scripts ', FALSE)) {
       // Other status code than 0.
       $this->messages[] = new Message($this->getLastStdOut(), 'stdout');
       $this->messages[] = new Message($this->getLastStdErr(), 'stderr');
       throw new ComposerInstallException('Composer install failed with exit code ' . $code);
     }
+    $this->log('composer install completed successfully');
   }
 
   /**
