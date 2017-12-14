@@ -24,6 +24,11 @@ use Symfony\Component\Process\Process;
 class CosyComposer {
 
   /**
+   * @var Process[]
+   */
+  protected $processesForCommands = [];
+
+  /**
    * @var array
    */
   private $messages = [];
@@ -58,9 +63,40 @@ class CosyComposer {
   protected $tmpDir;
 
   /**
+   * @return string
+   */
+  public function getTmpParent() {
+    return $this->tmpParent;
+  }
+
+  /**
+   * @param string $tmpParent
+   */
+  public function setTmpParent($tmpParent) {
+    $this->tmpParent = $tmpParent;
+  }
+
+  /**
+   * @var string
+   */
+  protected $tmpParent = '/tmp';
+
+  /**
    * @var Application
    */
   private $app;
+
+  /**
+   * @return string
+   */
+  public function getCwd() {
+    return $this->cwd;
+  }
+
+  /**
+   * @var string
+   */
+  protected $cwd;
 
   /**
    * @var string
@@ -86,11 +122,6 @@ class CosyComposer {
    * @var string
    */
   private $forkUser;
-
-  /**
-   * @var mixed
-   */
-  private $chdirCommand = 'chdir';
 
   /**
    * @var mixed
@@ -196,8 +227,8 @@ class CosyComposer {
     $user_repo = $repo_parts[1];
     // First set working dir to /tmp (since we might be in the directory of the
     // last processed item, which may be deleted.
-    if (!$this->chdir('/tmp')) {
-      throw new ChdirException('Problem with changing dir to /tmp');
+    if (!$this->chdir($this->getTmpParent())) {
+      throw new ChdirException('Problem with changing dir to ' . $this->getTmpParent());
     }
     $url = sprintf('https://%s:%s@github.com/%s', $this->githubUser, $this->githubPass, $repo);
     $this->log('Cloning repository');
@@ -575,7 +606,7 @@ class CosyComposer {
     if ($log) {
       $this->log("Creating command $command");
     }
-    $process = new Process($command, getcwd());
+    $process = $this->getProcess($command);
     $process->setTimeout($timeout);
     $process->run();
     $stdout = $process->getOutput();
@@ -590,6 +621,24 @@ class CosyComposer {
     }
     $returnCode = $process->getExitCode();
     return $returnCode;
+  }
+
+  protected function getProcess($command) {
+    if ($process = $this->getProcessForCommand($command)) {
+      return $process;
+    }
+    return new Process($command, $this->getCwd());
+  }
+
+  protected function getProcessForCommand($command) {
+    if (!empty($this->processesForCommands[$command])) {
+      return $this->processesForCommands[$command];
+    }
+    return FALSE;
+  }
+
+  public function setProcessForCommand($command, $process) {
+    $this->processesForCommands[$command] = $process;
   }
 
   /**
@@ -608,13 +657,6 @@ class CosyComposer {
 
   public function getPipes() {
     return $this->pipes;
-  }
-
-  /**
-   * @param string $chdirCommand
-   */
-  public function setChdirCommand($chdirCommand) {
-    $this->chdirCommand = $chdirCommand;
   }
 
   /**
@@ -675,7 +717,15 @@ class CosyComposer {
    * Changes to a different directory.
    */
   private function chdir($dir) {
-    return call_user_func($this->chdirCommand, $dir);
+    if (!file_exists($dir)) {
+      return FALSE;
+    }
+    $this->setCWD($dir);
+    return TRUE;
+  }
+
+  protected function setCWD($dir) {
+    $this->cwd = $dir;
   }
 
   /**

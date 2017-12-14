@@ -5,6 +5,8 @@ namespace eiriksm\CosyComposerTest;
 use eiriksm\CosyComposer\CosyComposer;
 use eiriksm\CosyComposer\Exceptions\ChdirException;
 use eiriksm\CosyComposer\Exceptions\GitCloneException;
+use Mockery\Mock;
+use Symfony\Component\Process\Process;
 
 class CosyComposerTest extends \PHPUnit_Framework_TestCase {
 
@@ -19,67 +21,43 @@ class CosyComposerTest extends \PHPUnit_Framework_TestCase {
 
   public function testChdirFail() {
     $c = new CosyComposer('', 'a/b');
-    $c->setChdirCommand([$this, 'noopLogger']);
+    $c->setTmpParent('/stupid/nonexistent');
     try {
       $c->run();
     }
     catch (ChdirException $e) {
-      $this->assertEquals('Problem with changing dir to /tmp', $e->getMessage());
+      $this->assertEquals('Problem with changing dir to /stupid/nonexistent', $e->getMessage());
     }
-    $this->assertEquals($this->logged_msgs[0][0], '/tmp');
   }
 
   public function testGitFail() {
     $c = new CosyComposer('token', 'a/b');
-    $c->setChdirCommand([$this, 'noopLogger']);
-    $c->setPipes([
-      1 => '',
-      2 => '',
-    ]);
-    $c->setProcClose(function() {
-      return 42;
-    });
-    $c->setProcOpen(function() {
-      $this->processCount++;
-      $this->logged_msgs[] = func_get_args();
-      return $this->processCount;
-    });
-    $c->setContentGetter(function() {
-    });
-    $this->returnCode = 1;
+    $p = \Mockery::mock(Process::class);
+    $p->shouldReceive('run');
+    $p->shouldReceive('setTimeout');
+    $p->shouldReceive('getOutput');
+    $p->shouldReceive('getErrorOutput');
+    $p->shouldReceive('getExitCode')
+      ->andReturn(42);
+    $c->setProcessForCommand(sprintf('git clone --depth=1 https://:@github.com/a/b %s', $c->getTmpDir()), $p);
     try {
       $c->run();
     }
     catch (GitCloneException $e) {
       $this->assertEquals('Problem with the execCommand git clone. Exit code was 42', $e->getMessage());
     }
-    $this->assertEquals('git clone --depth=1 https://:@github.com/a/b ' . $c->getTmpDir(), $this->logged_msgs[1][0]);
   }
 
   public function testChdirToCloneFail() {
     $c = new CosyComposer('token', 'a/b');
-    $c->setChdirCommand(function () {
-      $this->processCount++;
-      if ($this->processCount == 3) {
-        return 0;
-      }
-      return 1;
-    });
-    $c->setPipes([
-      1 => '',
-      2 => '',
-    ]);
-    $c->setProcClose(function() {
-      return 0;
-    });
-    $c->setProcOpen(function() {
-      $this->processCount++;
-      $this->logged_msgs[] = func_get_args();
-      return 0;
-    });
-    $c->setContentGetter(function() {
-    });
-    $this->returnCode = 0;
+    $p = \Mockery::mock(Process::class);
+    $p->shouldReceive('run');
+    $p->shouldReceive('setTimeout');
+    $p->shouldReceive('getOutput');
+    $p->shouldReceive('getErrorOutput');
+    $p->shouldReceive('getExitCode')
+      ->andReturn(0);
+    $c->setProcessForCommand(sprintf('git clone --depth=1 https://:@github.com/a/b %s', $c->getTmpDir()), $p);
     try {
       $c->run();
     }
