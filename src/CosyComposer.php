@@ -666,7 +666,7 @@ class CosyComposer {
     }
     // @todo: Should probably use composer install command programatically.
     $this->log('Running composer install');
-    if ($code = $this->execCommand('composer install -n --no-scripts ', FALSE)) {
+    if ($code = $this->execCommand('COMPOSER_PROCESS_TIMEOUT=3600 composer install -n --no-scripts', FALSE)) {
       // Other status code than 0.
       $this->messages[] = new Message($this->getLastStdOut(), 'stdout');
       $this->messages[] = new Message($this->getLastStdErr(), 'stderr');
