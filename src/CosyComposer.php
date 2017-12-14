@@ -602,11 +602,6 @@ class CosyComposer {
     $this->contentGetter = $callable;
   }
 
-  protected function getContents($res) {
-    $func = $this->contentGetter;
-    return $func($res);
-  }
-
   public function setPipes(array $pipes) {
     $this->pipes = $pipes;
   }
