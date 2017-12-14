@@ -669,6 +669,8 @@ class CosyComposer {
     // @todo: Should probably use composer install command programatically.
     if ($code = $this->execCommand('composer install -n --no-scripts ', FALSE)) {
       // Other status code than 0.
+      $this->messages[] = new Message($this->getLastStdOut(), 'stdout');
+      $this->messages[] = new Message($this->getLastStdErr(), 'stderr');
       throw new ComposerInstallException('Composer install failed with exit code ' . $code);
     }
   }
