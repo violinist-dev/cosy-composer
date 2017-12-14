@@ -2,7 +2,6 @@
 
 namespace eiriksm\CosyComposer;
 
-use Composer\Command\OutdatedCommand;
 use Composer\Console\Application;
 use eiriksm\CosyComposer\Exceptions\ChdirException;
 use eiriksm\CosyComposer\Exceptions\ComposerInstallException;
@@ -17,7 +16,6 @@ use Github\Exception\RuntimeException;
 use Github\Exception\ValidationFailedException;
 use Github\HttpClient\Builder;
 use Symfony\Component\Console\Input\ArrayInput;
-use Composer\Command\ShowCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
 
@@ -254,8 +252,6 @@ class CosyComposer {
       // We might want to know whats in here.
       $lock_file_contents = json_decode(file_get_contents($lock_file));
     }
-    $outdated = new OutdatedCommand();
-    $show = new ShowCommand();
     $this->app = new Application();
     $app = $this->app;
     $d = $app->getDefinition();
@@ -264,33 +260,27 @@ class CosyComposer {
     $d->setOptions($opts);
     $app->setDefinition($d);
     $app->setAutoExit(FALSE);
-    $app->add($outdated);
-    $app->add($show);
     $this->doComposerInstall();
-    $outdated->setApplication($app);
-    $show->setApplication($app);
-    $def = $outdated->getDefinition();
     $i = new ArrayInput([
+      'show',
+      '--latest' => TRUE,
+      '-d' => $this->getCwd(),
       '--direct' => TRUE,
       '--minor-only' => TRUE,
-    ], $def);
+      '--format' => 'json',
+    ]);
     $b = new ArrayOutput();
-    $outdated->run($i, $b);
-    $data = $b->fetch();
-    foreach ($data as $delta => $item) {
-      // @todo: Fix this properly.
-      if (strpos($item[0], '<warning>') === 0) {
-        unset($data[$delta]);
+    $app->run($i, $b);
+    $raw_data = $b->fetch();
+    foreach ($raw_data as $delta => $item) {
+      if (empty($item) || empty($item[0])) {
         continue;
       }
-      if (count($item) == 7) {
-        // @todo: This cant be the best way.
-        $data[$delta] = array(
-          $item[4],
-          $item[5],
-          $item[6],
-        );
+      if (!$json_update = @json_decode($item[0])) {
+        // Not interesting.
+        continue;
       }
+      $data[] = $json_update;
     }
     if (empty($data)) {
       $this->cleanup();
@@ -344,15 +334,6 @@ class CosyComposer {
       // Safe to ignore.
     }
     foreach ($data as $delta => $item) {
-      // @todo: Fix this properly.
-      if (strpos($item[0], '<warning>') === 0) {
-        unset($data[$delta]);
-        continue;
-      }
-      // @todo: Fix this properly.
-      $item[2] = str_replace('<highlight>!', '', $item[2]);
-      $item[2] = str_replace('</highlight>', '', $item[2]);
-      $item[2] = trim($item[2]);
       $branch_name = $this->createBranchName($item);
       if (in_array($branch_name, $branches_flattened)) {
         // Is there a PR for this?
@@ -388,22 +369,14 @@ class CosyComposer {
     // Now read the lockfile.
     $lockdata = json_decode(file_get_contents($this->tmpDir . '/composer.lock'));
     foreach ($data as $item) {
-      // @todo: Fix this properly.
-      if (strpos($item[0], '<warning>') === 0) {
-        continue;
-      }
       try {
-        // @todo: Fix this properly.
-        $item[2] = str_replace('<highlight>!', '', $item[2]);
-        $item[2] = str_replace('</highlight>', '', $item[2]);
-        $item[2] = trim($item[2]);
-        $package_name = $item[0];
+        $package_name = $item->installed[0]->name;
         $pre_update_data = $this->getPackageData($package_name, $lockdata);
-        $version_from = $item[1];
-        $version_to = $item[2];
+        $version_from = $item->installed[0]->version;
+        $version_to = $item->installed[0]->latest;
         // First see if we can update this at all?
         // @todo: Just logging this for now, but this would be nice to have.
-        $this->execCommand(sprintf('composer --no-ansi why-not %s:%s', $package_name, $version_to), TRUE, 300);
+        $this->execCommand(sprintf('composer --no-ansi why-not -t %s:%s', $package_name, $version_to), TRUE, 300);
         // See where this package is.
         $req_command = 'require';
         $lockfile_key = 'require';
@@ -561,14 +534,18 @@ class CosyComposer {
   /**
    * Creates a title for a PR.
    *
-   * @param $item
+   * @param object $item
    *   The item in question.
    *
    * @return string
    *   A string ready to use.
    */
   protected function createTitle($item) {
-    return $this->messageFactory->getPullRequestTitleLegacy($item);
+    $update = new ViolinistUpdate();
+    $update->setName($item->installed[0]->name);
+    $update->setCurrentVersion($item->installed[0]->version);
+    $update->setNewVersion($item->installed[0]->latest);
+    return $this->messageFactory->getPullRequestTitle($update);
   }
 
   /**
@@ -577,7 +554,10 @@ class CosyComposer {
    * @return string
    */
   public function createBody($item, $changelog = NULL) {
-    $update = ViolinistUpdate::fromLegacyFormat($item);
+    $update = new ViolinistUpdate();
+    $update->setName($item->installed[0]->name);
+    $update->setCurrentVersion($item->installed[0]->version);
+    $update->setNewVersion($item->installed[0]->latest);
     if ($changelog) {
       /** @var \eiriksm\GitLogFormat\ChangeLogData $changelog */
       $update->setChangelog($changelog->getAsMarkdown());
@@ -592,7 +572,7 @@ class CosyComposer {
    */
   protected function createBranchName($item) {
     $this->debug('Creating branch name based on ' . print_r($item, TRUE));
-    $item_string = sprintf('%s%s%s', $item[0], $item[1], $item[2]);
+    $item_string = sprintf('%s%s%s', $item->installed[0]->name, $item->installed[0]->version, $item->installed[0]->latest);
     // @todo: Fix this properly.
     $result = preg_replace('/[^a-zA-Z0-9]+/', '', $item_string);
     $this->debug('Creating branch named ' . $result);
