@@ -19,6 +19,7 @@ use Github\HttpClient\Builder;
 use Symfony\Component\Console\Input\ArrayInput;
 use Composer\Command\ShowCommand;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Process\Process;
 
 class CosyComposer {
 
@@ -567,21 +568,18 @@ class CosyComposer {
     return $result;
   }
 
+  /**
+   * Executes a command.
+   */
   protected function execCommand($command, $log = TRUE) {
     if ($log) {
       $this->log("Creating command $command");
     }
-    $descriptor_spec = [
-      0 => ['pipe', 'r'],
-      1 => ['pipe', 'w'],
-      2 => ['pipe', 'w'],
-    ];
-    $pipes = $this->getPipes();
-    $func = $this->proc_open;
-    $process = $func($command, $descriptor_spec, $pipes, getcwd(), NULL);
-    $stdout = $this->getContents($pipes[1]);
+    $process = new Process($command, getcwd());
+    $process->run();
+    $stdout = $process->getOutput();
     $this->setLastStdOut($stdout);
-    $stderr = $this->getContents($pipes[2]);
+    $stderr = $process->getErrorOutput();
     $this->setLastStdErr($stderr);
     if (!empty($stdout) && $log) {
       $this->log("stdout: $stdout");
@@ -589,7 +587,7 @@ class CosyComposer {
     if (!empty($stderr) && $log) {
       $this->log("stderr: $stderr");
     }
-    $returnCode = call_user_func_array($this->proc_close, [$process]);
+    $returnCode = $process->getExitCode();
     return $returnCode;
   }
 
