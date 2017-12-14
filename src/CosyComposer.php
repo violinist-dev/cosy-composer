@@ -201,7 +201,7 @@ class CosyComposer {
     }
     $url = sprintf('https://%s:%s@github.com/%s', $this->githubUser, $this->githubPass, $repo);
     $this->log('Cloning repository');
-    $clone_result = $this->execCommand('git clone --depth=1 ' . $url . ' ' . $this->tmpDir, FALSE);
+    $clone_result = $this->execCommand('git clone --depth=1 ' . $url . ' ' . $this->tmpDir, FALSE, 120);
     if ($clone_result) {
       // We had a problem.
       throw new GitCloneException('Problem with the execCommand git clone. Exit code was ' . $clone_result);
@@ -343,7 +343,7 @@ class CosyComposer {
     }
 
     // Unshallow the repo, for syncing it.
-    $this->execCommand('git pull --unshallow');
+    $this->execCommand('git pull --unshallow', FALSE, 300);
     // If the repo is private, we need to push directly to the repo.
     if (!$private) {
       $fork = $client->api('repo')->forks()->create($user_name, $user_repo, [
@@ -372,7 +372,7 @@ class CosyComposer {
         $version_to = $item[2];
         // First see if we can update this at all?
         // @todo: Just logging this for now, but this would be nice to have.
-        $this->execCommand(sprintf('composer why-not %s:%s', $package_name, $version_to));
+        $this->execCommand(sprintf('composer --no-ansi why-not %s:%s', $package_name, $version_to), TRUE, 300);
         // See where this package is.
         $req_command = 'require';
         $lockfile_key = 'require';
@@ -406,16 +406,16 @@ class CosyComposer {
             break;
         }
         if (!$lock_file_contents) {
-          $command = sprintf('composer %s %s:%s%s', $req_command, $package_name, $constraint, $version_to);
-          $this->execCommand($command);
+          $command = sprintf('composer --no-ansi %s %s:%s%s', $req_command, $package_name, $constraint, $version_to);
+          $this->execCommand($command, FALSE, 600);
         }
         else {
-          $command = 'COMPOSER_DISCARD_CHANGES=true composer update -n --no-scripts --with-dependencies ' . $package_name;
-          $this->execCommand($command);
+          $command = 'COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts --with-dependencies ' . $package_name;
+          $this->execCommand($command, FALSE, 600);
           // If the constraint is empty, we also try to require the new version.
           if ($constraint == '' && strpos($version, 'dev') === FALSE) {
             // @todo: Duplication from like 6 lines earlier.
-            $command = sprintf('composer %s %s:%s%s', $req_command, $package_name, $constraint, $version_to);
+            $command = sprintf('composer --no-ansi %s %s:%s%s', $req_command, $package_name, $constraint, $version_to);
             $this->execCommand($command);
           }
         }
@@ -509,8 +509,8 @@ class CosyComposer {
     $this->chdir('/tmp');
     $this->log('Cleaning up after update check.');
     $this->log('Storing custom composer cache for later');
-    $this->execCommand(sprintf('rsync -az --exclude "composer.*" %s/* %s', $this->tmpDir, $this->createCacheDir()), FALSE);
-    $this->execCommand('rm -rf ' . $this->tmpDir, FALSE);
+    $this->execCommand(sprintf('rsync -az --exclude "composer.*" %s/* %s', $this->tmpDir, $this->createCacheDir()), FALSE, 300);
+    $this->execCommand('rm -rf ' . $this->tmpDir, FALSE, 300);
   }
 
   /**
@@ -571,11 +571,12 @@ class CosyComposer {
   /**
    * Executes a command.
    */
-  protected function execCommand($command, $log = TRUE) {
+  protected function execCommand($command, $log = TRUE, $timeout = 120) {
     if ($log) {
       $this->log("Creating command $command");
     }
     $process = new Process($command, getcwd());
+    $process->setTimeout($timeout);
     $process->run();
     $stdout = $process->getOutput();
     $this->setLastStdOut($stdout);
@@ -662,11 +663,11 @@ class CosyComposer {
     // First copy the custom cache in here.
     if (file_exists($this->createCacheDir())) {
       $this->log('Found custom cache. using this for vendor folder.');
-      $this->execCommand(sprintf('rsync -a %s/* %s/', $this->createCacheDir(), $this->tmpDir), FALSE);
+      $this->execCommand(sprintf('rsync -a %s/* %s/', $this->createCacheDir(), $this->tmpDir), FALSE, 300);
     }
     // @todo: Should probably use composer install command programatically.
     $this->log('Running composer install');
-    if ($code = $this->execCommand('COMPOSER_PROCESS_TIMEOUT=3600 composer install -n --no-scripts', FALSE)) {
+    if ($code = $this->execCommand('composer install --no-ansi -n --no-scripts', FALSE, 1200)) {
       // Other status code than 0.
       $this->messages[] = new Message($this->getLastStdOut(), 'stdout');
       $this->messages[] = new Message($this->getLastStdErr(), 'stderr');
@@ -727,10 +728,10 @@ class CosyComposer {
     $clone_path = '/tmp/' . md5($data->name);
     $repo_path = $data->source->url;
     if (!file_exists($clone_path)) {
-      $this->execCommand(sprintf('git clone %s %s', $repo_path, $clone_path));
+      $this->execCommand(sprintf('git clone %s %s', $repo_path, $clone_path), FALSE, 300);
     }
     else {
-      $this->execCommand(sprintf('git -C %s pull', $clone_path));
+      $this->execCommand(sprintf('git -C %s pull', $clone_path), FALSE, 300);
     }
     return $clone_path;
   }
