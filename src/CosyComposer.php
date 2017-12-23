@@ -279,7 +279,7 @@ class CosyComposer {
         // Not interesting.
         continue;
       }
-      if (empty($json_update->installed)) {
+      if (!isset($json_update->installed)) {
         throw new \Exception('JSON output from composer was not looking as expected after checking updates');
         continue;
       }
