@@ -423,7 +423,7 @@ class CosyComposer {
           if ($constraint == '' && strpos($version, 'dev') === FALSE) {
             // @todo: Duplication from like 6 lines earlier.
             $command = sprintf('composer --no-ansi %s %s:%s%s --update-with-dependencies', $req_command, $package_name, $constraint, $version_to);
-            $this->execCommand($command);
+            $this->execCommand($command, FALSE, 600);
           }
         }
         // Clean away the lock file if we are not supposed to use it. But first
