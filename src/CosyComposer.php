@@ -418,7 +418,9 @@ class CosyComposer {
         }
         else {
           $command = 'COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts --with-dependencies ' . $package_name;
+          $this->log('Running composer update for package ' . $package_name);
           $this->execCommand($command, FALSE, 600);
+          $this->log('Successfully ran composer update for package ' . $package_name);
           // If the constraint is empty, we also try to require the new version.
           if ($constraint == '' && strpos($version, 'dev') === FALSE) {
             // @todo: Duplication from like 6 lines earlier.
@@ -463,6 +465,7 @@ class CosyComposer {
         $changelog = NULL;
         try {
           $changelog = $this->retrieveChangeLog($package_name, $lockdata, $version_from, $version_to);
+          $this->log('Changelog retrieved');
         }
         catch (\Exception $e) {
           // New feature. Just log it.
