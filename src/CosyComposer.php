@@ -419,7 +419,7 @@ class CosyComposer {
           // If the constraint is empty, we also try to require the new version.
           if ($constraint == '' && strpos($version, 'dev') === FALSE) {
             // @todo: Duplication from like 6 lines earlier.
-            $command = sprintf('composer --no-ansi %s %s:%s%s', $req_command, $package_name, $constraint, $version_to);
+            $command = sprintf('composer --no-ansi %s %s:%s%s --update-with-dependencies', $req_command, $package_name, $constraint, $version_to);
             $this->execCommand($command);
           }
         }
