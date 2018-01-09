@@ -262,8 +262,7 @@ class CosyComposer {
     $app->setAutoExit(FALSE);
     $this->doComposerInstall();
     $i = new ArrayInput([
-      'show',
-      '--latest' => TRUE,
+      'outdated',
       '-d' => $this->getCwd(),
       '--direct' => TRUE,
       '--minor-only' => TRUE,
@@ -280,7 +279,11 @@ class CosyComposer {
         // Not interesting.
         continue;
       }
-      $data[] = $json_update;
+      if (!isset($json_update->installed)) {
+        throw new \Exception('JSON output from composer was not looking as expected after checking updates');
+        continue;
+      }
+      $data = $json_update->installed;
     }
     if (empty($data)) {
       $this->cleanup();
@@ -370,10 +373,10 @@ class CosyComposer {
     $lockdata = json_decode(file_get_contents($this->tmpDir . '/composer.lock'));
     foreach ($data as $item) {
       try {
-        $package_name = $item->installed[0]->name;
+        $package_name = $item->name;
         $pre_update_data = $this->getPackageData($package_name, $lockdata);
-        $version_from = $item->installed[0]->version;
-        $version_to = $item->installed[0]->latest;
+        $version_from = $item->version;
+        $version_to = $item->latest;
         // First see if we can update this at all?
         // @todo: Just logging this for now, but this would be nice to have.
         $this->execCommand(sprintf('composer --no-ansi why-not -t %s:%s', $package_name, $version_to), TRUE, 300);
@@ -542,9 +545,9 @@ class CosyComposer {
    */
   protected function createTitle($item) {
     $update = new ViolinistUpdate();
-    $update->setName($item->installed[0]->name);
-    $update->setCurrentVersion($item->installed[0]->version);
-    $update->setNewVersion($item->installed[0]->latest);
+    $update->setName($item->name);
+    $update->setCurrentVersion($item->version);
+    $update->setNewVersion($item->latest);
     return $this->messageFactory->getPullRequestTitle($update);
   }
 
@@ -555,9 +558,9 @@ class CosyComposer {
    */
   public function createBody($item, $changelog = NULL) {
     $update = new ViolinistUpdate();
-    $update->setName($item->installed[0]->name);
-    $update->setCurrentVersion($item->installed[0]->version);
-    $update->setNewVersion($item->installed[0]->latest);
+    $update->setName($item->name);
+    $update->setCurrentVersion($item->version);
+    $update->setNewVersion($item->latest);
     if ($changelog) {
       /** @var \eiriksm\GitLogFormat\ChangeLogData $changelog */
       $update->setChangelog($changelog->getAsMarkdown());
@@ -572,7 +575,7 @@ class CosyComposer {
    */
   protected function createBranchName($item) {
     $this->debug('Creating branch name based on ' . print_r($item, TRUE));
-    $item_string = sprintf('%s%s%s', $item->installed[0]->name, $item->installed[0]->version, $item->installed[0]->latest);
+    $item_string = sprintf('%s%s%s', $item->name, $item->version, $item->latest);
     // @todo: Fix this properly.
     $result = preg_replace('/[^a-zA-Z0-9]+/', '', $item_string);
     $this->debug('Creating branch named ' . $result);
