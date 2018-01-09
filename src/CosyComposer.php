@@ -390,7 +390,7 @@ class CosyComposer {
         }
         // Create a new branch.
         $branch_name = $this->createBranchName($item);
-        $this->log('Checking out new branch');
+        $this->log('Checking out new branch: ' . $branch_name);
         $this->execCommand('git checkout -b ' . $branch_name, FALSE);
         // Make sure we do not have any uncommitted changes.
         $this->execCommand('git checkout .', FALSE);
