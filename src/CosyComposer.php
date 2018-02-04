@@ -275,15 +275,22 @@ class CosyComposer {
       if (empty($item) || empty($item[0])) {
         continue;
       }
-      if (!$json_update = @json_decode($item[0])) {
-        // Not interesting.
+      if (!is_array($item)) {
+        // Can't be it.
         continue;
       }
-      if (!isset($json_update->installed)) {
-        throw new \Exception('JSON output from composer was not looking as expected after checking updates');
-        continue;
+      foreach ($item as $value) {
+        if (!$json_update = @json_decode($value)) {
+          // Not interesting.
+          continue;
+        }
+        if (!isset($json_update->installed)) {
+          throw new \Exception('JSON output from composer was not looking as expected after checking updates');
+          continue;
+        }
+        $data = $json_update->installed;
+        break;
       }
-      $data = $json_update->installed;
     }
     if (empty($data)) {
       $this->cleanup();
