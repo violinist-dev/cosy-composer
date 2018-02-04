@@ -374,7 +374,7 @@ class CosyComposer {
       $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUserName, $this->githubUserPass, $this->forkUser, $user_repo);
       $this->execCommand('git remote add fork ' . $fork_url, FALSE);
       // Sync the fork.
-      $this->execCommand('git push fork ' . $default_branch);
+      $this->execCommand('git push fork ' . $default_branch, FALSE);
     }
     // Now read the lockfile.
     $lockdata = json_decode(file_get_contents($this->tmpDir . '/composer.lock'));
