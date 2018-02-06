@@ -426,12 +426,13 @@ class CosyComposer {
         else {
           $command = 'COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts --with-dependencies ' . $package_name;
           $this->log('Running composer update for package ' . $package_name);
-          if (!$this->execCommand($command, FALSE, 600)) {
+          // If exit code is not 0, there was a problem.
+          if ($this->execCommand($command, FALSE, 600)) {
             $this->log('Problem running composer update:');
             $this->log($this->lastStdErr);
             throw new \Exception('Composer update did not complete successfully');
           }
-          $this->log('Successfully ran composer update for package ' . $package_name);
+          $this->log('Successfully ran command composer update for package ' . $package_name);
           // If the constraint is empty, we also try to require the new version.
           if ($constraint == '' && strpos($version, 'dev') === FALSE) {
             // @todo: Duplication from like 6 lines earlier.
