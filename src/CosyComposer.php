@@ -390,7 +390,7 @@ class CosyComposer {
         $version_to = $item->latest;
         // First see if we can update this at all?
         // @todo: Just logging this for now, but this would be nice to have.
-        $this->execCommand(sprintf('composer --no-ansi why-not -t %s:%s', $package_name, $version_to), TRUE, 300);
+        $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer --no-ansi why-not -t %s:%s', $package_name, $version_to), TRUE, 300);
         // See where this package is.
         $req_command = 'require';
         $lockfile_key = 'require';
@@ -432,7 +432,7 @@ class CosyComposer {
           $this->execCommand($command, FALSE, 600);
         }
         else {
-          $command = 'COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts --with-dependencies ' . $package_name;
+          $command = 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-plugins --no-scripts --with-dependencies ' . $package_name;
           $this->log('Running composer update for package ' . $package_name);
           // If exit code is not 0, there was a problem.
           if ($this->execCommand($command, FALSE, 600)) {
@@ -444,7 +444,7 @@ class CosyComposer {
           // If the constraint is empty, we also try to require the new version.
           if ($constraint == '' && strpos($version, 'dev') === FALSE) {
             // @todo: Duplication from like 6 lines earlier.
-            $command = sprintf('composer --no-ansi %s %s:%s%s --update-with-dependencies', $req_command, $package_name, $constraint, $version_to);
+            $command = sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer --no-ansi %s %s:%s%s --update-with-dependencies', $req_command, $package_name, $constraint, $version_to);
             $this->execCommand($command, FALSE, 600);
           }
         }
@@ -715,7 +715,7 @@ class CosyComposer {
     }
     // @todo: Should probably use composer install command programatically.
     $this->log('Running composer install');
-    if ($code = $this->execCommand('composer install --no-ansi -n --no-scripts', FALSE, 1200)) {
+    if ($code = $this->execCommand('COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n --no-plugins --no-scripts', FALSE, 1200)) {
       // Other status code than 0.
       $this->messages[] = new Message($this->getLastStdOut(), 'stdout');
       $this->messages[] = new Message($this->getLastStdErr(), 'stderr');
