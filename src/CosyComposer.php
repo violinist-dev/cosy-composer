@@ -220,6 +220,8 @@ class CosyComposer {
    * @throws \eiriksm\CosyComposer\Exceptions\GitCloneException
    */
   public function run() {
+    // Export the user token so composer can use it.
+    $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->githubUser));
     $this->log(sprintf('Starting update check for %s', $this->slug));
     $repo = $this->slug;
     $repo_parts = explode('/', $repo);
@@ -462,6 +464,8 @@ class CosyComposer {
           throw new NotUpdatedException('The version installed is still the same after trying to update.');
         }
         $this->execCommand('git clean -f composer.*');
+        // This might have cleaned out the auth file, so we re-export it.
+        $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->githubUser));
         $command = sprintf('GIT_AUTHOR_NAME="%s" GIT_AUTHOR_EMAIL="%s" GIT_COMMITTER_NAME="%s" GIT_COMMITTER_EMAIL="%s" git commit composer.* -m "Update %s"',
           $this->githubUserName,
           $this->githubEmail,
