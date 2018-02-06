@@ -3,6 +3,8 @@
 namespace eiriksm\CosyComposer;
 
 use Composer\Console\Application;
+use Composer\Semver\Semver;
+use eiriksm\CosyComposer\Exceptions\CanNotUpdateException;
 use eiriksm\CosyComposer\Exceptions\ChdirException;
 use eiriksm\CosyComposer\Exceptions\ComposerInstallException;
 use eiriksm\CosyComposer\Exceptions\GitCloneException;
@@ -398,6 +400,10 @@ class CosyComposer {
         else {
           $req_item = $cdata->{'require'}->{$package_name};
         }
+        // See if the new version seems to satisfy the constraint.
+        if (!Semver::satisfies($version_to, (string) $req_item)) {
+          throw new CanNotUpdateException(sprintf('Package %s with the constraint %s can not be updated to %s', $package_name, $req_item, $version_to));
+        }
         // Create a new branch.
         $branch_name = $this->createBranchName($item);
         $this->log('Checking out new branch: ' . $branch_name);
@@ -499,13 +505,16 @@ class CosyComposer {
           $this->messages[] = new Message($pullRequest['html_url'], 'pr');
         }
       }
+      catch (CanNotUpdateException $e) {
+        $this->log($e->getMessage(), 'error');
+      }
       catch (ValidationFailedException $e) {
         // @todo: Do some better checking. Could be several things, this.
-        $this->log('Had a problem with creating the pull request: ' . $e->getMessage());
+        $this->log('Had a problem with creating the pull request: ' . $e->getMessage(), 'error');
       }
       catch (\Exception $e) {
         // @todo: Should probably handle this in some way.
-        $this->log('Caught an exception: ' . $e->getMessage());
+        $this->log('Caught an exception: ' . $e->getMessage(), 'error');
       }
       $this->log('Checking out default branch - ' . $default_branch);
       $this->execCommand('git checkout ' . $default_branch, FALSE);
@@ -682,11 +691,11 @@ class CosyComposer {
    *
    * @param string $message
    */
-  protected function log($message) {
+  protected function log($message, $type = 'message') {
     if ($this->verbose) {
       print_r("$message\n");
     }
-    $this->messages[] = new Message($message);
+    $this->messages[] = new Message($message, $type);
   }
 
   /**
