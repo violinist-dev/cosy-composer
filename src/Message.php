@@ -19,11 +19,16 @@ class Message {
    */
   protected $type;
 
+  const MESSAGE = 'message';
+  const UPDATE = 'update';
+  const ERROR = 'error';
+  const PR_URL = 'pr_url';
+
   /**
    * Message constructor.
    * @param $message
    */
-  public function __construct($message, $type = 'message') {
+  public function __construct($message, $type = self::MESSAGE) {
     $this->message = $message;
     $this->type = $type;
     $this->timestamp = time();

@@ -297,9 +297,16 @@ class CosyComposer {
       }
     }
     if (empty($data)) {
+      $this->log('No updates found');
       $this->cleanup();
       return;
     }
+    // Try to log what updates are found.
+    $updates_string = '';
+    foreach ($data as $delta => $item) {
+      $updates_string .= sprintf("%s: %s installed, %s available (type %s)\n", $item->name, $item->version, $item->latest, $item->{'latest-status'});
+    }
+    $this->log($updates_string, Message::UPDATE);
     $client = new Client(new Builder(), 'polaris-preview');
     $client->authenticate($this->token, NULL, Client::AUTH_URL_TOKEN);
     // Get the default branch of the repo.
@@ -506,7 +513,7 @@ class CosyComposer {
           'body'  => $body,
         ));
         if (!empty($pullRequest['html_url'])) {
-          $this->messages[] = new Message($pullRequest['html_url'], 'pr');
+          $this->log($pullRequest['html_url'], Message::PR_URL);
         }
       }
       catch (CanNotUpdateException $e) {
