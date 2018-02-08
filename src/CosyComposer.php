@@ -440,7 +440,7 @@ class CosyComposer {
           $this->execCommand($command, FALSE, 600);
         }
         else {
-          $command = 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-plugins --no-scripts --with-dependencies ' . $package_name;
+          $command = 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts --with-dependencies ' . $package_name;
           $this->log('Running composer update for package ' . $package_name);
           // If exit code is not 0, there was a problem.
           if ($this->execCommand($command, FALSE, 600)) {
@@ -723,7 +723,7 @@ class CosyComposer {
     }
     // @todo: Should probably use composer install command programatically.
     $this->log('Running composer install');
-    if ($code = $this->execCommand('COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n --no-plugins --no-scripts', FALSE, 1200)) {
+    if ($code = $this->execCommand('COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n --no-scripts', FALSE, 1200)) {
       // Other status code than 0.
       $this->messages[] = new Message($this->getLastStdOut(), 'stdout');
       $this->messages[] = new Message($this->getLastStdErr(), 'stderr');
