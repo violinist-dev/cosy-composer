@@ -218,10 +218,11 @@ class CosyComposer {
   /**
    * @throws \eiriksm\CosyComposer\Exceptions\ChdirException
    * @throws \eiriksm\CosyComposer\Exceptions\GitCloneException
+   * @throws \InvalidArgumentException
    */
   public function run() {
     // Export the user token so composer can use it.
-    $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->githubUser));
+    $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->githubUser), FALSE);
     $this->log(sprintf('Starting update check for %s', $this->slug));
     $repo = $this->slug;
     $repo_parts = explode('/', $repo);
