@@ -21,15 +21,10 @@ use Github\ResultPager;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
+use Violinist\Slug\Slug;
 
 class CosyComposer
 {
-
-  /**
-   * @var Process[]
-   */
-    protected $processesForCommands = [];
 
   /**
    * @var array
@@ -194,20 +189,45 @@ class CosyComposer
         $this->lastStdOut = $lastStdOut;
     }
 
+    /**
+     * @var \eiriksm\CosyComposer\CommandExecuter
+     */
+    protected $executer;
+
+    /**
+     * @return \eiriksm\CosyComposer\CommandExecuter
+     */
+    public function getExecuter()
+    {
+        return $this->executer;
+    }
+
+    /**
+     * @param \eiriksm\CosyComposer\CommandExecuter $executer
+     */
+    public function setExecuter($executer)
+    {
+        $this->executer = $executer;
+    }
+
   /**
    * CosyComposer constructor.
    * @param string $token
    * @param string $slug
    */
-    public function __construct($token, $slug, Application $app, OutputInterface $output)
+    public function __construct($token, $slug, Application $app, OutputInterface $output, CommandExecuter $executer)
     {
         $this->token = $token;
-        $this->slug = $slug;
+        // @todo: Move to create from URL.
+        $this->slug = new Slug();
+        $this->slug->setProvider('github.com');
+        $this->slug->setSlug($slug);
         $tmpdir = uniqid();
         $this->tmpDir = sprintf('/tmp/%s', $tmpdir);
         $this->messageFactory = new ViolinistMessages();
         $this->app = $app;
         $this->output = $output;
+        $this->executer = $executer;
     }
 
     public function setVerbose($verbose)
@@ -246,18 +266,20 @@ class CosyComposer
    */
     public function run()
     {
-      // Export the user token so composer can use it.
-        $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->githubUser), false);
-        $this->log(sprintf('Starting update check for %s', $this->slug));
-        $repo_parts = explode('/', $this->slug);
-        $user_name = $repo_parts[0];
-        $user_repo = $repo_parts[1];
-      // First set working dir to /tmp (since we might be in the directory of the
-      // last processed item, which may be deleted.
+        // Export the user token so composer can use it.
+        $this->execCommand(
+            sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->githubUser),
+            false
+        );
+        $this->log(sprintf('Starting update check for %s', $this->slug->getSlug()));
+        $user_name = $this->slug->getUserName();
+        $user_repo = $this->slug->getUserRepo();
+        // First set working dir to /tmp (since we might be in the directory of the
+        // last processed item, which may be deleted.
         if (!$this->chdir($this->getTmpParent())) {
             throw new ChdirException('Problem with changing dir to ' . $this->getTmpParent());
         }
-        $url = sprintf('https://%s:%s@github.com/%s', $this->githubUser, $this->githubPass, $this->slug);
+        $url = sprintf('https://%s:%s@github.com/%s', $this->githubUser, $this->githubPass, $this->slug->getSlug());
         $this->log('Cloning repository');
         $clone_result = $this->execCommand('git clone --depth=1 ' . $url . ' ' . $this->tmpDir, false, 120);
         if ($clone_result) {
@@ -656,45 +678,7 @@ class CosyComposer
    */
     protected function execCommand($command, $log = true, $timeout = 120)
     {
-        if ($log) {
-            $this->log("Creating command $command");
-        }
-        $process = $this->getProcess($command);
-        $process->setTimeout($timeout);
-        $process->run();
-        $stdout = $process->getOutput();
-        $this->setLastStdOut($stdout);
-        $stderr = $process->getErrorOutput();
-        $this->setLastStdErr($stderr);
-        if (!empty($stdout) && $log) {
-            $this->log("stdout: $stdout");
-        }
-        if (!empty($stderr) && $log) {
-            $this->log("stderr: $stderr");
-        }
-        $returnCode = $process->getExitCode();
-        return $returnCode;
-    }
-
-    protected function getProcess($command)
-    {
-        if ($process = $this->getProcessForCommand($command)) {
-            return $process;
-        }
-        return new Process($command, $this->getCwd());
-    }
-
-    protected function getProcessForCommand($command)
-    {
-        if (!empty($this->processesForCommands[$command])) {
-            return $this->processesForCommands[$command];
-        }
-        return false;
-    }
-
-    public function setProcessForCommand($command, $process)
-    {
-        $this->processesForCommands[$command] = $process;
+        return $this->executer->executeCommand($command, $log, $timeout);
     }
 
   /**
