@@ -2,6 +2,7 @@
 
 namespace eiriksm\CosyComposer\Exceptions;
 
-class ComposerInstallException extends \Exception {
+class ComposerInstallException extends \Exception
+{
 
 }

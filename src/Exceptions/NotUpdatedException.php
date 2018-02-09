@@ -2,6 +2,7 @@
 
 namespace eiriksm\CosyComposer\Exceptions;
 
-class NotUpdatedException extends \Exception {
+class NotUpdatedException extends \Exception
+{
 
 }

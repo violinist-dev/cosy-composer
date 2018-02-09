@@ -2,9 +2,10 @@
 
 namespace eiriksm\CosyComposer;
 
-interface ProviderInterface {
+interface ProviderInterface
+{
 
-  public function __construct();
+    public function __construct();
 
-  public function getOpenPullrequests();
+    public function getOpenPullrequests();
 }

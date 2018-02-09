@@ -2,6 +2,7 @@
 
 namespace eiriksm\CosyComposer\Exceptions;
 
-class ChdirException extends \Exception {
+class ChdirException extends \Exception
+{
 
 }

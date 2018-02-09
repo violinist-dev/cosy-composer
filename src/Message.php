@@ -2,51 +2,55 @@
 
 namespace eiriksm\CosyComposer;
 
-class Message {
+class Message
+{
 
   /**
    * @var string
    */
-  protected $message;
+    protected $message;
 
   /**
    * @var int
    */
-  protected $timestamp;
+    protected $timestamp;
 
   /**
    * @var string
    */
-  protected $type;
+    protected $type;
 
-  const MESSAGE = 'message';
-  const UPDATE = 'update';
-  const ERROR = 'error';
-  const PR_URL = 'pr_url';
+    const MESSAGE = 'message';
+    const UPDATE = 'update';
+    const ERROR = 'error';
+    const PR_URL = 'pr_url';
 
   /**
    * Message constructor.
    * @param $message
    */
-  public function __construct($message, $type = self::MESSAGE) {
-    $this->message = $message;
-    $this->type = $type;
-    $this->timestamp = time();
-  }
+    public function __construct($message, $type = self::MESSAGE)
+    {
+        $this->message = $message;
+        $this->type = $type;
+        $this->timestamp = time();
+    }
 
   /**
    * @return string
    */
-  public function getMessage() {
-    return $this->message;
-  }
+    public function getMessage()
+    {
+        return $this->message;
+    }
 
-  public function getTimestamp() {
-    return $this->timestamp;
-  }
+    public function getTimestamp()
+    {
+        return $this->timestamp;
+    }
 
-  public function getType() {
-    return $this->type;
-  }
-
+    public function getType()
+    {
+        return $this->type;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace eiriksm\CosyComposer\Exceptions;
 
-class GitPushException extends \Exception {
+class GitPushException extends \Exception
+{
   
 }
