@@ -263,6 +263,7 @@ class CosyComposer
    * @throws \eiriksm\CosyComposer\Exceptions\ChdirException
    * @throws \eiriksm\CosyComposer\Exceptions\GitCloneException
    * @throws \InvalidArgumentException
+   * @throws \Exception
    */
     public function run()
     {
@@ -283,7 +284,7 @@ class CosyComposer
         $this->log('Cloning repository');
         $clone_result = $this->execCommand('git clone --depth=1 ' . $url . ' ' . $this->tmpDir, false, 120);
         if ($clone_result) {
-          // We had a problem.
+            // We had a problem.
             throw new GitCloneException('Problem with the execCommand git clone. Exit code was ' . $clone_result);
         }
         $this->log('Repository cloned');
@@ -300,7 +301,7 @@ class CosyComposer
         $lock_file = $this->tmpDir . '/composer.lock';
         $lock_file_contents = false;
         if (@file_exists($lock_file)) {
-          // We might want to know whats in here.
+            // We might want to know whats in here.
             $lock_file_contents = json_decode(file_get_contents($lock_file));
         }
         $app = $this->app;
@@ -325,16 +326,18 @@ class CosyComposer
                 continue;
             }
             if (!is_array($item)) {
-              // Can't be it.
+                // Can't be it.
                 continue;
             }
             foreach ($item as $value) {
                 if (!$json_update = @json_decode($value)) {
-                  // Not interesting.
+                    // Not interesting.
                     continue;
                 }
                 if (!isset($json_update->installed)) {
-                    throw new \Exception('JSON output from composer was not looking as expected after checking updates');
+                    throw new \Exception(
+                        'JSON output from composer was not looking as expected after checking updates'
+                    );
                     continue;
                 }
                 $data = $json_update->installed;
@@ -349,12 +352,18 @@ class CosyComposer
       // Try to log what updates are found.
         $updates_string = '';
         foreach ($data as $delta => $item) {
-            $updates_string .= sprintf("%s: %s installed, %s available (type %s)\n", $item->name, $item->version, $item->latest, $item->{'latest-status'});
+            $updates_string .= sprintf(
+                "%s: %s installed, %s available (type %s)\n",
+                $item->name,
+                $item->version,
+                $item->latest,
+                $item->{'latest-status'}
+            );
         }
         $this->log($updates_string, Message::UPDATE);
         $client = new Client(new Builder(), 'polaris-preview');
         $client->authenticate($this->token, null, Client::AUTH_URL_TOKEN);
-      // Get the default branch of the repo.
+        // Get the default branch of the repo.
         $private_client = new Client();
         $private_client->authenticate($this->githubUser, null, Client::AUTH_HTTP_TOKEN);
         $repo = $private_client->api('repo')->show($user_name, $user_repo);
