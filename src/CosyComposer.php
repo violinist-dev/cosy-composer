@@ -337,29 +337,40 @@ class CosyComposer {
     $prs_named = [];
     $default_base = NULL;
     try {
-      $branches = $pr_client->api('repo')->branches($branch_user, $user_repo);
-      $branches_upstream = $private_client->api('repo')->branches($user_name, $user_repo);
-      $prs = $private_client->api('pr')->all($user_name, $user_repo);
-
-      foreach ($branches as $branch) {
-        $branches_flattened[] = $branch['name'];
-        if ($branch['name'] == $default_branch) {
-          $default_base = $branch['commit']['sha'];
+        // @todo: So much duplication. This should be handled by the provider
+        // class.
+        $pager = new ResultPager($pr_client);
+        $api = $pr_client->api('repo');
+        $method = 'branches';
+        $branches = $pager->fetchAll($api, $method, [$branch_user, $user_repo]);
+        $pager = new ResultPager($private_client);
+        $api = $private_client->api('repo');
+        $method = 'branches';
+        $branches_upstream = $pager->fetchAll($api, $method, [$user_name, $user_repo]);
+        $pager = new ResultPager($private_client);
+        $api = $private_client->api('pr');
+        $method = 'all';
+        $prs = $pager->fetchAll($api, $method, [$user_name, $user_repo]);
+        foreach ($branches as $branch) {
+            $branches_flattened[] = $branch['name'];
+            if ($branch['name'] == $default_branch) {
+                $default_base = $branch['commit']['sha'];
+            }
         }
-      }
 
-      foreach ($branches_upstream as $branch) {
-        if ($branch['name'] == $default_branch) {
-          $default_base = $branch['commit']['sha'];
+        foreach ($branches_upstream as $branch) {
+            if ($branch['name'] == $default_branch) {
+                $default_base = $branch['commit']['sha'];
+            }
         }
-      }
 
-      foreach ($prs as $pr) {
-        $prs_named[$pr['head']['ref']] = $pr;
-      }
+        foreach ($prs as $pr) {
+            $prs_named[$pr['head']['ref']] = $pr;
+        }
     }
     catch (RuntimeException $e) {
-      // Safe to ignore.
+        // Safe to ignore.
+        $this->log('Had a runtime exception with the fetching of branches and Prs: ' . $e->getMessage());
     }
     foreach ($data as $delta => $item) {
       $branch_name = $this->createBranchName($item);
