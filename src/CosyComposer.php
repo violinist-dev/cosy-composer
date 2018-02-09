@@ -17,8 +17,10 @@ use Github\Client;
 use Github\Exception\RuntimeException;
 use Github\Exception\ValidationFailedException;
 use Github\HttpClient\Builder;
+use Github\ResultPager;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 class CosyComposer {
@@ -85,6 +87,11 @@ class CosyComposer {
    * @var Application
    */
   private $app;
+
+  /**
+   * @var \Symfony\Component\Console\Output\OutputInterface
+   */
+  protected $output;
 
   /**
    * @return string
@@ -182,12 +189,14 @@ class CosyComposer {
    * @param string $token
    * @param string $slug
    */
-  public function __construct($token, $slug) {
+  public function __construct($token, $slug, Application $app, OutputInterface $output) {
     $this->token = $token;
     $this->slug = $slug;
     $tmpdir = uniqid();
     $this->tmpDir = sprintf('/tmp/%s', $tmpdir);
     $this->messageFactory = new ViolinistMessages();
+    $this->app = $app;
+    $this->output = $output;
   }
 
   public function setVerbose($verbose) {
@@ -224,8 +233,7 @@ class CosyComposer {
     // Export the user token so composer can use it.
     $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->githubUser), FALSE);
     $this->log(sprintf('Starting update check for %s', $this->slug));
-    $repo = $this->slug;
-    $repo_parts = explode('/', $repo);
+    $repo_parts = explode('/', $this->slug);
     $user_name = $repo_parts[0];
     $user_repo = $repo_parts[1];
     // First set working dir to /tmp (since we might be in the directory of the
@@ -233,7 +241,7 @@ class CosyComposer {
     if (!$this->chdir($this->getTmpParent())) {
       throw new ChdirException('Problem with changing dir to ' . $this->getTmpParent());
     }
-    $url = sprintf('https://%s:%s@github.com/%s', $this->githubUser, $this->githubPass, $repo);
+    $url = sprintf('https://%s:%s@github.com/%s', $this->githubUser, $this->githubPass, $this->slug);
     $this->log('Cloning repository');
     $clone_result = $this->execCommand('git clone --depth=1 ' . $url . ' ' . $this->tmpDir, FALSE, 120);
     if ($clone_result) {
@@ -257,7 +265,6 @@ class CosyComposer {
       // We might want to know whats in here.
       $lock_file_contents = json_decode(file_get_contents($lock_file));
     }
-    $this->app = new Application();
     $app = $this->app;
     $d = $app->getDefinition();
     $opts = $d->getOptions();
@@ -273,9 +280,8 @@ class CosyComposer {
       '--minor-only' => TRUE,
       '--format' => 'json',
     ]);
-    $b = new ArrayOutput();
-    $app->run($i, $b);
-    $raw_data = $b->fetch();
+    $app->run($i, $this->output);
+    $raw_data = $this->output->fetch();
     foreach ($raw_data as $delta => $item) {
       if (empty($item) || empty($item[0])) {
         continue;

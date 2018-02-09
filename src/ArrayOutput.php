@@ -11,6 +11,11 @@ class ArrayOutput extends Output {
 
   private $delta;
 
+  public function clear() {
+    $this->lines = [];
+    $this->delta = 0;
+  }
+
   public function fetch() {
     return $this->lines;
   }
