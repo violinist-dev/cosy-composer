@@ -3,24 +3,10 @@
 namespace eiriksm\CosyComposerTest;
 
 use eiriksm\CosyComposer\CommandExecuter;
-use eiriksm\CosyComposer\CosyComposer;
 use eiriksm\CosyComposer\Exceptions\ChdirException;
-use eiriksm\CosyComposer\Exceptions\GitCloneException;
-use Mockery\Mock;
-use Symfony\Component\Process\Process;
 
-class CosyComposerTest extends \PHPUnit_Framework_TestCase
+class FailTest extends Base
 {
-
-    private $logged_msgs = [];
-    private $returnCode = 0;
-    private $processCount = 0;
-
-    public function noopLogger()
-    {
-        $this->logged_msgs[] = func_get_args();
-        return $this->returnCode;
-    }
 
     public function testChdirFail()
     {
@@ -66,14 +52,5 @@ class CosyComposerTest extends \PHPUnit_Framework_TestCase
         $this->expectException(ChdirException::class);
         $c->setExecuter($mock_executer);
         $c->run();
-    }
-
-    protected function getMockCosy()
-    {
-        $app = $this->createMock('Composer\Console\Application');
-        $output = $this->createMock('eiriksm\CosyComposer\ArrayOutput');
-        $executer = $this->createMock('eiriksm\CosyComposer\CommandExecuter');
-        $c = new CosyComposer('token', 'a/b', $app, $output, $executer);
-        return $c;
     }
 }
