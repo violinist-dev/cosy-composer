@@ -1,6 +1,6 @@
 <?php
 
-namespace eiriksm\CosyComposerTest;
+namespace eiriksm\CosyComposerTest\integration;
 
 use eiriksm\CosyComposer\CosyComposer;
 

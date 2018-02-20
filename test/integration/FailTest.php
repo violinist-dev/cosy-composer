@@ -1,6 +1,6 @@
 <?php
 
-namespace eiriksm\CosyComposerTest;
+namespace eiriksm\CosyComposerTest\integration;
 
 use eiriksm\CosyComposer\CommandExecuter;
 use eiriksm\CosyComposer\Exceptions\ChdirException;
@@ -53,4 +53,44 @@ class FailTest extends Base
         $c->setExecuter($mock_executer);
         $c->run();
     }
+
+    public function testNoComposerFile()
+    {
+        $c = $this->getMockCosy();
+        $dir = '/tmp/' . uniqid();
+        mkdir($dir);
+        $c->setTmpDir($dir);
+        $mock_executer = $this->createMock(CommandExecuter::class);
+        $mock_executer->method('executeCommand')
+            ->will($this->returnCallback(
+                function ($cmd) {
+                    return 0;
+                }
+            ));
+        $this->expectExceptionMessage('No composer.json file found.');
+        $this->expectException(\InvalidArgumentException::class);
+        $c->setExecuter($mock_executer);
+        $c->run();
+    }
+
+    public function testInvalidComposerFile()
+    {
+        $c = $this->getMockCosy();
+        $dir = '/tmp/' . uniqid();
+        mkdir($dir);
+        $c->setTmpDir($dir);
+        file_put_contents("$dir/composer.json", '{not:json]');
+        $mock_executer = $this->createMock(CommandExecuter::class);
+        $mock_executer->method('executeCommand')
+            ->will($this->returnCallback(
+                function ($cmd) {
+                    return 0;
+                }
+            ));
+        $this->expectExceptionMessage('Invalid composer.json file');
+        $this->expectException(\InvalidArgumentException::class);
+        $c->setExecuter($mock_executer);
+        $c->run();
+    }
+
 }
