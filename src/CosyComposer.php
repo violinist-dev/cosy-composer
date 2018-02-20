@@ -631,7 +631,7 @@ class CosyComposer
    */
     public function createCacheDir()
     {
-        $dir_name = md5($this->slug);
+        $dir_name = md5($this->slug->getSlug());
         $path = sprintf('%s/%s', $this->cacheDir, $dir_name);
         if (!file_exists($path)) {
             mkdir($path, 0777, true);

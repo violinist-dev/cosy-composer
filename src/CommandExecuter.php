@@ -29,6 +29,8 @@ class CommandExecuter
             $this->logger->info("Creating command $command");
         }
         $process = $this->processFactory->getProcess($command);
+        $process->setTimeout($timeout);
+        $process->run();
         return $process->getExitCode();
     }
 }
