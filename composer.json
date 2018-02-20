@@ -13,7 +13,8 @@
         "violinist-dev/git-log-format": "dev-master",
         "violinist-dev/violinist-messages": "dev-master",
         "violinist-dev/slug-from-url": "dev-master",
-        "wa72/simplelogger": "^1.0"
+        "wa72/simplelogger": "^1.0",
+        "league/flysystem": "^1.0"
     },
     "autoload": {
         "psr-4": {"eiriksm\\CosyComposer\\": "src"}

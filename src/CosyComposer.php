@@ -18,6 +18,7 @@ use Github\Exception\RuntimeException;
 use Github\Exception\ValidationFailedException;
 use Github\HttpClient\Builder;
 use Github\ResultPager;
+use League\Flysystem\Adapter\Local;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -195,6 +196,11 @@ class CosyComposer
     protected $executer;
 
     /**
+     * @var ComposerFileGetter
+     */
+    protected $composerGetter;
+
+    /**
      * @return \eiriksm\CosyComposer\CommandExecuter
      */
     public function getExecuter()
@@ -291,11 +297,13 @@ class CosyComposer
         if (!$this->chdir($this->tmpDir)) {
             throw new ChdirException('Problem with changing dir to the clone dir.');
         }
-        $composer_file = $this->tmpDir . '/composer.json';
-        if (!file_exists($composer_file)) {
+        $local_adapter = new Local($this->tmpDir);
+        $this->composerGetter = new ComposerFileGetter($local_adapter);
+        if (!$this->composerGetter->hasComposerFile()) {
             throw new \InvalidArgumentException('No composer.json file found.');
         }
-        if (!$cdata = json_decode(file_get_contents($composer_file))) {
+        $cdata = $this->composerGetter->getComposerJsonData();
+        if (false == $cdata) {
             throw new \InvalidArgumentException('Invalid composer.json file');
         }
         $lock_file = $this->tmpDir . '/composer.lock';
