@@ -695,6 +695,7 @@ class CosyComposer
    */
     protected function execCommand($command, $log = true, $timeout = 120)
     {
+        $this->executer->setCwd($this->getCwd());
         return $this->executer->executeCommand($command, $log, $timeout);
     }
 
