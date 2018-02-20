@@ -767,10 +767,10 @@ class CosyComposer
             $this->log('Found custom cache. using this for vendor folder.');
             $this->execCommand(sprintf('rsync -a %s/* %s/', $this->createCacheDir(), $this->tmpDir), false, 300);
         }
-      // @todo: Should probably use composer install command programatically.
+        // @todo: Should probably use composer install command programatically.
         $this->log('Running composer install');
         if ($code = $this->execCommand('COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n --no-scripts', false, 1200)) {
-          // Other status code than 0.
+            // Other status code than 0.
             $this->messages[] = new Message($this->getLastStdOut(), 'stdout');
             $this->messages[] = new Message($this->getLastStdErr(), 'stderr');
             throw new ComposerInstallException('Composer install failed with exit code ' . $code);
@@ -795,26 +795,31 @@ class CosyComposer
         $this->cwd = $dir;
     }
 
-  /**
-   * @return string
-   */
+
+    /**
+     * @return string
+     */
     public function getTmpDir()
     {
         return $this->tmpDir;
     }
 
-  /**
-   * @param string $tmpDir
-   */
+    /**
+     * @param $tmpDir
+     */
     public function setTmpDir($tmpDir)
     {
         $this->tmpDir = $tmpDir;
     }
 
-  /**
-   * @param $package_name
-   * @param $lockdata
-   */
+    /**
+     * @param $package_name
+     * @param $lockdata
+     * @param $version_from
+     * @param $version_to
+     * @return ChangeLogData
+     * @throws \Exception
+     */
     public function retrieveChangeLog($package_name, $lockdata, $version_from, $version_to)
     {
         $data = $this->getPackageData($package_name, $lockdata);
