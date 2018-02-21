@@ -92,5 +92,4 @@ class FailTest extends Base
         $c->setExecuter($mock_executer);
         $c->run();
     }
-
 }

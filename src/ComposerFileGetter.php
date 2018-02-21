@@ -5,7 +5,8 @@ namespace eiriksm\CosyComposer;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
 
-class ComposerFileGetter {
+class ComposerFileGetter
+{
 
     /**
      * @var Filesystem
@@ -26,11 +27,11 @@ class ComposerFileGetter {
     {
         $data = $this->fs->read('composer.json');
         if (false == $data) {
-            return FALSE;
+            return false;
         }
         $json = @json_decode($data);
         if (false == $json) {
-            return FALSE;
+            return false;
         }
         return $json;
     }
