@@ -84,14 +84,32 @@ class CosyComposer
    */
     protected $tmpParent = '/tmp';
 
-  /**
-   * @var Application
-   */
+    /**
+     * @var Application
+     */
     private $app;
 
-  /**
-   * @var \Symfony\Component\Console\Output\OutputInterface
-   */
+    /**
+     * @return Application
+     */
+    public function getApp(): Application
+    {
+        return $this->app;
+    }
+
+    /**
+     * @param Application $app
+     */
+    public function setApp(Application $app)
+    {
+        $this->app = $app;
+    }
+
+    /**
+     * The output we use for updates?
+     *
+     * @var OutputInterface
+     */
     protected $output;
 
   /**
@@ -357,7 +375,7 @@ class CosyComposer
             $this->cleanup();
             return;
         }
-      // Try to log what updates are found.
+        // Try to log what updates are found.
         $updates_string = '';
         foreach ($data as $delta => $item) {
             $updates_string .= sprintf(
@@ -612,6 +630,14 @@ class CosyComposer
         return $this->messages;
     }
 
+    /**
+     * @param OutputInterface $output
+     */
+    public function setOutput(OutputInterface $output)
+    {
+        $this->output = $output;
+    }
+
   /**
    * Cleans up after the run.
    */
@@ -620,7 +646,15 @@ class CosyComposer
         $this->chdir('/tmp');
         $this->log('Cleaning up after update check.');
         $this->log('Storing custom composer cache for later');
-        $this->execCommand(sprintf('rsync -az --exclude "composer.*" %s/* %s', $this->tmpDir, $this->createCacheDir()), false, 300);
+        $this->execCommand(
+            sprintf(
+                'rsync -az --exclude "composer.*" %s/* %s',
+                $this->tmpDir,
+                $this->createCacheDir()
+            ),
+            false,
+            300
+        );
         $this->execCommand('rm -rf ' . $this->tmpDir, false, 300);
     }
 
