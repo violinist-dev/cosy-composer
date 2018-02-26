@@ -3,7 +3,7 @@
 namespace eiriksm\CosyComposerTest\integration;
 
 use Composer\Console\Application;
-use eiriksm\CosyComposer\ArrayOutput;
+use eiriksm\ArrayOutput\ArrayOutput;
 use eiriksm\CosyComposer\CommandExecuter;
 use Symfony\Component\Console\Input\InputDefinition;
 

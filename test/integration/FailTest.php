@@ -2,6 +2,7 @@
 
 namespace eiriksm\CosyComposerTest\integration;
 
+use eiriksm\ArrayOutput\ArrayOutput;
 use eiriksm\CosyComposer\CommandExecuter;
 use eiriksm\CosyComposer\Exceptions\ChdirException;
 
@@ -107,7 +108,7 @@ class FailTest extends Base
         $mock_app->method('getDefinition')
             ->willReturn($mock_definition);
         $c->setApp($mock_app);
-        $mock_output = $this->createMock('eiriksm\CosyComposer\ArrayOutput');
+        $mock_output = $this->createMock(ArrayOutput::class);
         $mock_output->method('fetch')
             ->willReturn([
                 [
