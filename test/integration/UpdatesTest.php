@@ -7,7 +7,6 @@ use eiriksm\ArrayOutput\ArrayOutput;
 use eiriksm\CosyComposer\CommandExecuter;
 use eiriksm\CosyComposer\ProviderFactory;
 use eiriksm\CosyComposer\Providers\Github;
-use Github\Client;
 use Github\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputDefinition;
 
