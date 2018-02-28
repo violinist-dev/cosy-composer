@@ -360,11 +360,11 @@ class CosyComposer
         $app->setAutoExit(false);
         $this->doComposerInstall();
         $i = new ArrayInput([
-        'outdated',
-        '-d' => $this->getCwd(),
-        '--direct' => true,
-        '--minor-only' => true,
-        '--format' => 'json',
+            'outdated',
+            '-d' => $this->getCwd(),
+            '--direct' => true,
+            '--minor-only' => true,
+            '--format' => 'json',
         ]);
         $app->run($i, $this->output);
         $raw_data = $this->output->fetch();
@@ -385,7 +385,6 @@ class CosyComposer
                     throw new \Exception(
                         'JSON output from composer was not looking as expected after checking updates'
                     );
-                    continue;
                 }
                 $data = $json_update->installed;
                 break;
@@ -454,19 +453,19 @@ class CosyComposer
             return;
         }
 
-      // Unshallow the repo, for syncing it.
+        // Unshallow the repo, for syncing it.
         $this->execCommand('git pull --unshallow', false, 300);
-      // If the repo is private, we need to push directly to the repo.
+        // If the repo is private, we need to push directly to the repo.
         if (!$private) {
             $fork = $client->api('repo')->forks()->create($user_name, $user_repo, [
             'organization' => $this->forkUser,
             ]);
             $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUserName, $this->githubUserPass, $this->forkUser, $user_repo);
             $this->execCommand('git remote add fork ' . $fork_url, false);
-          // Sync the fork.
+            // Sync the fork.
             $this->execCommand('git push fork ' . $default_branch, false);
         }
-      // Now read the lockfile.
+        // Now read the lockfile.
         $lockdata = json_decode(file_get_contents($this->tmpDir . '/composer.lock'));
         foreach ($data as $item) {
             try {
@@ -574,7 +573,7 @@ class CosyComposer
                     $changelog = $this->retrieveChangeLog($package_name, $lockdata, $version_from, $version_to);
                     $this->log('Changelog retrieved');
                 } catch (\Exception $e) {
-                  // New feature. Just log it.
+                    // New feature. Just log it.
                     $this->log('Exception for changelog: ' . $e->getMessage());
                 }
                 $this->log('Creating pull request from ' . $branch_name);
@@ -583,12 +582,12 @@ class CosyComposer
                     $head = $branch_name;
                 }
                 $body = $this->createBody($item, $changelog);
-                $pullRequest = $pr_client->api('pull_request')->create($user_name, $user_repo, array(
-                'base'  => $default_branch,
-                'head'  => $head,
-                'title' => $this->createTitle($item),
-                'body'  => $body,
-                ));
+                $pullRequest = $pr_client->api('pull_request')->create($user_name, $user_repo, [
+                    'base'  => $default_branch,
+                    'head'  => $head,
+                    'title' => $this->createTitle($item),
+                    'body'  => $body,
+                ]);
                 if (!empty($pullRequest['html_url'])) {
                     $this->log($pullRequest['html_url'], Message::PR_URL);
                 }
@@ -877,11 +876,11 @@ class CosyComposer
 
     private function retrieveDependencyRepo($data)
     {
-      // First find the repo source.
+        // First find the repo source.
         if (!isset($data->source) || $data->source->type != 'git') {
             throw new \Exception('Unknown source or non-git source. Aborting.');
         }
-      // We could have this cached in the md5 of the package name.
+        // We could have this cached in the md5 of the package name.
         $clone_path = '/tmp/' . md5($data->name);
         $repo_path = $data->source->url;
         if (!file_exists($clone_path)) {
@@ -897,12 +896,17 @@ class CosyComposer
         $lockfile_key = 'packages';
         $key = $this->getPackagesKey($package_name, $lockfile_key, $lockdata);
         if ($key === false) {
-          // Well, could be a dev req.
+            // Well, could be a dev req.
             $lockfile_key = 'packages-dev';
             $key = $this->getPackagesKey($package_name, $lockfile_key, $lockdata);
-          // If the key still is false, then this is not looking so good.
+            // If the key still is false, then this is not looking so good.
             if ($key === false) {
-                throw new \Exception(sprintf('Did not find the requested package (%s) in the lockfile. This is probably an error', $package_name));
+                throw new \Exception(
+                    sprintf(
+                        'Did not find the requested package (%s) in the lockfile. This is probably an error',
+                        $package_name
+                    )
+                );
             }
         }
         return $lockdata->{$lockfile_key}[$key];
