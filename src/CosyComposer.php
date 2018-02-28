@@ -234,6 +234,27 @@ class CosyComposer
         $this->executer = $executer;
     }
 
+    /**
+     * @return ProviderFactory
+     */
+    public function getProviderFactory()
+    {
+        return $this->providerFactory;
+    }
+
+    /**
+     * @param ProviderFactory $providerFactory
+     */
+    public function setProviderFactory(ProviderFactory $providerFactory)
+    {
+        $this->providerFactory = $providerFactory;
+    }
+
+    /**
+     * @var ProviderFactory
+     */
+    protected $providerFactory;
+
   /**
    * CosyComposer constructor.
    * @param string $token
@@ -387,59 +408,27 @@ class CosyComposer
             );
         }
         $this->log($updates_string, Message::UPDATE);
-        $client = new Client(new Builder(), 'polaris-preview');
-        $client->authenticate($this->token, null, Client::AUTH_URL_TOKEN);
+        $client = $this->getClient($this->slug);
+        $client->authenticate($this->token, null);
         // Get the default branch of the repo.
-        $private_client = new Client();
-        $private_client->authenticate($this->githubUser, null, Client::AUTH_HTTP_TOKEN);
-        $repo = $private_client->api('repo')->show($user_name, $user_repo);
-        $private = false;
-        if ($repo['private']) {
-            $private = true;
-        }
-        $default_branch = $repo['default_branch'];
-      // Try to see if we have already dealt with this (i.e already have a branch
-      // for all the updates.
+        $private_client = $this->getClient($this->slug);
+        $private_client->authenticate($this->githubUser, null);
+        $private = $private_client->repoIsPrivate($user_name, $user_repo);
+        $default_branch = $private_client->getDefaultBranch($user_name, $user_repo);
+        // Try to see if we have already dealt with this (i.e already have a branch for all the updates.
         $pr_client = $client;
         $branch_user = $this->forkUser;
         if ($private) {
             $pr_client = $private_client;
             $branch_user = $user_name;
         }
-        $branches_flattened = [];
-        $prs_named = [];
-        $default_base = null;
         try {
-            // @todo: So much duplication. This should be handled by the provider
-            // class.
-            $pager = new ResultPager($pr_client);
-            $api = $pr_client->api('repo');
-            $method = 'branches';
-            $branches = $pager->fetchAll($api, $method, [$branch_user, $user_repo]);
-            $pager = new ResultPager($private_client);
-            $api = $private_client->api('repo');
-            $method = 'branches';
-            $branches_upstream = $pager->fetchAll($api, $method, [$user_name, $user_repo]);
-            $pager = new ResultPager($private_client);
-            $api = $private_client->api('pr');
-            $method = 'all';
-            $prs = $pager->fetchAll($api, $method, [$user_name, $user_repo]);
-            foreach ($branches as $branch) {
-                $branches_flattened[] = $branch['name'];
-                if ($branch['name'] == $default_branch) {
-                    $default_base = $branch['commit']['sha'];
-                }
+            $branches_flattened = $pr_client->getBranchesFlattened($branch_user, $user_repo);
+            $default_base = $pr_client->getDefaultBase($branch_user, $user_repo, $default_branch);
+            if ($default_base_upstream = $private_client->getDefaultBase($user_name, $user_repo, $default_branch)) {
+                $default_base = $default_base_upstream;
             }
-
-            foreach ($branches_upstream as $branch) {
-                if ($branch['name'] == $default_branch) {
-                    $default_base = $branch['commit']['sha'];
-                }
-            }
-
-            foreach ($prs as $pr) {
-                $prs_named[$pr['head']['ref']] = $pr;
-            }
+            $prs_named = $private_client->getPrsNamed($user_name, $user_repo);
         } catch (RuntimeException $e) {
             // Safe to ignore.
             $this->log('Had a runtime exception with the fetching of branches and Prs: ' . $e->getMessage());
@@ -923,5 +912,18 @@ class CosyComposer
     {
         $names = array_column($lockdata->{$lockfile_key}, 'name');
         return array_search($package_name, $names);
+    }
+
+    /**
+     * @param Slug $slug
+     *
+     * @return ProviderInterface
+     */
+    private function getClient(Slug $slug)
+    {
+        if (!$this->providerFactory) {
+            $this->setProviderFactory(new ProviderFactory());
+        }
+        return $this->providerFactory->createFromHost($slug);
     }
 }
