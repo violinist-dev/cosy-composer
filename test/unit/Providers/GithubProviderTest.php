@@ -156,6 +156,41 @@ class GithubProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['patch-1', 'patch-2'], array_keys($g->getPrsNamed($user, $repo)));
     }
 
+    public function testDefaultBase()
+    {
+        $user = 'testUser';
+        $repo = 'testRepo';
+        $mock_repo_api = $this->createMock(Repo::class);
+        $mock_repo_api->expects($this->once())
+            ->method('branches')
+            ->with($user, $repo)
+            ->willReturn([
+                [
+                    'name' => 'master',
+                    'commit' => [
+                        'sha' => 'abcd',
+                    ],
+                ],
+                [
+                    'name' => 'develop',
+                    'commit' => [
+                        'sha' => '1234',
+                    ]
+                ],
+            ]);
+        $mock_client = $this->getMockClient();
+        $mock_client->expects($this->once())
+            ->method('api')
+            ->with('repo')
+            ->willReturn($mock_repo_api);
+        $mock_response = $this->createMock(ResponseInterface::class);
+        $mock_client->expects($this->once())
+            ->method('getLastResponse')
+            ->willReturn($mock_response);
+        $g = new Github($mock_client);
+        $this->assertEquals('abcd', $g->getDefaultBase($user, $repo, 'master'));
+    }
+
     private function getMockClient()
     {
         return $this->createMock(Client::class);

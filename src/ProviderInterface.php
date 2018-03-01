@@ -4,8 +4,6 @@ namespace eiriksm\CosyComposer;
 
 interface ProviderInterface
 {
-    public function getOpenPullRequests($user, $repo);
-
     public function authenticate($user, $token);
 
     public function authenticatePrivate($user, $token);
