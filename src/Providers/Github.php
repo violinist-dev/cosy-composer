@@ -77,11 +77,6 @@ class Github implements ProviderInterface
         return $prs_named;
     }
 
-    public function getOpenPullRequests($user, $repo)
-    {
-        // TODO: Implement getOpenPullRequests() method.
-    }
-
     public function getDefaultBase($user, $repo, $default_branch)
     {
         $branches = $this->getBranches($user, $repo);
