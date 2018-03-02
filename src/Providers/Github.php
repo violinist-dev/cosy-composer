@@ -88,4 +88,16 @@ class Github implements ProviderInterface
         }
         return $default_base;
     }
+
+    public function createFork($user, $repo, $fork_user)
+    {
+        return $this->client->api('repo')->forks()->create($user, $repo, [
+          'organization' => $fork_user,
+        ]);
+    }
+
+    public function createPullRequest($user_name, $user_repo, $params)
+    {
+        return $this->client->api('pull_request')->create($user_name, $user_repo, $params);
+    }
 }

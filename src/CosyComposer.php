@@ -457,9 +457,7 @@ class CosyComposer
         $this->execCommand('git pull --unshallow', false, 300);
         // If the repo is private, we need to push directly to the repo.
         if (!$private) {
-            $fork = $client->api('repo')->forks()->create($user_name, $user_repo, [
-            'organization' => $this->forkUser,
-            ]);
+            $fork = $client->createFork($user_name, $user_repo, $this->forkUser);
             $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUserName, $this->githubUserPass, $this->forkUser, $user_repo);
             $this->execCommand('git remote add fork ' . $fork_url, false);
             // Sync the fork.
@@ -582,7 +580,7 @@ class CosyComposer
                     $head = $branch_name;
                 }
                 $body = $this->createBody($item, $changelog);
-                $pullRequest = $pr_client->api('pull_request')->create($user_name, $user_repo, [
+                $pullRequest = $pr_client->createPullRequest($user_name, $user_repo, [
                     'base'  => $default_branch,
                     'head'  => $head,
                     'title' => $this->createTitle($item),
