@@ -471,10 +471,10 @@ class CosyComposer
                 $pre_update_data = $this->getPackageData($package_name, $lockdata);
                 $version_from = $item->version;
                 $version_to = $item->latest;
-              // First see if we can update this at all?
-              // @todo: Just logging this for now, but this would be nice to have.
+                // First see if we can update this at all?
+                // @todo: Just logging this for now, but this would be nice to have.
                 $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer --no-ansi why-not -t %s:%s', $package_name, $version_to), true, 300);
-              // See where this package is.
+                // See where this package is.
                 $req_command = 'require';
                 $lockfile_key = 'require';
                 if (!empty($cdata->{'require-dev'}->{$package_name})) {
@@ -484,17 +484,17 @@ class CosyComposer
                 } else {
                     $req_item = $cdata->{'require'}->{$package_name};
                 }
-              // See if the new version seems to satisfy the constraint.
+                // See if the new version seems to satisfy the constraint.
                 if (!Semver::satisfies($version_to, (string) $req_item)) {
                     throw new CanNotUpdateException(sprintf('Package %s with the constraint %s can not be updated to %s', $package_name, $req_item, $version_to));
                 }
-              // Create a new branch.
+                // Create a new branch.
                 $branch_name = $this->createBranchName($item);
                 $this->log('Checking out new branch: ' . $branch_name);
                 $this->execCommand('git checkout -b ' . $branch_name, false);
-              // Make sure we do not have any uncommitted changes.
+                // Make sure we do not have any uncommitted changes.
                 $this->execCommand('git checkout .', false);
-              // Try to use the same version constraint.
+                // Try to use the same version constraint.
                 $version = (string) $req_item;
                 switch ($version[0]) {
                     case '^':
@@ -515,22 +515,22 @@ class CosyComposer
                 } else {
                     $command = 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts --with-dependencies ' . $package_name;
                     $this->log('Running composer update for package ' . $package_name);
-                  // If exit code is not 0, there was a problem.
+                    // If exit code is not 0, there was a problem.
                     if ($this->execCommand($command, false, 600)) {
                         $this->log('Problem running composer update:');
                         $this->log($this->lastStdErr);
                         throw new \Exception('Composer update did not complete successfully');
                     }
                     $this->log('Successfully ran command composer update for package ' . $package_name);
-                  // If the constraint is empty, we also try to require the new version.
+                    // If the constraint is empty, we also try to require the new version.
                     if ($constraint == '' && strpos($version, 'dev') === false) {
-                      // @todo: Duplication from like 6 lines earlier.
+                        // @todo: Duplication from like 6 lines earlier.
                         $command = sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer --no-ansi %s %s:%s%s --update-with-dependencies', $req_command, $package_name, $constraint, $version_to);
                         $this->execCommand($command, false, 600);
                     }
                 }
-              // Clean away the lock file if we are not supposed to use it. But first
-              // read it for use later.
+                // Clean away the lock file if we are not supposed to use it. But first
+                // read it for use later.
                 $new_lockdata = json_decode(file_get_contents($this->tmpDir . '/composer.lock'));
                 $post_update_data = $this->getPackageData($package_name, $new_lockdata);
                 if (isset($post_update_data->source) || $post_update_data->source->type == 'git') {
