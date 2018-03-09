@@ -24,6 +24,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Violinist\Slug\Slug;
+use Wa72\SimpleLogger\ArrayLogger;
 
 class CosyComposer
 {
@@ -32,6 +33,9 @@ class CosyComposer
      */
     public function getLogger()
     {
+        if (!$this->logger) {
+            $this->logger = new ArrayLogger();
+        }
         return $this->logger;
     }
 
@@ -777,7 +781,8 @@ class CosyComposer
    */
     protected function log($message, $type = 'message')
     {
-        $this->logger->log('info', new Message($message, $type));
+
+        $this->getLogger()->log('info', new Message($message, $type));
     }
 
   /**
