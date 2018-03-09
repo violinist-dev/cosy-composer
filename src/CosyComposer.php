@@ -74,10 +74,6 @@ class CosyComposer
    */
     private $cacheDir = '/tmp';
 
-  /**
-   * @var bool
-   */
-    private $verbose = false;
 
   /**
    * @var string
@@ -294,11 +290,6 @@ class CosyComposer
         $this->app = $app;
         $this->output = $output;
         $this->executer = $executer;
-    }
-
-    public function setVerbose($verbose)
-    {
-        $this->verbose = $verbose;
     }
 
     public function setGithubAuth($user, $pass)
@@ -727,11 +718,9 @@ class CosyComposer
    */
     protected function createBranchName($item)
     {
-        $this->debug('Creating branch name based on ' . print_r($item, true));
         $item_string = sprintf('%s%s%s', $item->name, $item->version, $item->latest);
-      // @todo: Fix this properly.
+        // @todo: Fix this properly.
         $result = preg_replace('/[^a-zA-Z0-9]+/', '', $item_string);
-        $this->debug('Creating branch named ' . $result);
         return $result;
     }
 
@@ -779,13 +768,6 @@ class CosyComposer
     public function setProcOpen($proc_open)
     {
         $this->proc_open = $proc_open;
-    }
-
-    protected function debug($message)
-    {
-        if ($this->verbose) {
-            $this->log($message);
-        }
     }
 
   /**
