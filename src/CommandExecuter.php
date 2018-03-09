@@ -27,9 +27,6 @@ class CommandExecuter
 
     public function executeCommand($command, $log = true, $timeout = 120)
     {
-        if ($log) {
-            $this->logger->info("Creating command $command");
-        }
         $process = $this->processFactory->getProcess($command, $this->getCwd());
         $process->setTimeout($timeout);
         $process->run();
