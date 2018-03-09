@@ -24,6 +24,7 @@ class Message
     const UPDATE = 'update';
     const ERROR = 'error';
     const PR_URL = 'pr_url';
+    const UNUPDATEABLE = 'unupdate';
 
   /**
    * Message constructor.

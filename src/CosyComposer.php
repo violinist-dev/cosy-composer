@@ -498,7 +498,7 @@ class CosyComposer
                 }
                 // See if the new version seems to satisfy the constraint.
                 if (!Semver::satisfies($version_to, (string) $req_item)) {
-                    throw new CanNotUpdateException(sprintf('Package %s with the constraint %s can not be updated to %s', $package_name, $req_item, $version_to));
+                    throw new CanNotUpdateException(sprintf('Package %s with the constraint %s can not be updated to %s.', $package_name, $req_item, $version_to));
                 }
                 // Create a new branch.
                 $branch_name = $this->createBranchName($item);
@@ -602,18 +602,18 @@ class CosyComposer
                     $this->log($pullRequest['html_url'], Message::PR_URL);
                 }
             } catch (CanNotUpdateException $e) {
-                $this->log($e->getMessage(), 'error');
+                $this->log($e->getMessage(), Message::UNUPDATEABLE);
             } catch (ValidationFailedException $e) {
-              // @todo: Do some better checking. Could be several things, this.
+                // @todo: Do some better checking. Could be several things, this.
                 $this->log('Had a problem with creating the pull request: ' . $e->getMessage(), 'error');
             } catch (\Exception $e) {
-              // @todo: Should probably handle this in some way.
+                // @todo: Should probably handle this in some way.
                 $this->log('Caught an exception: ' . $e->getMessage(), 'error');
             }
             $this->log('Checking out default branch - ' . $default_branch);
             $this->execCommand('git checkout ' . $default_branch, false);
         }
-      // Clean up.
+        // Clean up.
         $this->cleanUp();
     }
 
