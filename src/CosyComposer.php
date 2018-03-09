@@ -19,6 +19,7 @@ use Github\Exception\ValidationFailedException;
 use Github\HttpClient\Builder;
 use Github\ResultPager;
 use League\Flysystem\Adapter\Local;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,6 +27,26 @@ use Violinist\Slug\Slug;
 
 class CosyComposer
 {
+    /**
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     */
+    public function setLogger($logger)
+    {
+        $this->logger = $logger;
+    }
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
   /**
    * @var array
@@ -613,7 +634,11 @@ class CosyComposer
    */
     public function getOutput()
     {
-        return $this->messages;
+        $msgs = [];
+        foreach ($this->logger->get() as $message) {
+            $msgs[] = $message['message'];
+        }
+        return $msgs;
     }
 
     /**
@@ -770,10 +795,7 @@ class CosyComposer
    */
     protected function log($message, $type = 'message')
     {
-        if ($this->verbose) {
-            print_r("$message\n");
-        }
-        $this->messages[] = new Message($message, $type);
+        $this->logger->log('info', new Message($message, $type));
     }
 
   /**
