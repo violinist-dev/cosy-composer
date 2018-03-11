@@ -504,9 +504,6 @@ class CosyComposer
                 $pre_update_data = $this->getPackageData($package_name, $lockdata);
                 $version_from = $item->version;
                 $version_to = $item->latest;
-                // First see if we can update this at all?
-                // @todo: Just logging this for now, but this would be nice to have.
-                $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer --no-ansi why-not -t %s:%s', $package_name, $version_to), true, 300);
                 // See where this package is.
                 $req_command = 'require';
                 $lockfile_key = 'require';
