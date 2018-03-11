@@ -26,6 +26,7 @@ class Message
     const PR_URL = 'pr_url';
     const UNUPDATEABLE = 'unupdate';
     const COMMAND = 'command';
+    const VIOLINIST_ERROR = 'violinist_error';
 
   /**
    * Message constructor.
