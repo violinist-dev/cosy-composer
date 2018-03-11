@@ -40,7 +40,8 @@ class CommandExecuter
         return $process->getExitCode();
     }
 
-    public function getLastOutput() {
+    public function getLastOutput()
+    {
         $last_index = count($this->output) - 1;
         return $this->output[$last_index];
     }
