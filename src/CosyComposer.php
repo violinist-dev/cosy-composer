@@ -187,27 +187,18 @@ class CosyComposer
     private $githubEmail;
     private $messageFactory;
 
-  /**
-   * @var string
-   */
-    private $lastStdErr = '';
-
-  /**
-   * @var string
-   */
-    private $lastStdOut = '';
-
-  /**
-   * @return string
-   */
+   /**
+    * @return string
+    */
     public function getLastStdErr()
     {
-        return $this->lastStdErr;
+        $output = $this->executer->getLastOutput();
+        return $output['stderr'];
     }
 
-  /**
-   * @param string $lastStdErr
-   */
+   /**
+    * @param string $lastStdErr
+    */
     public function setLastStdErr($lastStdErr)
     {
         $this->lastStdErr = $lastStdErr;
@@ -218,16 +209,10 @@ class CosyComposer
    */
     public function getLastStdOut()
     {
-        return $this->lastStdOut;
+        $output = $this->executer->getLastOutput();
+        return $output['stderr'];
     }
 
-  /**
-   * @param string $lastStdOut
-   */
-    public function setLastStdOut($lastStdOut)
-    {
-        $this->lastStdOut = $lastStdOut;
-    }
 
     /**
      * @var \eiriksm\CosyComposer\CommandExecuter
@@ -547,7 +532,7 @@ class CosyComposer
                     // If exit code is not 0, there was a problem.
                     if ($this->execCommand($command, false, 600)) {
                         $this->log('Problem running composer update:');
-                        $this->log($this->lastStdErr);
+                        $this->log($this->getLastStdErr());
                         throw new \Exception('Composer update did not complete successfully');
                     }
                     $this->log('Successfully ran command composer update for package ' . $package_name);
@@ -870,28 +855,29 @@ class CosyComposer
     {
         $data = $this->getPackageData($package_name, $lockdata);
         $clone_path = $this->retrieveDependencyRepo($data);
-      // Then try to get the changelog.
+        // Then try to get the changelog.
         $command = sprintf('git -C %s log %s..%s --oneline', $clone_path, $version_from, $version_to);
         $this->execCommand($command, false);
-        $changelog_string = $this->getLastStdOut();
+        $output = $this->executer->getLastOutput();
+        $changelog_string = $output['stdout'];
         if (empty($changelog_string)) {
             throw new \Exception('The changelog string was empty');
         }
-      // If the changelog is too long, truncate it.
+        // If the changelog is too long, truncate it.
         if (mb_strlen($changelog_string) > 60000) {
-          // Truncate it to 60K.
+            // Truncate it to 60K.
             $changelog_string = mb_substr($changelog_string, 0, 60000);
-          // Then split it into lines.
+            // Then split it into lines.
             $lines = explode("\n", $changelog_string);
-          // Cut off the last one, since it could be partial.
+            // Cut off the last one, since it could be partial.
             array_pop($lines);
-          // Then append a line saying the changelog was too long.
+            // Then append a line saying the changelog was too long.
             $lines[] = sprintf('%s ...more commits found, but message is too long for PR', $version_to);
             $changelog_string = implode("\n", $lines);
         }
-      // Then split it into lines that makes sense.
+        // Then split it into lines that makes sense.
         $log = ChangeLogData::createFromString($changelog_string);
-      // Then assemble the git source.
+        // Then assemble the git source.
         $git_url = preg_replace('/.git$/', '', $data->source->url);
         $log->setGitSource($git_url);
         return $log;
