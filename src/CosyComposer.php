@@ -818,6 +818,9 @@ class CosyComposer
             $this->messages[] = new Message($this->getLastStdErr(), 'stderr');
             throw new ComposerInstallException('Composer install failed with exit code ' . $code);
         }
+
+        $command_output = $this->executer->getLastOutput();
+        $this->log($command_output['stderr'], Message::COMMAND);
         $this->log('composer install completed successfully');
     }
 

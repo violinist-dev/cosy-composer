@@ -19,6 +19,8 @@ class CommandExecuter
 
     protected $cwd;
 
+    protected $output = [];
+
     public function __construct(LoggerInterface $logger, ProcessFactory $factory)
     {
         $this->logger = $logger;
@@ -31,7 +33,16 @@ class CommandExecuter
         $process = $this->processFactory->getProcess($command, $this->getCwd());
         $process->setTimeout($timeout);
         $process->run();
+        $this->output[] = [
+            'stdout' => $process->getOutput(),
+            'stderr' => $process->getErrorOutput(),
+        ];
         return $process->getExitCode();
+    }
+
+    public function getLastOutput() {
+        $last_index = count($this->output) - 1;
+        return $this->output[$last_index];
     }
 
     /**
