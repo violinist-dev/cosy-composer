@@ -406,12 +406,27 @@ class CosyComposer
                 break;
             }
         }
+        // Remove blacklisted packages.
+        if (!empty($cdata->extra) && !empty($cdata->extra->violinist) && !empty($cdata->extra->violinist->blacklist)) {
+            if (!is_array($cdata->extra->violinist->blacklist)) {
+                $this->log('The format for blacklisting packages was not correct. Expected an array, got ' . gettype($cdata->extra->violinist->blacklist), Message::VIOLINIST_ERROR);
+            }
+            else {
+                foreach ($data as $delta => $item) {
+                    if (in_array($item->name, $cdata->extra->violinist->blacklist)) {
+                        $this->log(sprintf('Skipping update of %s because it is blacklisted', $item->name));
+                        unset($data[$delta]);
+                    }
+                }
+            }
+        }
         if (empty($data)) {
             $this->log('No updates found');
             $this->cleanup();
             return;
         }
         // Try to log what updates are found.
+        $this->log('The following updates were found:');
         $updates_string = '';
         foreach ($data as $delta => $item) {
             $updates_string .= sprintf(
