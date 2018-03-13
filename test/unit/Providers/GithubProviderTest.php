@@ -5,6 +5,7 @@ namespace eiriksm\CosyComposerTest\unit\Providers;
 use eiriksm\CosyComposer\Providers\Github;
 use Github\Api\PullRequest;
 use Github\Api\Repo;
+use Github\Api\Repository\Forks;
 use Github\Client;
 use Psr\Http\Message\ResponseInterface;
 
@@ -190,6 +191,53 @@ class GithubProviderTest extends \PHPUnit_Framework_TestCase
         $g = new Github($mock_client);
         $this->assertEquals('abcd', $g->getDefaultBase($user, $repo, 'master'));
     }
+
+    public function testCreateFork()
+    {
+        $user = 'testUser';
+        $repo = 'testRepo';
+        $fork_user = 'forkUser';
+        $testresponse = 'testresponse';
+        $mock_forks = $this->createMock(Forks::class);
+        $mock_forks->expects($this->once())
+            ->method('create')
+            ->with($user, $repo, ['organization' => $fork_user])
+            ->willReturn($testresponse);
+        $mock_repo_api = $this->createMock(Repo::class);
+        $mock_repo_api->expects($this->once())
+            ->method('forks')
+            ->willReturn($mock_forks);
+        $mock_client = $this->getMockClient();
+        $mock_client->expects($this->once())
+            ->method('api')
+            ->with('repo')
+            ->willReturn($mock_repo_api);
+        $g = new Github($mock_client);
+        $this->assertEquals($testresponse, $g->createFork($user, $repo, $fork_user));
+    }
+
+    public function testCreatePR()
+    {
+        $user = 'testUser';
+        $repo = 'testRepo';
+        $params = [
+            'param1' => true,
+        ];
+        $testresponse = 'testresponse';
+        $mock_pr_api = $this->createMock(PullRequest::class);
+        $mock_pr_api->expects($this->once())
+            ->method('create')
+            ->with($user, $repo, $params)
+            ->willReturn($testresponse);
+        $mock_client = $this->getMockClient();
+        $mock_client->expects($this->once())
+            ->method('api')
+            ->with('pull_request')
+            ->willReturn($mock_pr_api);
+        $g = new Github($mock_client);
+        $this->assertEquals($testresponse, $g->createPullRequest($user, $repo, $params));
+    }
+
 
     private function getMockClient()
     {
