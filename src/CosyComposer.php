@@ -535,7 +535,6 @@ class CosyComposer
                         $this->log($this->getLastStdErr());
                         throw new \Exception('Composer update did not complete successfully');
                     }
-                    $this->log('Successfully ran command composer update for package ' . $package_name);
                     // If the constraint is empty, we also try to require the new version.
                     if ($constraint == '' && strpos($version, 'dev') === false) {
                         // @todo: Duplication from like 6 lines earlier.
@@ -552,14 +551,15 @@ class CosyComposer
                     $version_to = $post_update_data->source->reference;
                 }
                 if ($version_to === $version_from) {
-                  // Nothing has happened here. Although that can be alright (like we
-                  // have updated some dependencies of this package) this is not what
-                  // this service does, currently, and also the title of the PR would be
-                  // wrong.
+                    // Nothing has happened here. Although that can be alright (like we
+                    // have updated some dependencies of this package) this is not what
+                    // this service does, currently, and also the title of the PR would be
+                    // wrong.
                     throw new NotUpdatedException('The version installed is still the same after trying to update.');
                 }
+                $this->log('Successfully ran command composer update for package ' . $package_name);
                 $this->execCommand('git clean -f composer.*');
-              // This might have cleaned out the auth file, so we re-export it.
+                // This might have cleaned out the auth file, so we re-export it.
                 $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->githubUser));
                 $command = sprintf(
                     'GIT_AUTHOR_NAME="%s" GIT_AUTHOR_EMAIL="%s" GIT_COMMITTER_NAME="%s" GIT_COMMITTER_EMAIL="%s" git commit composer.* -m "Update %s"',
