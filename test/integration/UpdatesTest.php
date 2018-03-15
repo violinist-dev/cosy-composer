@@ -397,7 +397,7 @@ class UpdatesTest extends Base
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals('Caught an exception: The version installed is still the same after trying to update.', $output[11]->getMessage());
+        $this->assertEquals('psr/log was not updated running composer update', $output[12]->getMessage());
         $this->assertEquals(true, $called);
     }
 
