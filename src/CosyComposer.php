@@ -535,12 +535,6 @@ class CosyComposer
                         $this->log($this->getLastStdErr());
                         throw new \Exception('Composer update did not complete successfully');
                     }
-                    // If the constraint is empty, we also try to require the new version.
-                    if ($constraint == '' && strpos($version, 'dev') === false) {
-                        // @todo: Duplication from like 6 lines earlier.
-                        $command = sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer --no-ansi %s %s:%s%s --update-with-dependencies', $req_command, $package_name, $constraint, $version_to);
-                        $this->execCommand($command, false, 600);
-                    }
                 }
                 // Clean away the lock file if we are not supposed to use it. But first
                 // read it for use later.
