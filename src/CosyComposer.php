@@ -549,6 +549,7 @@ class CosyComposer
                     // have updated some dependencies of this package) this is not what
                     // this service does, currently, and also the title of the PR would be
                     // wrong.
+                    $this->log($this->getLastStdErr());
                     throw new NotUpdatedException('The version installed is still the same after trying to update.');
                 }
                 $this->log('Successfully ran command composer update for package ' . $package_name);
@@ -599,6 +600,10 @@ class CosyComposer
                 }
             } catch (CanNotUpdateException $e) {
                 $this->log($e->getMessage(), Message::UNUPDATEABLE);
+            } catch (NotUpdatedException $e) {
+                // Not updated because of the composer command, not the
+                // restriction itself.
+                $this->log("$package_name was not updated running composer update", Message::NOT_UPDATED);
             } catch (ValidationFailedException $e) {
                 // @todo: Do some better checking. Could be several things, this.
                 $this->log('Had a problem with creating the pull request: ' . $e->getMessage(), 'error');

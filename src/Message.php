@@ -25,6 +25,7 @@ class Message
     const ERROR = 'error';
     const PR_URL = 'pr_url';
     const UNUPDATEABLE = 'unupdate';
+    const NOT_UPDATED = 'notupdated';
     const COMMAND = 'command';
     const VIOLINIST_ERROR = 'violinist_error';
 
