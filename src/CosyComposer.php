@@ -498,8 +498,8 @@ class CosyComposer
                 } else {
                     $req_item = $cdata->{'require'}->{$package_name};
                 }
-                // See if the new version seems to satisfy the constraint.
-                if (!Semver::satisfies($version_to, (string) $req_item)) {
+                // See if the new version seems to satisfy the constraint. Unless the constraint is dev related somehow.
+                if (strpos((string) $req_item, 'dev') === false && !Semver::satisfies($version_to, (string) $req_item)) {
                     throw new CanNotUpdateException(sprintf('Package %s with the constraint %s can not be updated to %s.', $package_name, $req_item, $version_to));
                 }
                 // Create a new branch.
