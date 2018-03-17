@@ -421,7 +421,9 @@ class CosyComposer
                 $item->{'latest-status'}
             );
         }
-        $this->log($updates_string, Message::UPDATE);
+        $this->log($updates_string, Message::UPDATE, [
+            'packages' => $data,
+        ]);
         $client = $this->getClient($this->slug);
         $client->authenticate($this->token, null);
         // Get the default branch of the repo.
