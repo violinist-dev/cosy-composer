@@ -783,7 +783,7 @@ class CosyComposer
    *
    * @param string $message
    */
-    protected function log($message, $type = 'message', $context)
+    protected function log($message, $type = 'message', $context = [])
     {
 
         $this->getLogger()->log('info', new Message($message, $type), $context);
