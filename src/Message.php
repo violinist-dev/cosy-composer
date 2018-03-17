@@ -5,20 +5,41 @@ namespace eiriksm\CosyComposer;
 class Message
 {
 
-  /**
-   * @var string
-   */
+    /**
+     * @var string
+     */
     protected $message;
 
-  /**
-   * @var int
-   */
+    /**
+     * @var int
+     */
     protected $timestamp;
 
-  /**
-   * @var string
-   */
+    /**
+     * @var string
+     */
     protected $type;
+
+    /**
+     * @return mixed
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    /**
+     * @param mixed $context
+     */
+    public function setContext($context)
+    {
+        $this->context = $context;
+    }
+
+    /**
+     * @var mixed
+     */
+    protected $context;
 
     const MESSAGE = 'message';
     const UPDATE = 'update';

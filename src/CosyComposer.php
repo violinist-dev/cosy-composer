@@ -599,11 +599,15 @@ class CosyComposer
                     $this->log($pullRequest['html_url'], Message::PR_URL);
                 }
             } catch (CanNotUpdateException $e) {
-                $this->log($e->getMessage(), Message::UNUPDATEABLE);
+                $this->log($e->getMessage(), Message::UNUPDATEABLE, [
+                    'package' => $package_name,
+                ]);
             } catch (NotUpdatedException $e) {
                 // Not updated because of the composer command, not the
                 // restriction itself.
-                $this->log("$package_name was not updated running composer update", Message::NOT_UPDATED);
+                $this->log("$package_name was not updated running composer update", Message::NOT_UPDATED, [
+                    'package' => $package_name,
+                ]);
             } catch (ValidationFailedException $e) {
                 // @todo: Do some better checking. Could be several things, this.
                 $this->log('Had a problem with creating the pull request: ' . $e->getMessage(), 'error');
@@ -628,6 +632,9 @@ class CosyComposer
     {
         $msgs = [];
         foreach ($this->logger->get() as $message) {
+            /** @var Message $msg */
+            $msg = $message['message'];
+            $msg->setContext($message['context']);
             $msgs[] = $message['message'];
         }
         return $msgs;
@@ -776,10 +783,10 @@ class CosyComposer
    *
    * @param string $message
    */
-    protected function log($message, $type = 'message')
+    protected function log($message, $type = 'message', $context)
     {
 
-        $this->getLogger()->log('info', new Message($message, $type));
+        $this->getLogger()->log('info', new Message($message, $type), $context);
     }
 
   /**
