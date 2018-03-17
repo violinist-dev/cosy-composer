@@ -577,7 +577,9 @@ class CosyComposer
                     // have updated some dependencies of this package) this is not what
                     // this service does, currently, and also the title of the PR would be
                     // wrong.
-                    $this->log($this->getLastStdErr());
+                    $this->log($this->getLastStdErr(), Message::MESSAGE, [
+                        'package' => $package_name,
+                    ]);
                     throw new NotUpdatedException('The version installed is still the same after trying to update.');
                 }
                 $this->log('Successfully ran command composer update for package ' . $package_name);
