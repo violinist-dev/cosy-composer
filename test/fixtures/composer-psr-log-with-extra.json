@@ -1,0 +1,10 @@
+{
+    "require": {
+        "psr/log": "^1.0"
+    },
+    "extra": {
+        "violinist": {
+            "allow_updates_beyond_constraint": 1
+        }
+    }
+}
