@@ -125,6 +125,10 @@ class UpdatesTest extends Base
         $c->setProviderFactory($mock_provider_factory);
         $this->assertEquals(false, $called);
         $c->run();
+        $output = $c->getOutput();
+        $this->assertEquals(Message::PR_EXISTS, $output[9]->getType());
+        $this->assertEquals('Skipping eiriksm/fake-package because a pull request already exists', $output[9]->getMessage());
+        $this->assertEquals('eiriksm/fake-package', $output[9]->getContext()["package"]);
         $this->assertEquals(true, $called);
     }
 
