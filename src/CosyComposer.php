@@ -398,7 +398,9 @@ class CosyComposer
             } else {
                 foreach ($data as $delta => $item) {
                     if (in_array($item->name, $cdata->extra->violinist->blacklist)) {
-                        $this->log(sprintf('Skipping update of %s because it is blacklisted', $item->name));
+                        $this->log(sprintf('Skipping update of %s because it is blacklisted', $item->name), Message::BLACKLISTED, [
+                            'package' => $item->name,
+                        ]);
                         unset($data[$delta]);
                     }
                 }
@@ -455,12 +457,16 @@ class CosyComposer
               // Is there a PR for this?
                 if (array_key_exists($branch_name, $prs_named)) {
                     if (!$default_base) {
-                        $this->log(sprintf('Skipping %s because a pull request already exists', $item->name));
+                        $this->log(sprintf('Skipping %s because a pull request already exists', $item->name, Message::PR_EXISTS, [
+                            'package' => $item->name,
+                        ]));
                         unset($data[$delta]);
                     }
                     // Is the pr up to date?
                     if ($prs_named[$branch_name]['base']['sha'] == $default_base) {
-                        $this->log(sprintf('Skipping %s because a pull request already exists', $item->name));
+                        $this->log(sprintf('Skipping %s because a pull request already exists', $item->name, Message::PR_EXISTS, [
+                            'package' => $item->name,
+                        ]));
                         unset($data[$delta]);
                     }
                 }

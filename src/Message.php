@@ -45,6 +45,8 @@ class Message
     const UPDATE = 'update';
     const ERROR = 'error';
     const PR_URL = 'pr_url';
+    const BLACKLISTED = 'blacklisted';
+    const PR_EXISTS = 'pr_exists';
     const UNUPDATEABLE = 'unupdate';
     const NOT_UPDATED = 'notupdated';
     const COMMAND = 'command';
