@@ -683,6 +683,8 @@ class CosyComposer
    */
     private function cleanUp()
     {
+        // Run composer install again, so we can get rid of newly installed updates for next run.
+        $this->execCommand('COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n --no-scripts', false, 1200);
         $this->chdir('/tmp');
         $this->log('Cleaning up after update check.');
         $this->log('Storing custom composer cache for later');
@@ -835,8 +837,8 @@ class CosyComposer
         $this->log('Running composer install');
         if ($code = $this->execCommand('COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n --no-scripts', false, 1200)) {
             // Other status code than 0.
-            $this->messages[] = new Message($this->getLastStdOut(), 'stdout');
-            $this->messages[] = new Message($this->getLastStdErr(), 'stderr');
+            $this->log($this->getLastStdOut(), Message::COMMAND);
+            $this->log($this->getLastStdErr(), Message::COMMAND);
             throw new ComposerInstallException('Composer install failed with exit code ' . $code);
         }
 
