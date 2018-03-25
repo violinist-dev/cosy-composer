@@ -220,7 +220,7 @@ class UpdatesTest extends Base
                 ]
             ]);
         $c->setOutput($mock_output);
-        $composer_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.json');
+        $composer_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log-with-extra.json');
         $composer_file = "$dir/composer.json";
         file_put_contents($composer_file, $composer_contents);
         $called = false;
@@ -650,7 +650,7 @@ class UpdatesTest extends Base
                 ]
             ]);
         $c->setOutput($mock_output);
-        $composer_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log-with-extra.json');
+        $composer_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.json');
         $composer_file = "$dir/composer.json";
         file_put_contents($composer_file, $composer_contents);
         $called = false;

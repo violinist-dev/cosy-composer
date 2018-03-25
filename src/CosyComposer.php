@@ -506,15 +506,17 @@ class CosyComposer
                 } else {
                     $req_item = $cdata->{'require'}->{$package_name};
                 }
-                $can_update_beyond = false;
+                $can_update_beyond = true;
+                $should_update_beyond = false;
                 // See if the new version seems to satisfy the constraint. Unless the constraint is dev related somehow.
                 try {
                     if (strpos((string)$req_item, 'dev') === false && !Semver::satisfies($version_to, (string)$req_item)) {
                         // Well, unless we have actually allowed this through config.
                         // @todo: Move to somewhere more central (and certainly outside a loop), and probably together
                         // with other config.
-                        if (!empty($cdata->extra) && !empty($cdata->extra->violinist) && !empty($cdata->extra->violinist->allow_updates_beyond_constraint)) {
-                            $can_update_beyond = true;
+                        $should_update_beyond = true;
+                        if (!empty($cdata->extra) && !empty($cdata->extra->violinist) && isset($cdata->extra->violinist->allow_updates_beyond_constraint)) {
+                            $can_update_beyond = (bool) $cdata->extra->violinist->allow_updates_beyond_constraint;
                         }
                         if (!$can_update_beyond) {
                             throw new CanNotUpdateException(sprintf('Package %s with the constraint %s can not be updated to %s.', $package_name, $req_item, $version_to));
@@ -551,7 +553,7 @@ class CosyComposer
                         $constraint = '';
                         break;
                 }
-                if (!$lock_file_contents || $can_update_beyond) {
+                if (!$lock_file_contents || ($should_update_beyond && $can_update_beyond)) {
                     $command = sprintf('COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi %s %s:%s%s', $req_command, $package_name, $constraint, $version_to);
                     $this->execCommand($command, false, 600);
                 } else {
