@@ -686,7 +686,7 @@ class CosyComposer
     private function cleanUp()
     {
         // Run composer install again, so we can get rid of newly installed updates for next run.
-        $this->execCommand('COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n --no-scripts', false, 1200);
+        $this->execCommand('COMPOSER_DISCARD_CHANGES=true COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n --no-scripts', false, 1200);
         $this->chdir('/tmp');
         $this->log('Cleaning up after update check.');
         $this->log('Storing custom composer cache for later');
@@ -837,7 +837,7 @@ class CosyComposer
         }
         // @todo: Should probably use composer install command programatically.
         $this->log('Running composer install');
-        if ($code = $this->execCommand('COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n --no-scripts', false, 1200)) {
+        if ($code = $this->execCommand('COMPOSER_DISCARD_CHANGES=true COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n --no-scripts', false, 1200)) {
             // Other status code than 0.
             $this->log($this->getLastStdOut(), Message::COMMAND);
             $this->log($this->getLastStdErr(), Message::COMMAND);
