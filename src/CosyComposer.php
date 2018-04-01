@@ -511,7 +511,7 @@ class CosyComposer
                 // See if the new version seems to satisfy the constraint. Unless the constraint is dev related somehow.
                 try {
                     if (strpos((string)$req_item, 'dev') === false && !Semver::satisfies($version_to, (string)$req_item)) {
-                        // Well, unless we have actually allowed this through config.
+                        // Well, unless we have actually disallowed this through config.
                         // @todo: Move to somewhere more central (and certainly outside a loop), and probably together
                         // with other config.
                         $should_update_beyond = true;
