@@ -700,4 +700,77 @@ class UpdatesTest extends Base
         $this->assertEquals(true, $called);
         $this->assertEquals(true, $install_called);
     }
+
+    public function testEndToEndButNotUpdatedWithDependencies()
+    {
+        $c = $this->getMockCosy();
+        $dir = '/tmp/' . uniqid();
+        mkdir($dir);
+        $c->setTmpDir($dir);
+        // Create a mock app, that can respond to things.
+        $mock_definition = $this->createMock(InputDefinition::class);
+        $mock_definition->method('getOptions')
+            ->willReturn([]);
+        $mock_app = $this->createMock(Application::class);
+        $mock_app->method('getDefinition')
+            ->willReturn($mock_definition);
+        $c->setApp($mock_app);
+        $mock_output = $this->createMock(ArrayOutput::class);
+        $mock_output->method('fetch')
+            ->willReturn([
+                [
+                    '{"installed": [{"name": "psr/log", "version": "1.0.0", "latest": "1.0.1", "latest-status": "semver-safe-update"}]}'
+                ]
+            ]);
+        $c->setOutput($mock_output);
+        $this->createComposerFileFromFixtures($dir, 'composer-psr-log-with-extra-update-with.json');
+        $called = false;
+        $mock_executer = $this->getMockExecuterWithReturnCallback(
+            function ($cmd) use (&$called, $dir) {
+                $return = 0;
+                if ($cmd == 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts psr/log ') {
+                    file_put_contents("$dir/composer.lock", file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock-updated'));
+                }
+                if (strpos($cmd, 'rm -rf /tmp/') === 0) {
+                    $called = true;
+                }
+                return $return;
+            }
+        );
+        $c->setExecuter($mock_executer);
+        $this->assertEquals(false, $called);
+
+        // Then we are going to mock the provider factory.
+        $mock_provider_factory = $this->createMock(ProviderFactory::class);
+        $mock_provider = $this->createMock(Github::class);
+        $fake_pr_url = 'http://example.com/pr';
+        $mock_provider->expects($this->once())
+            ->method('createPullRequest')
+            ->willReturn([
+                'html_url' => $fake_pr_url,
+            ]);
+        $mock_provider->method('repoIsPrivate')
+            ->willReturn(true);
+        $mock_provider->method('getDefaultBranch')
+            ->willReturn('master');
+        $mock_provider->method('getBranchesFlattened')
+            ->willReturn([]);
+        $default_sha = 123;
+        $mock_provider->method('getDefaultBase')
+            ->willReturn($default_sha);
+        $mock_provider->method('getPrsNamed')
+            ->willReturn([]);
+        $mock_provider_factory->method('createFromHost')
+            ->willReturn($mock_provider);
+
+        $c->setProviderFactory($mock_provider_factory);
+        $this->assertEquals(false, $called);
+        $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock');
+        file_put_contents("$dir/composer.lock", $composer_lock_contents);
+        $c->run();
+        $output = $c->getOutput();
+        $this->assertEquals($fake_pr_url, $output[15]->getMessage());
+        $this->assertEquals(Message::PR_URL, $output[15]->getType());
+        $this->assertEquals(true, $called);
+    }
 }
