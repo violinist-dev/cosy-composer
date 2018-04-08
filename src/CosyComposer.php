@@ -161,27 +161,21 @@ class CosyComposer
    */
     private $githubUser;
 
-  /**
-   * @var string
-   */
+    /**
+     * Github pass.
+     *
+     * @var string
+     */
     private $githubPass;
 
-  /**
-   * @var string
-   */
+    /**
+     * @var string
+     */
     private $forkUser;
 
-  /**
-   * @var mixed
-   */
-    private $proc_open = 'proc_open';
-
-    private $proc_close = 'proc_close';
-
-    private $pipes = [];
-
-    private $contentGetter = 'stream_get_contents';
-
+    /**
+     * @var string
+     */
     private $githubUserName;
     private $githubUserPass;
     private $githubEmail;
@@ -786,48 +780,11 @@ class CosyComposer
         return $this->executer->executeCommand($command, $log, $timeout);
     }
 
-  /**
-   * Sets the function to call for getting the contents.
-   *
-   * @param $callable
-   *   A callable function.
-   */
-    public function setContentGetter($callable)
-    {
-        $this->contentGetter = $callable;
-    }
-
-    public function setPipes(array $pipes)
-    {
-        $this->pipes = $pipes;
-    }
-
-    public function getPipes()
-    {
-        return $this->pipes;
-    }
-
-  /**
-   * @param string $proc_close
-   */
-    public function setProcClose($proc_close)
-    {
-        $this->proc_close = $proc_close;
-    }
-
-  /**
-   * @param string $proc_open
-   */
-    public function setProcOpen($proc_open)
-    {
-        $this->proc_open = $proc_open;
-    }
-
-  /**
-   * Log a message.
-   *
-   * @param string $message
-   */
+    /**
+     * Log a message.
+     *
+     * @param string $message
+     */
     protected function log($message, $type = 'message', $context = [])
     {
 
