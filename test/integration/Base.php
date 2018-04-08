@@ -2,21 +2,15 @@
 
 namespace eiriksm\CosyComposerTest\integration;
 
+use Composer\Console\Application;
 use eiriksm\ArrayOutput\ArrayOutput;
 use eiriksm\CosyComposer\CommandExecuter;
 use eiriksm\CosyComposer\CosyComposer;
+use eiriksm\CosyComposerTest\GetCosyTrait;
 
 class Base extends \PHPUnit_Framework_TestCase
 {
-
-    protected function getMockCosy()
-    {
-        $app = $this->createMock('Composer\Console\Application');
-        $output = $this->createMock(ArrayOutput::class);
-        $executer = $this->createMock(CommandExecuter::class);
-        $c = new CosyComposer('token', 'a/b', $app, $output, $executer);
-        return $c;
-    }
+    use GetCosyTrait;
 
     protected function getMockExecuterWithReturnCallback($function)
     {
