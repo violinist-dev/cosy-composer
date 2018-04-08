@@ -553,11 +553,22 @@ class CosyComposer
                         $constraint = '';
                         break;
                 }
+                $with_dep_suffix = '--with-dependencies';
+                $update_with_deps = true;
+                if (!empty($cdata->extra) && !empty($cdata->extra->violinist) && isset($cdata->extra->violinist->update_with_dependencies)) {
+                    if (!(bool) $cdata->extra->violinist->update_with_dependencies) {
+                        $with_dep_suffix = '';
+                        $update_with_deps = false;
+                    }
+                }
                 if (!$lock_file_contents || ($should_update_beyond && $can_update_beyond)) {
-                    $command = sprintf('COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi %s %s:%s%s', $req_command, $package_name, $constraint, $version_to);
+                    if ($update_with_deps) {
+                        $with_dep_suffix = '--update-with-dependencies';
+                    }
+                    $command = sprintf('COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi %s %s:%s%s %s', $req_command, $package_name, $constraint, $version_to, $with_dep_suffix);
                     $this->execCommand($command, false, 600);
                 } else {
-                    $command = 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts --with-dependencies ' . $package_name;
+                    $command = sprintf('COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts %s %s', $package_name, $with_dep_suffix);
                     $this->log('Running composer update for package ' . $package_name);
                     // If exit code is not 0, there was a problem.
                     if ($this->execCommand($command, false, 600)) {
