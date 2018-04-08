@@ -84,16 +84,14 @@ class UpdatesTest extends Base
         $composer_file = "$dir/composer.json";
         file_put_contents($composer_file, $composer_contents);
         $called = false;
-        $mock_executer = $this->createMock(CommandExecuter::class);
-        $mock_executer->method('executeCommand')
-            ->will($this->returnCallback(
-                function ($cmd) use (&$called) {
-                    if (strpos($cmd, 'rm -rf /tmp/') === 0) {
-                        $called = true;
-                    }
-                    return 0;
+        $mock_executer = $this->getMockExecuterWithReturnCallback(
+            function ($cmd) use (&$called) {
+                if (strpos($cmd, 'rm -rf /tmp/') === 0) {
+                    $called = true;
                 }
-            ));
+                return 0;
+            }
+        );
         $c->setExecuter($mock_executer);
         $this->assertEquals(false, $called);
 
@@ -158,16 +156,14 @@ class UpdatesTest extends Base
         $composer_file = "$dir/composer.json";
         file_put_contents($composer_file, $composer_contents);
         $called = false;
-        $mock_executer = $this->createMock(CommandExecuter::class);
-        $mock_executer->method('executeCommand')
-            ->will($this->returnCallback(
-                function ($cmd) use (&$called) {
-                    if (strpos($cmd, 'rm -rf /tmp/') === 0) {
-                        $called = true;
-                    }
-                    return 0;
+        $mock_executer = $mock_executer = $this->getMockExecuterWithReturnCallback(
+            function ($cmd) use (&$called) {
+                if (strpos($cmd, 'rm -rf /tmp/') === 0) {
+                    $called = true;
                 }
-            ));
+                return 0;
+            }
+        );
         $c->setExecuter($mock_executer);
         $this->assertEquals(false, $called);
 
