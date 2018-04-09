@@ -52,10 +52,10 @@ class Message
     const COMMAND = 'command';
     const VIOLINIST_ERROR = 'violinist_error';
 
-  /**
-   * Message constructor.
-   * @param $message
-   */
+    /**
+     * Message constructor.
+     * @param $message
+     */
     public function __construct($message, $type = self::MESSAGE)
     {
         $this->message = $message;
