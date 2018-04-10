@@ -29,136 +29,38 @@ use Wa72\SimpleLogger\ArrayLogger;
 class CosyComposer
 {
     /**
-     * @return LoggerInterface
+     * @var ProviderFactory
      */
-    public function getLogger()
-    {
-        if (!$this->logger) {
-            $this->logger = new ArrayLogger();
-        }
-        return $this->logger;
-    }
+    protected $providerFactory;
 
     /**
-     * @param LoggerInterface $logger
+     * @var \eiriksm\CosyComposer\CommandExecuter
      */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
+    protected $executer;
 
     /**
-     * @var LoggerInterface
+     * @var ComposerFileGetter
      */
-    protected $logger;
-
-  /**
-   * @var array
-   */
-    private $messages = [];
-
-  /**
-   * @return string
-   */
-    public function getCacheDir()
-    {
-        return $this->cacheDir;
-    }
-
-  /**
-   * @param string $cacheDir
-   */
-    public function setCacheDir($cacheDir)
-    {
-        $this->cacheDir = $cacheDir;
-    }
-
-  /**
-   * @var string
-   */
-    private $cacheDir = '/tmp';
-
-
-  /**
-   * @var string
-   */
-    protected $tmpDir;
-
-  /**
-   * @return string
-   */
-    public function getTmpParent()
-    {
-        return $this->tmpParent;
-    }
-
-  /**
-   * @param string $tmpParent
-   */
-    public function setTmpParent($tmpParent)
-    {
-        $this->tmpParent = $tmpParent;
-    }
-
-  /**
-   * @var string
-   */
-    protected $tmpParent = '/tmp';
+    protected $composerGetter;
 
     /**
-     * @var Application
+     * @var string
      */
-    private $app;
-
-    /**
-     * @return Application
-     */
-    public function getApp(): Application
-    {
-        return $this->app;
-    }
-
-    /**
-     * @param Application $app
-     */
-    public function setApp(Application $app)
-    {
-        $this->app = $app;
-    }
-
-    /**
-     * The output we use for updates?
-     *
-     * @var OutputInterface
-     */
-    protected $output;
-
-  /**
-   * @return string
-   */
-    public function getCwd()
-    {
-        return $this->cwd;
-    }
-
-  /**
-   * @var string
-   */
     protected $cwd;
 
-  /**
-   * @var string
-   */
+    /**
+     * @var string
+     */
     private $token;
 
-  /**
-   * @var string
-   */
+    /**
+     * @var string
+     */
     private $slug;
 
-  /**
-   * @var string
-   */
+    /**
+     * @var string
+     */
     private $githubUser;
 
     /**
@@ -177,53 +79,138 @@ class CosyComposer
      * @var string
      */
     private $githubUserName;
+
+    /**
+     * @var string
+     */
     private $githubUserPass;
+
+    /**
+     * @var string
+     */
     private $githubEmail;
+
+    /**
+     * @var ViolinistMessages
+     */
     private $messageFactory;
 
-   /**
-    * @return string
-    */
+    /**
+     * The output we use for updates?
+     *
+     * @var OutputInterface
+     */
+    protected $output;
+
+    /**
+     * @var string
+     */
+    protected $tmpDir;
+
+    /**
+     * @var string
+     */
+    private $cacheDir = '/tmp';
+
+    /**
+     * @var string
+     */
+    protected $tmpParent = '/tmp';
+
+    /**
+     * @var Application
+     */
+    private $app;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        if (!$this->logger) {
+            $this->logger = new ArrayLogger();
+        }
+        return $this->logger;
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
+
+    /**
+     * @param string $cacheDir
+     */
+    public function setCacheDir($cacheDir)
+    {
+        $this->cacheDir = $cacheDir;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCacheDir()
+    {
+        return $this->cacheDir;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTmpParent()
+    {
+        return $this->tmpParent;
+    }
+
+    /**
+     * @param string $tmpParent
+     */
+    public function setTmpParent($tmpParent)
+    {
+        $this->tmpParent = $tmpParent;
+    }
+
+    /**
+     * @param Application $app
+     */
+    public function setApp(Application $app)
+    {
+        $this->app = $app;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCwd()
+    {
+        return $this->cwd;
+    }
+
+    /**
+     * @return string
+     */
     public function getLastStdErr()
     {
         $output = $this->executer->getLastOutput();
         return $output['stderr'];
     }
 
-   /**
-    * @param string $lastStdErr
-    */
-    public function setLastStdErr($lastStdErr)
-    {
-        $this->lastStdErr = $lastStdErr;
-    }
-
-  /**
-   * @return string
-   */
+    /**
+     * @return string
+     */
     public function getLastStdOut()
     {
         $output = $this->executer->getLastOutput();
-        return $output['stderr'];
-    }
-
-
-    /**
-     * @var \eiriksm\CosyComposer\CommandExecuter
-     */
-    protected $executer;
-
-    /**
-     * @var ComposerFileGetter
-     */
-    protected $composerGetter;
-
-    /**
-     * @return \eiriksm\CosyComposer\CommandExecuter
-     */
-    public function getExecuter()
-    {
-        return $this->executer;
+        return $output['stdout'];
     }
 
     /**
@@ -235,14 +222,6 @@ class CosyComposer
     }
 
     /**
-     * @return ProviderFactory
-     */
-    public function getProviderFactory()
-    {
-        return $this->providerFactory;
-    }
-
-    /**
      * @param ProviderFactory $providerFactory
      */
     public function setProviderFactory(ProviderFactory $providerFactory)
@@ -250,16 +229,12 @@ class CosyComposer
         $this->providerFactory = $providerFactory;
     }
 
-    /**
-     * @var ProviderFactory
-     */
-    protected $providerFactory;
 
-  /**
-   * CosyComposer constructor.
-   * @param string $token
-   * @param string $slug
-   */
+    /**
+     * CosyComposer constructor.
+     * @param string $token
+     * @param string $slug
+     */
     public function __construct($token, $slug, Application $app, OutputInterface $output, CommandExecuter $executer)
     {
         $this->token = $token;
@@ -299,12 +274,12 @@ class CosyComposer
         $this->forkUser = $user;
     }
 
-  /**
-   * @throws \eiriksm\CosyComposer\Exceptions\ChdirException
-   * @throws \eiriksm\CosyComposer\Exceptions\GitCloneException
-   * @throws \InvalidArgumentException
-   * @throws \Exception
-   */
+    /**
+     * @throws \eiriksm\CosyComposer\Exceptions\ChdirException
+     * @throws \eiriksm\CosyComposer\Exceptions\GitCloneException
+     * @throws \InvalidArgumentException
+     * @throws \Exception
+     */
     public function run()
     {
         // Export the user token so composer can use it.
@@ -659,12 +634,12 @@ class CosyComposer
         $this->cleanUp();
     }
 
-  /**
-   * Get the messages that are logged.
-   *
-   * @return \eiriksm\CosyComposer\Message[]
-   *   The logged messages.
-   */
+    /**
+     * Get the messages that are logged.
+     *
+     * @return \eiriksm\CosyComposer\Message[]
+     *   The logged messages.
+     */
     public function getOutput()
     {
         $msgs = [];
@@ -715,7 +690,7 @@ class CosyComposer
     public function createCacheDir()
     {
         $dir_name = md5($this->slug->getSlug());
-        $path = sprintf('%s/%s', $this->cacheDir, $dir_name);
+        $path = sprintf('%s/%s', $this->getCacheDir(), $dir_name);
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
