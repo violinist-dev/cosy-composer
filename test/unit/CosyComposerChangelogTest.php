@@ -55,4 +55,66 @@ class CosyComposerChangelogTest extends \PHPUnit_Framework_TestCase
         ]])), 1, 2);
         $this->assertEquals(true, $called);
     }
+
+    public function testChangeLogRegular()
+    {
+        $c = $this->getMockCosy();
+        $called = false;
+        $mock_executer = $this->getMockExecuterWithReturnCallback(function ($command) use (&$called) {
+            if (strpos($command, 'log 1..2 --oneline') > 0) {
+                $called = true;
+            }
+            return 0;
+        });
+        $mock_executer->expects($this->once())
+            ->method('getLastOutput')
+            ->willReturn([
+                'stdout' => "112233 This is the first line\n445566 This is the second line"
+                ]);
+        $c->setExecuter($mock_executer);
+        $log = $c->retrieveChangeLog('vendor/package', json_decode(json_encode(['packages' => [
+            [
+                'name' => 'vendor/package',
+                'source' => [
+                    'type' => 'git',
+                    'url' => 'https://github.com/vendor/package',
+                ],
+            ],
+        ]])), 1, 2);
+        $this->assertEquals('- [112233](https://github.com/vendor/package/commit/112233) This is the first line
+- [445566](https://github.com/vendor/package/commit/445566) This is the second line
+', $log->getAsMarkdown());
+        $this->assertEquals(true, $called);
+    }
+
+    public function testChangeLogSuperLong()
+    {
+        $c = $this->getMockCosy();
+        $called = false;
+        $mock_executer = $this->getMockExecuterWithReturnCallback(function ($command) use (&$called) {
+            if (strpos($command, 'log 1..2 --oneline') > 0) {
+                $called = true;
+            }
+            return 0;
+        });
+        // Use the one-line output of a comparison between Drupal 8.4 and 8.5.
+        $one_line_example_output = file_get_contents(__DIR__ . '/../fixtures/git-log-one-line-super-long.txt');
+        $mock_executer->expects($this->once())
+            ->method('getLastOutput')
+            ->willReturn([
+                'stdout' => $one_line_example_output,
+            ]);
+        $c->setExecuter($mock_executer);
+        $log = $c->retrieveChangeLog('drupal/core', json_decode(json_encode(['packages' => [
+            [
+                'name' => 'drupal/core',
+                'source' => [
+                    'type' => 'git',
+                    'url' => 'https://github.com/drupal/core',
+                ],
+            ],
+        ]])), 1, 2);
+        $this->assertEquals(file_get_contents(__DIR__ . '/../fixtures/git-log-one-line-super-long-markdown.txt'), $log->getAsMarkdown());
+        $this->assertEquals(true, $called);
+    }
 }

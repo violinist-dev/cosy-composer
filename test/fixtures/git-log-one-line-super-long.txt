@@ -1,0 +1,1022 @@
+b73ab73d39 Drupal 8.5.0
+e0577f77ed Issue #2940165 by mondrake, Berdir: [regression] Cannot add effects to image style via the UI
+9076756cd7 Issue #2647824 by xjm: Determine what should go in CHANGELOG.txt for 8.x core releases.
+8e302d1d34 Issue #2940890 by plach, Wim Leers, effulgentsia, matsbla, timmillwood: Don’t allow deleting revision translations in pending revisions
+9a4cc552c1 Issue #2942986 by alexpott, Lendude, chr.fritsch, larowlan, dawehner, catch: Views should be dependent on providers of table data via hook_views_data
+ce330dbe35 Issue #2949815 by plach, catch: Flagging translations as outdated in a pending revision causes multiple translations to be marked as affected
+634bb29618 Issue #2937799 by EclipseGc, tim.plunkett, effulgentsia, tedbow, Kristen Pol: Allow greater flexibility within SectionComponent::toRenderArray()
+809d71bd7b Issue #2949710 by plach, catch: Pending revisions may become unavailable when untranslatable fields affect all translations
+29b0fb6081 Issue #2949619 by plach: Removed revision translations may reappear when creating a new revision
+ee7970c481 Issue #2910706 by joelpittet, droplet, alexpott, Yogesh Pawar: Update Stylelint related Packages
+e644f945a2 Issue #2946425 by vaplas, borisson_, Lendude, dawehner: Correcting the tests that lie in BTB but using WTB
+906327c77a Issue #2935193 by Sutharsan, alexpott: Fix broken exceptions in Gettext component
+a189a0604a Issue #2941062 by plach, Wim Leers: EntityUntranslatableFieldsConstraintValidator always allows changes in default revisions
+6bc47ae09c Issue #2946041 by neerajsingh: Theme development link should point to the version specific documentation
+94db9ade01 Issue #2931443 by Wim Leers, casey, zuuperman, drpal: Browser parsing race condition: JSON.parse sometimes called on partially streamed BigPipe placholder replacements, causes fatal JS error
+ed37dfe2b4 Revert "Issue #2945306 by alexpott, dawehner: The new ModuleList in 8.6.x can discover modules in tests the previous code could not"
+594a0f6713 Issue #2843617 by maxocub, hussainweb, joelpittet, quietone, heddn, Jo Fitzgerald: Field formatter mappings defined in getFieldFormatterMap have no effect
+8f40d97557 Issue #2788087 by alexpott, dawehner, shafiqhossain: Drupal 8: You have requested a non-existent service "router.route_provider.old"
+a0484ea61b Issue #2945306 by alexpott, dawehner: The new ModuleList in 8.6.x can discover modules in tests the previous code could not
+340165716e git commit -m 'Issue #2941945 by L-four, chiranjeeb2410: path.api.php references to a non-existent PathInterface class and updated to AliasStorageInterface'
+1c383910b8 Issue #2945275 by alexpott: Remove hack to fix bug in symfony/yaml
+860b5c2e12 Issue #2940146 by Eli-T, cehfisher, nicolarbell, markconroy, kjay, Gábor Hojtsy, andrewmacpherson, JayKandari, volkswagenchick: Standardize writing style for Umami
+ae5ffa9fde Issue #2943627 by tim.plunkett, Falco010, alexpott, samuel.mortenson, xjm: Layout Builder does not consult layout plugin for dependencies
+9a4e8a9a98 Issue #2942769 by neclimdul: Consolidate umami .htaccess files and testing - coding standards followup
+bc219620b6 Revert "Issue #2943627 by tim.plunkett, Falco010, alexpott, samuel.mortenson: Layout Builder does not consult layout plugin for dependencies"
+bc6f172f55 Issue #2943627 by tim.plunkett, Falco010, alexpott, samuel.mortenson: Layout Builder does not consult layout plugin for dependencies
+fcb7dd9d0b Issue #2918761 by quietone, chiranjeeb2410, phenaproxima, maxocub, heddn, alexpott: Break up MigrateUpgradeForm into smaller forms
+d6674ad27c Issue #2942769 by alexpott, vaplas, smaz, Gábor Hojtsy, borisson_, Eli-T: Consolidate umami .htaccess files and testing
+50f4ceae89 Issue #2934145 by quietone, heddn, Jo Fitzgerald, David Hernández, alexpott, joelpittet, phenaproxima, Gábor Hojtsy: Image field migration plugin in wrong module
+8eb79476f2 Issue #2940513 by Sam152, Berdir: ModerationStateFieldItemList fails after an entity has been serialized/unserialized
+f40b9de3a0 Back to dev.
+d01769c8d8 Drupal 8.5.0-rc1
+faf360b695 SA-CORE-2018-001 by cashwilliams, catch, cilefen, droplet, dawehner, bonus, agentrickard, David_Rothstein, Chi, Gábor Hojtsy, Heine, Wim Leers, Schnitzel, drpal, effulgentsia, tedbow, tim.plunkett, tstoeckler, xjm, will_c, stefan.r, samuel.mortenson, larowlan, greggles, logaritmisk, mpdonadio, pwolanin, plach
+d0af739e12 Issue #2885583 by drpal, keeganstreet, Dinesh18, naiduharish, sim_1, idebr, larowlan, Gábor Hojtsy, nick_schuch, droplet: Close button in tour module lacks descriptive text
+6beb0f478d Issue #2944658 by neerajsingh, cilefen: Creating distributions link should point to the version specific documentation
+5d27615c22 Issue #2899392 by idebr, neclimdul, rgpublic: user_hook_toolbar() makes all pages uncacheable
+9a1d26721a Issue #2915175 by vaplas, Phonoman, Lendude: Duplicating a Page to Block after changing the display id and then saving the view destroys the Page
+ab140c2100 Issue #2937850 by Wim Leers, plach: Mark revision_default as internal for REST consumers
+84e302e00c Issue #2778167 by Wim Leers, arunkumark: Build link in Statistics block with toRenderable()
+f5f0896031 Issue #2932083 by Lendude, andreyjan, siva_drupal: Views Table style plugin breaks dynamic cache
+c94a751691 Issue #2934960 by marcoscano, mycw1991, seanB, evankay, chr.fritsch, andrewmacpherson, jefuri, Jeroen Witte: Clean up icons that ship with Media
+82500fa9bc Issue #2945369 by Pasqualle: Wrong variable name in \Drupal\node\Form\DeleteMultiple
+c4db7a8e35 Issue #2945041 by heddn, maxocub: Categorize derived migrations according to their type
+1bc2d2f383 Issue #2711099 by heddn, Jo Fitzgerald, edysmp, edgewl2, alexpott, Charlotte17, mikeryan, masipila, quietone, maxocub, phenaproxima: Categorize migrations according to their type
+8fab69caa8 Issue #2938643 by markconroy, andrewmacpherson, David_Rothstein, yoroy: Umami Banner Block does not have accessible text alternative at wide viewport
+bd09718af2 Issue #2938194 by markconroy, andrewmacpherson: Focus styles should meet accessibility guidelines in Umami theme
+0d71c78654 Issue #2941647 by markconroy, JayKandari, cehfisher, smaz, andrewmacpherson: Link hover styles unintentionally applied to administration toolbar
+1285938b7d Issue #2938800 by markconroy, David_Rothstein, ckrina, smaz, Eli-T, cehfisher, larowlan: Finalize wording for Toolbar warning message
+79b2e3b306 Revert "Issue #2942769 by alexpott, Eli-T: Consolidate umami .htaccess files and testing"
+3c79fbcfc2 Issue #2661542 by Mile23, Mixologic: Isolate Drupal\Tests\Component\Plugin\DefaultFactoryTest from core test module
+779f756419 Issue #2942769 by alexpott, Eli-T: Consolidate umami .htaccess files and testing
+17e48810a1 Issue #2942590 by tim.plunkett: Layout Builder defaults should work regardless of the ability to provide overrides
+aa591cd9ea Issue #2921367 by ApacheEx, xjm, effulgentsia, drpal, webchick, justafish, dawehner: Add the JS modernization initiative to MAINTAINERS.txt
+08fbb0bff9 Issue #2942600 by tim.plunkett: SectionComponent::toRenderArray() runs access checks even when not needed
+e751f4d004 Issue #2936085 by tim.plunkett, Kristen Pol, larowlan: Remove 'display title' or make it unchecked by default for Field Block
+9507c19af3 Issue #2713073 by harsha012, Mile23, dawehner, webflo, jibran: Add required php extensions to composer.json
+2d0151b8f1 Issue #2933620 by masipila, mpdonadio, heddn, quietone, phenaproxima, maxocub, kay_v, cilefen: Polish migrate.api.php API documentation
+c6296d553b Issue #2944524 by wundo: Typo in Drupal\Core\Routing\UrlGenerator
+0bc2b9b4b5 Issue #2942388 by alexpott, quietone: Ensure d7_url_alias migration works for paths without a slashes
+b79a827697 Issue #2887161 by Mohit Malik, joelpittet: Ensure argument order is correct for assertSame() assertions
+720b520aab Issue #2784015 by amateescu, jlbellido, Gogowitsch, krknth, ibustos: Widget validation crashes on ItemList violations for widgets with a custom errorElement() implementation
+2a5cdaec84 Issue #2944291 by jibran, Mixologic: Upgrade behat/mink-selenium2-driver to 1.3.x-dev
+af8e73f8d3 Issue #2943860 by Mixologic, alexpott: Add a LICENSE.txt to Serialization and Transliteration components
+f4fd08a7e3 Issue #2944215 by jeqq, alexpott: Aliases generated by PathItem::generateSampleValue() should start with a slash
+80eac4a11e Issue #2943226 by droplet: Remove droplet from MAINTAINERS.txt
+9fa428b4b8 Issue #2942497 by scott_euser, timmillwood, malcomio, Berdir: Using content moderation block in preview mode causes EntityStorageException
+1cf634359d Issue #2941106 by droplet, idebr: Site email address in the install profile form is no longer copied to the user email address
+6b83e79c84 Issue #2939988 by bn_code, xjm, Sam152: Remove content moderation exclusion from StableLibraryOverrideTest
+ed7ab51d9e Issue #2933099 by Sam152, sathish.redcrackle, amaisano, Berdir: "Default Revision cannot be deleted." But it's not the default revision
+8fb4418024 Issue #2943209 by gabesullice, amateescu, Wim Leers: Mark at least one entity_test entity type as 'internal'
+fdb66ec509 Issue #2866801 by harsha012, joelpittet, BrightBold, droplet, Akshay kashyap, arunkumark, bmx269: Update stylelint rules color-hex-length to be consistent with Drupal's CSS standards
+a8802f74cd Issue #2942068 by kim.pepper, jibran: FileTestSaveUploadFromForm incorrectly counts messages
+fcd1465565 Issue #2914503 by jibran, tim.plunkett, samuel.mortenson: Determine if serializing blobs is safe for use in Layout Builder
+acb5c9e415 Issue #2943445 by VitaliyB98: Incorrect path to icons in stable/settings_tray CSS files
+0ddf7699bd Back to dev.
+99379d7d9f Drupal 8.5.0-beta1
+d575b05c27 Issue #2943004 by alexpott, webchick, smaz, xjm, catch: Backport Umami to 8.5, but mark it hidden (for now)
+f224778200 Issue #2941902 by smaz: Reduce the file size for bundled images in Umami
+1dfe9945cd Issue #2942406 by Eli-T, markconroy, andrewmacpherson: Text alternative for Umami mobile search link
+8c0a00b2c0 Issue #2941837 by Eli-T, kjay, cehfisher: Move article body out of csv file in to their own text file
+a0be792af3 Issue #2938185 by tedbow, JayKandari, navneet0693, acbramley, Eli-T, larowlan, webchick, markconroy, andrewmacpherson, David_Rothstein, smaz, ckrina: When installing Umami, only show warning if 'Demo Umami' radio button is selected (and ensure that it is obvious that warning message only applies to the Umami profile)
+24fb9bb61f Issue #2941558 by markconroy, Eli-T, oakulm: Theme does not provide logged in users menu item or controls to edit his/hers user details
+447346823c Issue #2942007 by David_Rothstein, navneet0693, andrewmacpherson: Move the footer promo block image to a field, for better configurability and accessibility
+81cdac84f5 Issue #2940362 by Eli-T, kjay, navneet0693, markconroy, larowlan, Gábor Hojtsy: Move recipe instruction out of csv file in to their own text file
+79d9c1502a Issue #2938805 by markconroy, David_Rothstein, ckrina, Eli-T: Finalise the wording of the warning message on the status report page
+b26073c6fd Issue #2941582 by markconroy, Eli-T, smaz, ckrina, steveparks: Create a drupal.org documentation page for Umami profile to explain why it shouldn't be used in production sites
+88728d372c Issue #2939019 by David_Rothstein: Umami theme has a confusing theme description
+28c833e256 Issue #2941488 by larowlan, Eli-T: Add a .htaccess file to core/profiles/demo_umami/modules/demo_umami_content/default_content/images to prevent direct downloading of images
+709012d38f Issue #2938186 by navneet0693, John Cook, Eli-T, markconroy, smaz, ckrina, andrewmacpherson, larowlan: Set toolbar warning message to only appear on admin/edit pages
+327ca9f01f Issue #2938900 by David_Rothstein, navneet0693, JayKandari: Replace profile-defined blocks with custom blocks to fix a variety of problems
+f5ad645584 Issue #2938686 by Adam_Moulsdale, andrewmacpherson: Pink button/link style in Umami fails WCAG 2.0 SC 1.4.3 Contrast (minimum)
+8121e64c29 Issue #2939940 by bmx269, joelpittet: Update stylelint rules color-hex-case to be consistent with Drupal's CSS standards
+cd36c8ff0b Issue #2939018 by smaz, David_Rothstein: Umami theme and modules don't have version numbers in their info files
+cf4950d800 Issue #2939835 by David_Rothstein, markconroy: Documentation for testAppearance() says that it tests that Umami is the default theme, but it doesn't
+12955b4591 Issue #2938170 by navneet0693, andrewmacpherson, markconroy, owenpm3, larowlan: Enable ALT text for Banner Block image field
+bbb17577d7 Issue #2938918 by David_Rothstein, markconroy, larowlan: Impossible to switch back to the Umami theme after switching away from it
+a516724a66 Issue #2938187 by markconroy, andrewmacpherson: Homepage/Recipes page banner image is duplicating on small screens
+7eaad7133d Issue #2937636 by piyuesh23, markconroy: Umami Theme - follow-up - Use hook_form_alter() for search block placeholder
+7c45bb5e79 Issue #2938360 by markconroy: Change hook_preprocess_block to use $variables instead of $vars
+634ce6aafe Issue #2937894 by navneet0693: Remove unneeded schema entry from demo_umami.schema.yml
+f065a566ca Issue #2809635 by markconroy, navneet0693, alexpott, smaz, larowlan, Eli-T, webchick, yoroy, ikit-claw, budda, kjay, timmillwood, tkoleary, Gábor Hojtsy, andrewmacpherson, lauriii, JayKandari, jibran, ok_lyndsey, big_man, ckrina, nathancz, Paul_Gregory, vijaycs85, SharJay, tomphippen, tim.plunkett, Tarun Lewis, cehfisher, kreynen, Petr Illek, mariohernandez, thamas, thatdamnqa, John Cook, philipnorton42, h2cm, kattekrab, martin_q, waako: Create experimental installation profile
+1d52eabafa Issue #2931436 by amateescu, dillix, Berdir, DuneBL, plach: field_purge_batch expects an array of objects but instead gets an array of arrays
+d43708069a Issue #2939563 by webchick: Un-hide Media from the UI. With special thanks to all contributors who helped us get here!
+22618248c6 Issue #2943486 by xjm: media-reference-help.html.twig missing from stable theme
+5e2dc5c5a4 Revert "Issue #2939563 by webchick: Un-hide Media from the UI. With special thanks to all contributors to helped us get here!"
+f2ea35d944 Issue #2939563 by webchick: Un-hide Media from the UI. With special thanks to all contributors to helped us get here!
+ab4fea34d3 Issue #2936293 by xjm, tedbow, marcoscano, ershov.andrey, phenaproxima, benjifisher, samuel.mortenson, davidhernandez, tim.plunkett, Gábor Hojtsy, seanB, ckrina, yoroy, DyanneNova, amateescu: At least inform content authors where they can list and add media
+b9bd2dc889 Issue #2802403 by _Archy_, Berdir, rjay, catch, Tachion, jacktonkin, oriol_e9g, willwh, tameeshb, dawehner, dhansen, bmcclure, DeFr, david.gil, gagarine, plach: Combination of language negotiation and path aliasing can cause a corrupted route cache, 404s
+e084a0d20f Issue #2940899 by plach, Wim Leers, hchonov: Regression: _entity_form routes should not get load_latest_revision_flag by default: changes default behavior (= regression) while only Content Moderation needs it
+b5c4aa5dbf Issue #2943035 by tedbow, xjm, tim.plunkett: hook_field_widget_multivalue_form_alter and hook_field_widget_multivalue_WIDGET_TYPE_alter are not invoked for single widget that handle multiple values
+054722c94c Issue #2941622 by Wim Leers: Make REST's EntityResource deriver exclude internal entity types and mark ContentModerationState entity type as internal instead of the current hack
+b724598670 Issue #2942293 by Neograph734: Uppercase letter in Bartik's color.inc causes incorrect color replacements
+effcfdb45f Issue #2937469 by alexpott, Mixologic: Automatic upgrade to PHPUnit 6 is dangerous
+a52fc43666 Issue #2941318 by davewilly, chiranjeeb2410, kiamlaluno: Incorrectly formatted documentation in Get migrate process plugin
+b88bfd25bc Issue #2939026 by tstoeckler: Installer does not fix the database connection after creating the database on MySQL
+cf1b8bfd8b Issue #2936511 by hchonov, Berdir, plach, Wim Leers, catch, amateescu, sdewitt: ContentEntityType::getRevisionMetadataKeys() never considers the BC logic because of the new "revision_default" key
+eddad1b9c9 Issue #2935951 by heddn, maxocub, quietone, Jo Fitzgerald, phenaproxima, alexpott, larowlan: Copy migrate source plugin from migrate_drupal_d8 into migrate_drupal
+381e7554e4 Issue #2940088 by joelpittet, cilefen: Shorthand hex colors in CSS files break color module's comparisons
+10ee6ebff9 Issue #2775653 by dawehner, droplet, michielnugter, Lendude, jibran, alexpott, Mixologic, klausi, juampynr, cosmicdreams, cspitzlay, justafish, drpal, larowlan, claudiu.cristea, Berdir, Mile23, andypost, xjm, mtodor: JavascriptTests with webDriver
+f3a5f932a0 Issue #2866817 by harsha012, Jo Fitzgerald, BrightBold, alexpott, joelpittet: Update stylelint rule no-empty-source to be consistent with Drupal's CSS standards
+37f992ea2d Issue #2940201 by xjm, amateescu, benjifisher, tedbow, tim.plunkett, Berdir: hook_field_widget_form_alter() can no longer affect the whole widget for multi-value fields
+bf47414a25 Issue #2927227 by Jo Fitzgerald, Olarin, ao2, quietone, heddn: d6_url_alias migration fails when the src path in D6 contains no slashes
+f50cc6591b Issue #2860097 by plach, timmillwood, Sam152, Wim Leers, hchonov, catch, amateescu, matsbla: Ensure that content translations can be moderated independently
+122e840b08 Issue #2938140 by tim.plunkett, EclipseGc, DyanneNova, larowlan: Mark Layout Builder as Beta in 8.5.x
+50f0a25035 Issue #2920963 by quietone, Saviktor, shashikant_chauhan: Remove the migrate.migration prefix from core test migrations
+42baaa6566 Issue #2941736 by plach, Sam152, amateescu, timmillwood: Moderation state revisions should have their isDefaultRevision() match the host entity's
+606353a540 Issue #2941912 by Mohit Malik, quietone: Remove incremental @todo from MigrateUpgradeForm
+d4fd35c1ef Issue #2942073 by effulgentsia, Sam152: Add a "bare.standard.php.gz" test fixture that starts from Drupal 8.4.0
+9139b0801a Revert "Issue #2893117 by Mile23, Berdir: Improve HTML caching of Simpletest UI test form"
+9117bdb3ca Issue #2927344 by Wim Leers, xjm, TR, webchick, larowlan, David_Rothstein, catch, yoroy: Specifically warn about end dates for PHP support for old versions
+7da71a20a9 Issue #2940956 by alexpott: Properly disable resource tracking in the ContainerBuilder
+de17645f4a Issue #2939208 by alexpott, tim.plunkett: Services registered with ContainerBuilder::setDefinition() are removed from container causing a BC break
+dd5bae6905 Issue #2936642 by tim.plunkett: Getting runtime contexts will generate an E_WARNING for anonymous users
+7966f130d4 Issue #2916084 by tim.plunkett, John Cook, andrewmacpherson, borisson_: Add John Cook as Batch API subsystem maintainer
+8830ce72bb Issue #2941457 by agentrickard, tim.plunkett, hbensalem: EntityAdapter::getIterator requires undocumented methods
+bf7dbd1045 Issue #2914839 by Sam152: The current moderation state in the "meta" region on content entity forms is coupled to the moderation_state field widget
+1e5c50e932 Issue #2939692 by Leksat, blazey, larowlan: menu_link_content_entity_predelete deletes "collection", "add-form", etc. links
+bbb42220c1 Issue #2940204 by plach, Wim Leers, effulgentsia, matsbla, Gábor Hojtsy, tacituseu: Translatable fields with synchronization enabled should behave as untranslatable fields with respect to pending revisions
+fb2ebac655 Issue #2941275 by zuhair_ak, joachim: improve the exception message for a missing source ID value in \Drupal\migrate\Row
+da5cca892a Issue #2937964 by Jo Fitzgerald, quietone: RequirementException summary doc line is incomplete
+774ee68cfe Issue #2937945 by yo30, kim.pepper, dawehner, voleger, larowlan: Add messenger to ControllerBase and FormBase
+062835e590 Issue #2940108 by yo30, quietone, maxocub: getLegacyDrupalVersion() returns string not int as documented
+cfbe3fcf9c Revert "Issue #2940204 by plach, Wim Leers, effulgentsia, matsbla: Translatable fields with synchronization enabled should behave as untranslatable fields with respect to pending revisions"
+c15775f348 Issue #2936714 by gabesullice, Wim Leers, amateescu, Sam152, Berdir: Entity type definitions cannot be set as 'internal'
+fb3c36a0a7 Issue #2940204 by plach, Wim Leers, effulgentsia, matsbla: Translatable fields with synchronization enabled should behave as untranslatable fields with respect to pending revisions
+4d6bead355 Issue #2791907 by ddrozdik, Chi: Improve TranslatableMarkup and FormattableMarkup classes
+d85dada0a1 Issue #2927344 by Wim Leers, xjm, webchick, larowlan, catch, David_Rothstein, yoroy: Specifically warn about end dates for PHP support for old versions
+3df4d825c7 Issue #2905098 by tedbow, Jo Fitzgerald, Wim Leers, MerryHamster, Yogesh Pawar, rajeshwari10, larowlan, xjm: Change block entity form handler from 'off_canvas' to 'settings_tray'
+79357bff46 Issue #2747789 by jhedstrom, pashupathi nath gajawada: Improve UpdatePathTestBase debuggablity
+fbd7960ca3 Issue #2940367 by jibran: Update Symfony components to 3.4.4
+e8a2d7c78a Issue #2932715 by alexpott, mondrake, vaplas: PHPUnit testing fails on Windows since #2928249
+add9968785 Issue #2659616 by Lendude, greggmarshall, katzilla, hexabinaer: Check field order and fix below/above in descriptions
+f00676452a Issue #2809491 by ApacheEx, dawehner, Lendude: Convert AJAX part of \Drupal\field\Tests\Boolean\BooleanFieldTest::testBooleanField to JavascriptTestBase
+1b40c7ca49 Issue #2843707 by Chirag_Garg, lokapujya, xjm, gerzenstl: Default config for entity displays does not match what is saved
+5a48c60711 Issue #2768823 by Jo Fitzgerald, Berdir, quietone: Store uploads in correct translation
+b4cf8d07f8 Issue #2939802 by Wim Leers, cburschka: Follow-up for #2824851: EntityResourceTestBase::getModifiedEntityForPatchTesting() handles @FieldType=path incorrectly
+a8b80d85c8 Issue #2935783 by larowlan, Wim Leers: RequestHandler's handle method interacts with the Route object but should be able to just declare arguments
+6db700c8e9 Issue #2843328 by mpdonadio, alexpott, Mile23, cburschka, xjm: Enforce minimum PHP version in composer dependencies
+0934fdc54a Issue #2936704 by Wim Leers, amateescu, alexpott, Berdir: Remove REST route deprecations from DeprecationListenerTrait::getSkippedDeprecations(), use ExpectDeprecationTrait::expectDeprecation() instead
+81fd2724c4 Issue #2857857 by vegantriathlete, Jo Fitzgerald, snehi, plach, xjm, Skabbkladden: Check use of "it's" in core to ensure proper use
+cd8e2e20c9 Issue #2940050 by Mohit Malik, kiamlaluno: Fix the grammar for the comment describing TranslatableInterface::hasTranslation()
+3320b3b477 Issue #2940051 by Mohit Malik, kiamlaluno: Fix the punctuation in the comment describing what ContentEntityBase::isTranslatable() does
+437636669e Revert "Issue #2932715 by mondrake, alexpott, vaplas: PHPUnit testing fails on Windows since #2928249"
+28de462c65 Revert "Revert "Issue #2935157 by neclimdul, alexpott: Run-test.sh does not run TestSuite tests""
+553d91a58d Issue #2922603 by tedbow, Wim Leers, andrewmacpherson: Mark Settings Tray module as stable
+b3bf798c31 Revert "Issue #2935157 by neclimdul, alexpott: Run-test.sh does not run TestSuite tests"
+b235999e33 Issue #2937666 by Jo Fitzgerald, quietone: errorCount() returns string not int as documented
+d66fb147b8 Issue #2931420 by harsha012, chiranjeeb2410, marcoscano, heddn: Fix wrong documentation on \Drupal\migrate\Plugin\migrate\source\SourcePluginBase::initializeIterator()
+cb8f3f2578 Issue #1014816 by mondrake, Dave Reid, m1n0, leschekfm, jwilson3, claudiu.cristea, fietserwin, guybedford: Allow image fields to use any extensions the current image toolkit supports (instead of hard-coding jpg, png and gif only)
+63fa6f2258 Issue #2745491 by mcdruid, juampynr, Jo Fitzgerald, sanduhrs, snehi, mparker17, rodrigoaguilera: ImageWidget::validateRequiredFields() produces a PHP Warning message if triggering element is a non-button
+bfa44123aa Issue #2797639 by jzavrl, slashrsm, yobottehg, tassilogroeper, Yogesh Pawar, Berdir: For multi language private files FileDownloadController is used for the ImageStyle instead of ImageStyleDownloadController
+494bbac6ef Issue #2932715 by mondrake, alexpott, vaplas: PHPUnit testing fails on Windows since #2928249
+c70c4f4165 Issue #2867960 by Eric_A, Mile23, Jo Fitzgerald, mpdonadio: Merge Component composer.json files to account for them during build
+968c43f35d Issue #2687843 by quietone, heddn, Jo Fitzgerald, alexpott, piggito, mallezie, mikeryan, xjm, phenaproxima, benjifisher, webchick, Gábor Hojtsy, masipila, benjy, abhishek-anand, catch: Add back incremental migrations through the UI
+8023a1c572 Issue #2923915 by tstoeckler, heddn: Stubbing content entities with required fields with a default value is broken
+c1070219b1 Issue #2935076 by amateescu: EntityResourceTestBase::getNormalizedPostEntity() wrongly assumes that all entity types have auto-generated sequential IDs
+5e69700e0a Issue #2915398 by Sam152, amateescu, timmillwood, plach, mstef: The moderation_state field is not computed during the creation of a new entity translation
+0b2d458da9 Issue #2929198 by alexpott: .ht.router.php does not support update.php
+9d5a928c4e Issue #2880703 by alexpott, droplet, Daniel.Moberly, yogesh01: Status report page without JavaScript is messed up
+d90b997a07 Issue #2940169 by Nitebreed, jefuri, seanB: Remove all occurences of 'media entity' in core
+1e17288985 Issue #2922862 by jibran: Update non-Symfony dependencies in lock file
+9a8c545117 Issue #1712106: Fix spelling mistake introduced on commit
+fd2d6c259d Issue #1712106 by jamix, dawehner, m4olivei, Boobaa, InternetDevels, JacobSanford: truncate_utf8() cuts on the first newline character when $wordsafe == TRUE
+4984a6d07c Issue #2910705 by droplet, drpal: Update JS Build Script Packages
+b26f5d80f9 Issue #2936368 by gaurav.kapoor: Duplicate css property in toolbar module
+b8d30703dd Issue #2935157 by neclimdul, alexpott: Run-test.sh does not run TestSuite tests
+d4acfb86bd Issue #2940174 by jefuri: Soundcould rename to Soundcloud in MediaSourceInterface
+3a8ede60ae Issue #2938645 by kmbremner, swarad07, Gábor Hojtsy: invalid YAML in example
+bb9c5a2665 Issue #2939940 by bmx269, joelpittet: Update stylelint rules color-hex-case to be consistent with Drupal's CSS standards
+c2f2111781 Issue #2866818 by harsha012, BrightBold, brahmjeet789, joelpittet: Update stylelint rule number-leading-zero to be consistent with Drupal's CSS standards
+2deb0f1d08 Issue #2866806 by harsha012, Mukeysh, joelpittet: Update stylelint rule declaration-block-no-shorthand-property-overrides to be consistent with Drupal's CSS standards
+b84567df38 Issue #2939917 by plach, jibran, Wim Leers: Field synchronization should run only for Content Translation-enabled entities
+82a20b9af8 Issue #2939909 by plach, xjm, Wim Leers: Ensure that hook_bundle_info_alter() implementations know whether bundles are translatable
+a55b528693 Issue #2938623 by kmbremner: broken link in docs for Condition::notExists()
+441f198ba3 Issue #2939724 by ryanhayes, joachim, Samvel, andrewmacpherson, sacha@wellborn.co.uk, Adam_Moulsdale, rachel_norfolk: wrong variable name in sample code
+ced17a4912 Issue #2897132 by timmillwood, Sam152, amateescu, pameeela, xjm, Wim Leers, webchick, lauriii, esod: Mark Content Moderation module as stable
+4d13415e0d Issue #2922701 by quietone, masipila, heddn, benjifisher, phenaproxima, larowlan, xjm, catch: Migrate UI - refer to modules and add help text
+384b0fd25b Revert "Issue #2939909 by plach, Wim Leers: Ensure that hook_bundle_info_alter() implementations know whether bundles are translatable"
+4aab62aa32 Issue #2939742 by plach, Wim Leers: Node links always load the default revision during rendering
+321e306145 Issue #2939795 by plach, Wim Leers: Multilingual logic is not applied when a new revision translation is being added
+400300843c Issue #2939909 by plach, Wim Leers: Ensure that hook_bundle_info_alter() implementations know whether bundles are translatable
+237d23a007 Revert "Issue #2895271 by navneet0693, Lendude, dawehner, pasan.gamage, larowlan: Convert web tests to JTB and KTB tests for user module part-3"
+7e351605f8 Issue #2939894 by xjm: Temporarily skip LocaleConfigTranslationImportTest because it is failing massively in HEAD
+274d50c513 Issue #2895271 by navneet0693, Lendude, dawehner, pasan.gamage, larowlan: Convert web tests to JTB and KTB tests for user module part-3
+35eca78561 Issue #2939242 by yo30: Update Drupal Documentation to reflect that assert() eval syntax is no longer to be used
+a03daf0b1b Issue #2938309 by tedbow, tacituseu, Wim Leers: Only install Quick Edit when necessary for Settings Tray tests
+62886de5ee Revert "Issue #2817833 by Jo Fitzgerald, ckaotik, svendecabooter: Delay sql map table creation"
+f8a87ecc2a Issue #2893117 by Mile23, Berdir: Improve HTML caching of Simpletest UI test form
+936b75299a Issue #2817833 by Jo Fitzgerald, ckaotik, svendecabooter: Delay sql map table creation
+bc85165e35 Issue #2924812 by Sam152, plach, Wim Leers, timmillwood, xjm: Deprecate EntityRevisionConverter in content_moderation
+15c6d126c1 Issue #2939247 by plach, hchonov: Revert Content Translation routes to act on default rather than latest revisions
+9e76e618b9 Issue #2926412 by Wim Leers: Follow-up for #2883680: deprecation message indicates the wrong deprecation introduction version
+b6408bb296 Issue #2874904 by Mixologic, alexpott: Fix YamlTest to not scan core/node_modules
+7279503b37 Issue #2938947 by Wim Leers, plach: Always list a "Current revision" for each available content translation
+db9c0e672b Issue #2939107 by plach, Wim Leers: Follow-up for #2924724: Clean up the node revision translation revert logic to leverage the new API
+087c590c52 Issue #2931765 by timmillwood, Wim Leers: Regression: \Drupal\hal\LinkManager\LinkManagerBase implicitly depends on REST module
+dbeef2335a Issue #2938895 by plach, Wim Leers, hchonov, timmillwood: Make EntityConverter load the latest translation-affecting revision for translated entities
+8ad40fc104 Issue #2938834 by alexpott: Resolve out-dated @todo in DefaultConfigTest
+8525135ea4 Issue #2936725 by gabesullice, Wim Leers, dawehner, Berdir: EntityDataDefinition::create() does not respect derived entity definitions
+cc8c7a85bc Issue #2937980 by pameeela, Jigar.addweb: Standard install sets article comment field to required
+f25a62f060 Issue #2935215 by alexpott: Apply coding standards to Drupal 8 PHP code in core/scripts
+db92bf5055 Issue #2936253 by gabesullice: Clarify usage of AccountProxyInterface: recommend AccountInterface for most use cases
+1b33730d48 Issue #2938799 by claudiu.cristea: Provide the timestamp scalar data type
+d69758a89b Issue #2924165 by TravisCarden: Doxygen for callable arguments missing callable keyword
+8d0135d52b Issue #2935137 by el7cosmos, Mixologic: License "GPL-2.0+" is a deprecated SPDX license identifier, use "GPL-2.0+-only" or "GPL-2.0+-or-later" instead
+9414fb5e06 Issue #2936802 by alexpott, Wim Leers: expectDeprecation() doesn't work in isolated tests
+29d131c3ec Issue #2925997 by tikaszvince, ndolley: position-min.js issue since 8.4 upgrade
+6fbccf3ee6 Issue #2872355 by sarguna raj M, chiranjeeb2410, joachim: expand and clarify docs for DefaultPluginManager::alterInfo()
+18ef80802a Issue #2938369 by Mohit Malik, yo30, mondrake, alexpott: The Symfony\Component\ClassLoader\WinCacheClassLoader class is deprecated
+ce3bd3653b Issue #2921706 by Daniel Korte, bkosborne: Update example.settings.local.php to include ['cache']['bins']['page']
+bd02cffe3c Issue #2914834 by snehi, tresti88, joachim: missing @return for drupal_get_user_timezone() and return types for other methods in bootstrap.inc
+4ef20795f0 Issue #2936641 by alokvermaei: 'Path alias' in PathFilterForm.php is not translated
+648d7c5484 Issue #2935575 by gaurav.kapoor, kiamlaluno, amateescu: Fix or remove the @see tag
+f3ca2c9481 Issue #2934997 by benjifisher, Lendude, xjm: Intermittent failure in MediaUiJavascriptTest
+4787a15df4 Issue #2936525 by priya.chat, benjifisher: Confusing documentation for setConfigOverrideLanguage()
+1cbb164879 Issue #2936941 by alexpott: Diff can infinitely loop since #2885309
+6fc5ef10cf Issue #2930542 by sahil432, sdewitt, andrewmacpherson: Disabled form labels in Seven theme's node meta-data  do not meet WCAG AA 1.4.3 Contrast (minimum)
+d229279900 Issue #2878556 by plach, matsbla, vijaycs85, Gábor Hojtsy, catch, gabesullice, effulgentsia, hchonov, hass, amateescu, xjm: Ensure that changes to untranslatable fields affect only one translation in pending revisions
+9aaf79dfa5 Issue #2919373 by tedbow, Wim Leers, Adita, webchick, Berdir, drpal, xjm, samuel.mortenson, bircher: Prevent Settings Tray functionality for blocks that have configuration overrides
+0cb1cd502b Issue #2891215 by plach, timmillwood, hchonov, amateescu, catch, gabesullice: Add a way to track whether a revision was default when originally created
+4c7237cb09 Issue #2937902 by jibran: Remove "drupal/layout_builder": "self.version" from core/composer.json
+7871cc00ee Issue #2937889 by larowlan, Sam152: Regression: LinkWidget no longer supports base fields with optional title
+8a19bec6e7 Back to dev.
+be644a6b49 Drupal 8.5.0-alpha1
+568053d9c3 Issue #2927746 by alexpott, catch, slasher13, mpdonadio, martin107, RoSk0, jibran, larowlan, pounard, Mile23, Jo Fitzgerald, deviantintegral, pritish.kumar: Update Symfony components to 3.4.*
+32d6b67697 Remove alpha-stability experimental modules in preparation for 8.5.0-alpha1.
+14ea7b01a8 Revert "Issue #2891215 by plach, timmillwood, hchonov, amateescu, catch, gabesullice: Add a way to track whether a revision was default when originally created"
+e6be0300a1 Issue #2908952 by sahil432, martin107: drupal_get_complete_schema() and drupal_get_schema() are not completely removed
+02af9bc3f6 Issue #2936793 follow-up by tim.plunkett: Fix PHP5's hacking and wheezing.
+877918c7ed Issue #2936793 by tim.plunkett, tstoeckler, EclipseGc: EntityReferenceItem::generateSampleValue() should create a sample entity if a referenceable entity is not found
+1802d32140 Issue #2935779 by tim.plunkett, EclipseGc, webchick, xjm, dead_arm: Come up with an affordance for what parts of the page are/are not affected by Layout Builder
+535d519c33 Issue #2902187 by amateescu, timmillwood, Sam152, webchick, Manuel Garcia, xjm, plach, DuneBL, larowlan, Bojhan, jibran, Berdir, jojototh: Provide a way for users to moderate content
+14e2ed669c Issue #2936457 by Berdir, larowlan: views_post_update_filter_placeholder_text() can result in errors in filter plugins due to incomplete definition
+fb74ea47ad Issue #2862422 by chr.fritsch, robpowell, phenaproxima, webflo, bdimaggio, seanB, naveenvalecha, sunset_bill, vijaycs85, yoroy, starshaped, xjm, Berdir, hazong: Add per-media type creation permissions for media
+86b363eb0e Issue #2935755 by alexpott, Wim Leers: Add a trait to allow dynamic setting of expected deprecations
+b15791c03e Issue #2858482 by Wim Leers, dawehner, benjy, larowlan, tedbow, borisson_: Simplify REST routing: disallow requesting POST/PATCH in any format, make consistent
+6c92a2a862 Issue #2935725 by markconroy: Add vw and vh to the CSS stylelint
+c9cb478028 Issue #2914974 by quietone, rakesh.gectcr, maxocub, heddn, Jo Fitzgerald, Yogesh Pawar, masipila, phenaproxima, jhodgdon, Gábor Hojtsy, larowlan, neclimdul: Migrate UI - handle sources that do not need an upgrade
+c060f5de66 Issue #2936435 by Berdir, alexpott: Better BC for deprecated container parameter user.tempstore.expire
+dafa5f1176 Issue #2885469 by Wim Leers, amateescu, timmillwood, alexpott, tstoeckler, xjm, remram, Berdir, dawehner, larowlan, samuel.mortenson: Regression: manually setting the ID field for newly-created content entities is not possible anymore (public follow-up to SA-2017-002)
+58cf7593ab Issue #2862041 by Sam152, amateescu, timmillwood, jibran, hamrant, dawehner, plach, Manuel Garcia, Jo Fitzgerald, mgalalm, xjm, larowlan, webchick, Wim Leers, gambry, kkus, tim.plunkett, tedbow, CatherineOmega: Provide useful Views filters for Content Moderation State fields
+a0f31bc763 Issue #2862744 by masipila, heddn: Add documentation to EntityBaseFieldOverride destination plugin
+253b1020fc Issue #2862748 by masipila, Jo Fitzgerald, quietone, phenaproxima: Add documentation to EntityRevision destination plugin
+36ea4d333d Issue #2933773 by masipila, quietone: Merge handbook documentation to API: skip_on_empty process plugin
+ed35f803c2 Issue #2933776 by masipila, quietone: Merge handbook documentation to API: sub_process process plugin
+eb9b03e3fd Issue #2933770 by masipila, quietone, phenaproxima: Merge handbook documentation to API: static_map process plugin
+9182b21697 Issue #2891215 by plach, timmillwood, hchonov, amateescu, catch, gabesullice: Add a way to track whether a revision was default when originally created
+e428304f34 Issue #2934178 by samuel.mortenson, DyanneNova, xjm, yoroy, andrewmacpherson: Contrast issues with off-canvas dialog styling
+8351e1bc9f Issue #2931165 by heddn, phenaproxima, maxocub, quietone, masipila: Mark Migrate (API) as stable
+80390b6b5e Issue #2921626 by tim.plunkett, EclipseGc, larowlan, dead_arm, xjm: Add proper context-awareness to Layout Builder
+4637781212 Revert "Issue #2921626 by tim.plunkett, EclipseGc, larowlan, dead_arm: Add proper context-awareness to Layout Builder"
+2909c978d0 Issue #2924724 by plach, hchonov, timmillwood, Gábor Hojtsy, amateescu, gabesullice, catch: Add an API to create a new revision correctly handling multilingual pending revisions
+749f41ff44 Issue #2921626 by tim.plunkett, EclipseGc, larowlan, dead_arm: Add proper context-awareness to Layout Builder
+358989eaa1 Issue #2918837 by heddn, neclimdul, phenaproxima, quietone, Gábor Hojtsy: SqlBase throws fatal error when extended directly
+1e2583bb31 Issue #2934885 by marcoscano, benjifisher, seanB, starshaped, xjm, chr.fritsch, phenaproxima, Gábor Hojtsy: Document the difference between File, Image, and Media fields
+601593f06e Issue #2935617 by alexpott, chr.fritsch: Move User module's temp stores to core
+e965387d6f Issue #2866819 by harsha012, jpassetti, joelpittet: Update stylelint rule number-no-trailing-zeros to be consistent with Drupal's CSS standards
+18bba35a27 Issue #2920172 by sushantpaste, dev.patrick, Ashreen Kaur, yoroy, xjm: User Guide link on front page in new Install should  open in new tab
+5b62f5dc94 Issue #2883892 by Jo Fitzgerald, voleger, ozin, mpdonadio, Taran2L, heddn: Add from/to timezone settings for the "FormatDate process plugin"
+f22b0385b2 Issue #2908282 by heddn, phenaproxima, Jo Fitzgerald, quietone, xjm, larowlan, mikeryan, dipakmdhrm: Throw exception for source plugins without a source_module property
+9d4f798fe6 Issue #2862662 by masipila, Jo Fitzgerald, heddn, quietone, ohthehugemanatee: Add documentation to EntityContentBase destination plugin
+8419cf3d4a Issue #2930832 by phenaproxima, heddn, larowlan, quietone: Add isAuditable() method to MigrationInterface
+c944475c55 Issue #2935822 by sonu.raj.chauhan, quietone: Correct test group for two migrate tests
+c433063c12 Issue #2926932 by matthiasm11, Wim Leers, vijaycs85: Update CKEditor library to 4.8.0
+d778f80bc2 Issue #2912803 by Jo Fitzgerald, heddn: MigrationPluginManagerInterface is missing createInstancesByTag
+1d2289547c Issue #2916199 by quietone, heddn: MigrateUpgradeTestBase shouldn't enable modules
+848e20e3b2 Issue #2933774 by masipila, quietone: Merge handbook documentation to API: migration_lookup process plugin
+412c75674d Issue #2848085 by snehi, rkoller, Sutharsan, Gábor Hojtsy: "Translation update status" in locale.install is not translated
+c805443531 Issue #2927349 by tim.plunkett: Decouple the Layout Builder UI from entities
+bcb5afd44a Issue #2862248 by m4olivei, Wim Leers, cburschka, larowlan: UnitTestCase::getConfigFactoryStub() doesn't accept dotted keys
+21b9f7d1b8 Issue #2923004 by tedbow, bircher, samuel.mortenson, alexpott, Wim Leers, axel.rutz, Berdir, borisson_, xjm, tim.plunkett: Add method to check if any overrides are applied to \Drupal\Core\Config\Config
+92787ef805 Issue #2897272 by tedbow, Wim Leers, Jo Fitzgerald, Adita, xjm: Fix module description, hook_help(), and document module scope in *.api.php file
+c1df3d2b93 Issue #2853460 by Wim Leers, dawehner, gabesullice, neclimdul, larowlan: Simplify RequestHandler: make it no longer ContainerAware, split up ::handle()
+d1e91cbf56 Issue #2934336 by alexpott: Update symfony/phpunit-bridge to the latest released version
+7bf384b29c Issue #2866816 by harsha012, BrightBold, cwells, joelpittet, idebr: Update stylelint rule length-zero-no-unit to be consistent with Drupal's CSS standards
+1f0b7604d0 Issue #2935524 by neclimdul: PHPCS failure on DrupalStandardsListenerTrait
+3af9d071a9 Issue #2935151 by alexpott: Long array syntax checking in ./core files is broken
+ba4f89edf0 Issue #2934424 by chr.fritsch, benjifisher, tstoeckler, phenaproxima, xjm, marcoscano, larowlan: Media has no collection route
+0013e901fe Issue #2866810 by BrightBold, harsha012, joelpittet: Update stylelint rule function-comma-space-after to be consistent with Drupal's CSS standards
+6abe25edc5 Issue #2935318 by marcoscano: Improve default display of Audio and Video media types shipped with Standard profile
+62cf4b50e5 Issue #2904084 by Ruslan P, Venkatesh Rajan.J: Confusing title for "Boolean" field in "Manage form display"
+cbd3299e68 Issue #2916740 by chr.fritsch, xjm, Manuel Garcia, tstoeckler, alexpott, seanB, Sam152, amateescu, tim.plunkett, dawehner, larowlan, Berdir: Add generic entity actions
+c9ca954cb9 Issue #2934499 by samuel.mortenson: Adjust foccus styling for the Settings Tray [x] close button to match the dialog system
+27ff71aacf Issue #2934162 by marcoscano, phenaproxima, chr.fritsch, robpowell, Berdir, xjm, effulgentsia: Provide better defaults to media form displays
+60a2dc0be4 Issue #2866823 by harsha012, Mukeysh, joelpittet: Update stylelint rule selector-type-no-unknown to be consistent with Drupal's CSS standards
+b8d018e325 Issue #2775131 by chr.fritsch, marcoscano, katzilla, seanB, xjm, gippy, phenaproxima, alexpott, Berdir, lauriii, webflo, dawehner: Media entities should support contextual links
+9f54d00d40 Revert "Issue #2775131 by chr.fritsch, marcoscano, katzilla, seanB, xjm, gippy, phenaproxima, alexpott, Berdir, lauriii, webflo, dawehner: Media entities should support contextual links"
+1da5a5ccb3 Issue #2775131 by chr.fritsch, marcoscano, katzilla, seanB, xjm, gippy, phenaproxima, alexpott, Berdir, lauriii, webflo, dawehner: Media entities should support contextual links
+d039f07cb7 Issue #2933964 by kiamlaluno, oakulm: Remove the left-over @todo comments in the BaseFieldDefinition class
+ec31a14195 Issue #2934649 by chr.fritsch, marcoscano: Fix wrong header "Source" on media overview page
+b022734be8 Issue #2917594 by kevin.dutra, robin.ingelbrecht, jwkovell, Lendude: Add support for HTML5 placeholder in views exposed filters
+694b95b98a Issue #2575135 by quietone, ckaotik, olegel, mikeryan, larowlan: Dummy map/message tables being created
+bfe514a0d4 Issue #2934966 by benjifisher, starshaped: Make it easier to get source field values from media items
+0c1de8e423 Issue #2671964 by EclipseGc, tim.plunkett, Jo Fitzgerald, larowlan, fago, dawehner, Berdir, phenaproxima: ContextHandler cannot validate constraints
+ee7f7f2a25 Issue #2932226 by robpowell, marcoscano, phenaproxima, Darvanen, larowlan: Media Type entities don't validate machine name properly
+6eafe72da8 Issue #2934096 by kiamlaluno, joelpittet: Simplify the ListDataDefinition::getClass() code
+a9d3f0ab31 Issue #2934962 by starshaped, xjm: Ship local audio and video media types in Standard
+3d0e79f229 Issue #2928798 by balsama, axel.rutz, xjm, phenaproxima, chr.fritsch, jeetendrakumar: Add extractors: mimetype & filesize
+db68052953 Issue #2924631 by marcoscano, starshaped, chr.fritsch, xjm, phenaproxima, Gábor Hojtsy, seanB, yoroy, evankay: Media sources for local video and audio support
+28830054bb Issue #2866805 by Mukeysh, joelpittet, harsha012: Update stylelint rule declaration-block-no-redundant-longhand-properties to be consistent with Drupal's CSS standards
+319f023727 Issue #2934850 by balsama, Berdir: Media Images should be rendered at a reasonable size by default
+32fc1125e7 Issue #2934840 by robpowell, marcoscano: MediaAccessTest wrongly extends another test class, instead of base class
+b23aebd77e Issue #2932369 by marcoscano, balsama, Berdir, Grimreaper, alexpott: Media Types missing access control handler result in empty column in media overview page
+895db7dd8a Issue #2934517 by Berdir: Setting a revision ID on a new entity sets the newRevision flag to false
+128cb26225 Issue #2856950 by dmsmidt, marcvangend, tim.plunkett, andrewmacpherson, Lendude, tameeshb, Berdir, xjm, tedbow, Gábor Hojtsy, Sutharsan: Add a possibility to disable inline form errors for a complete form
+ad1e35c7b0 Issue #2816861 by dpi, jibran, bucefal91, harsha012, tim.plunkett, catch: Action configuration form does not support #ajax
+0428e20aa1 Issue #2931883 by moshe weitzman, David_Rothstein, Wim Leers: Unneeded always_populate_raw_post_data requirements check while on CLI
+0cfb103b42 Issue #2933980 by richgerdes, Maheshwaran.j: JQuery UI CSS dependencies are not met in core.libraries.yml
+a0ce0b879d Issue #2765849 by kiamlaluno: The description for template_preprocess() has not been update for Drupal 8
+6930e1b18b Issue #2929835 by amateescu, dawehner: [regression] Modules can no longer alter the the table queue of a \Drupal\views\Plugin\views\query\Sql query object
+3e0376353b Issue #2934233 by neclimdul: Fix reference to DrupalKernelTest in system module
+0f2bebf2e0 Issue #2861840 by tim.plunkett, lauriii: Preprocess functions are not merged when a module registers a theme hook for a theme-provided template
+71584842ea Issue #2931047 by Dropa, D34dMan, borisson_, catch: hook_post_update_NAME documentation is misleading
+a46090e0aa Issue #2934152 by Wim Leers, neclimdul: ContentTypeHeaderMatcher should not run for GET, HEAD, OPTIONS or TRACE requests
+891c39b37c Issue #2933991 by alexpott, neclimdul: Deprecation tests fail when all PHPUnit tests are run via PHPUnit
+e538433ffc Issue #2863354 by benqwerty, DuaelFr, andrewmacpherson, xjm, mgifford, lauriii, ckrina: Add border to dialog [x] close button for hover and focus states
+5616f9b877 Issue #2866808 by BrightBold, pk188, idebr: Update stylelint rule declaration-block-trailing-semicolon to be consistent with Drupal's CSS standards
+e8a584a7d3 Issue #2866800 by BrightBold: Update stylelint rule block-no-empty to be consistent with Drupal's CSS standards
+c5654de7aa Issue #2866809 by BrightBold: Update stylelint rule declaration-colon-space-after to be consistent with Drupal's CSS standards
+d540d6426f Issue #2866799 by cwells: Update stylelint rule at-rule-empty-line-before to be consistent with Drupal's CSS standards
+3b06c57e4f Issue #2866812 by idebr: Update stylelint rule function-name-case to be consistent with Drupal's CSS standards
+2971ea9d10 Issue #2934520 by tstoeckler: Avoid information disclosure by timing attack in EntityResource::patch()
+be569c75d7 Issue #2859381 by Manuel Garcia, Sam152, mstef, jhedstrom: Broken/missing handler for Moderation state field
+1911dc4056 Issue #2862741 by masipila: Add documentation to ComponentEntityDisplayBase destination plugin
+32cc90b3c1 Issue #2933424 by David_Rothstein, harsha012, jhodgdon, vaplas: English-specific links to php.net shouldn't be used in non-translatable strings
+b66af73c82 Issue #2918500 by tim.plunkett, EclipseGc, tedbow, larowlan, jibran, Wim Leers, phenaproxima, amateescu, borisson_, samuel.mortenson, gaurav.kapoor, KarlShea, hctom, mroycroft, neerajsingh, DamienMcKenna, dsnopek, Xano, TravisCarden, Tim Bozeman: Create a block which can render entity fields
+81b7676391 Issue #2915759 by samuel.mortenson, tedbow, xjm, yoroy: :focus is is hard to see for links in the off-canvas dialog
+03e3d7a3a0 Issue #2377747 by mondrake, eiriksm, rpayanm, adci_contributor, mgifford, oakulm, Truptti, chetan2111, joyceg, alexpott, xjm, yoroy, catch: Incorrect node create validation error when an invalid image is attached to a field
+44805b25e6 Issue #2933769 by masipila: Merge handbook documentation to API: substr process plugin
+f1e33ca3d8 Issue #2925064 by drpal, dawehner, droplet, xjm, webchick, justafish: [1/2] JS codestyle: no-restricted-syntax
+9d552cad6c Issue #2926309 by vaplas, alexpott, mpdonadio, tacituseu, Mixologic: Random fail due to APCu not being able to allocate memory
+cf805af249 Issue #2928699 by marcoscano, phenaproxima, amateescu, seanB, yoroy: Add an alter hook for the pre-configured field UI options and implement it in the Media module
+72c76b73c5 Issue #2359389 by harsha012, hgoto, jeqq, fago, sureshcj, larowlan: Call to a member function filters() on a non-object in core/modules/text/text.module on line 83
+354462c6f6 Issue #2932774 by harsha012, gaurav.kapoor, neelam.chaudhary, dpi: Update docs for getEmail, can return null
+f9445b466b Issue #2919147 by tedbow, tim.plunkett: When edit mode is enabled new page loads will not have Contextual tabbing constrained
+35de151d0e Issue #2924351 by drpal, tedbow, xjm, dawehner: Fix coding standards issues with existing settings tray JavaScript
+5485720ee8 Issue #2866779 by Mile23, dawehner: Add a way to trigger_error() for deprecated hooks
+c5fba61258 Issue #2894068 by Jo Fitzgerald, davidsickmiller, alexpott, heddn, Yogesh Pawar, quietone, xjm: datetime_type is not set correctly when migrating datetime fields from D7
+3f57ebc31b Issue #2862743 by masipila: Add documentation to DestinationBase destination plugin
+c2d7454b54 Issue #2932865 by kiamlaluno, joachim: Incorrect description for ExtensionDiscovery::scanDirectory()
+0d2a45adc2 Issue #2930715 by alexpott, dawehner: Recursive rebuild caused by installing admin_toolbar_tools module
+7f00c34194 Issue #2926483 by plach, amateescu, effulgentsia, xjm, Sam152, timmillwood, jibran, larowlan, Gábor Hojtsy: Add API methods for determining whether an entity object is the latest (translation-affecting) revision
+0dc30938c7 Issue #2824851 by Wim Leers, arshadcn, amateescu, effulgentsia, tedbow, timmillwood, cburschka, tstoeckler, Berdir, xjm, catch: EntityResource::patch() makes an incorrect assumption about entity keys, hence results in incorrect behavior
+0c20200d12 Issue #2837022 by hchonov, xjm, vlad.dancer, plach, matsbla, Gábor Hojtsy: Concurrently editing two translations of a node may result in data loss for non-translatable fields
+4cd7b4950c Issue #2933125 by Tessa Bakker: Case mismatch in ExportForm.php
+9ba7824211 Issue #2626924 by Wim Leers, tedbow, dawehner, frob, martin107, damiankloip, dagmar, almaudoh, Berdir, larowlan, amateescu: Include processed text in normalizations: "text" field type's "processed" computed property should be non-internal and carry cacheability metadata
+efab31b7f2 Issue #2862894 by fgm, Wim Leers, bkosborne, borisson_, catch: Docs for Internal Page Cache incorrectly state that it respects the maximum age performance setting
+d372f6d8ee Issue #2323459 by harsha012, jhodgdon, joachim: Change wording of annotation keys to properties
+ed45b4d5dc Issue #2840257 by kiamlaluno: The documentation makes reference to a function that doesn't exist
+384a35caf6 Issue #2779921 by kiamlaluno, alexpott: hook_field_widget_form_alter() still reference a hook that is not used anymore
+1872e83be5 Issue #2931294 by claudiu.cristea, Wim Leers: Timestamp field type misses schema for value
+6585630775 Issue #2931709 by marcoscano, claudiu.cristea: Wrong constant name in \Drupal\image\Plugin\Field\FieldType\ImageItem::generateSampleValue()
+984a268454 Issue #2931264 by markcarver, claudiu.cristea: Remove static \Drupal::$legacyMessenger property
+8946662d75 Issue #2928450 by tim.plunkett: Remove dead code in the Layout Builder following Section refactoring
+a351d726a6 Issue #2931598 by kim.pepper, markcarver, almaudoh, Sam152: Messenger methods drop repeat flag
+f3b60edab6 Issue #2932154 by jhedstrom: ModerationInformation::getLatestRevisionId returns access-specific results
+e145f2a543 Issue #2932551 by jeqq: Error when calling ModerationStateFieldItemList::updateModeratedEntity() if the entity doesn't have workflow
+f9548751b8 Issue #2346893 by lauriii, idebr, slashrsm, RavindraSingh, Rade, Fabianx, alexpott, swentel, gauravjeet, darrenwh, deepak_zyxware, joelpittet, Wim Leers, Yogesh Pawar, Vj, ivan.chavarro, josephdpurcell, josmera01, rloos289, kattekrab, Tanvish Jha, csakiistvan, xjm, larowlan, akalata: Duplicate AJAX wrapper around a file field
+abebbfb06d Issue #2845361 by claudiu.cristea, Munavijayalakshmi: Don't compute children and parents of a new term on TermForm
+824fff57f3 Issue #2899708 by gaurav.kapoor, tedbow, droplet, Wim Leers: `quote` should be `blockquote` in off-canvas.base.css
+26235da61b Issue #2930788 by marcoscano, phenaproxima, Berdir, seanB: Do not show name by default in media displays
+a83b06a46b Issue #2923015 by cburschka, amateescu, tstoeckler, alexpott, hchonov, mondrake, pfrenssen: [PHP 7.2] Incompatible method declarations
+03fd77c842 Issue #2927806 by alexpott, mondrake, jibran, Mile23: Use PHPUnit 6 for testing when PHP version >= 7.2
+4e5b4b09bd Issue #2931368 by opdavies: Add missing param documentation for hook_migrate_prepare_row, document hook_migrate_MIGRATION_ID_prepare_row
+962122efc7 Issue #2884675 by rodrigoaguilera, joelpittet, TR: Remove twig uses of Twig_Node::getLine to Twig_Node::getTemplateLine
+93b9f58426 Issue #2932044 by alexpott: Remove \PHPUnit_Util_XML::cssSelect() from \Drupal\tour\Tests\TourTestBase
+6ac6325024 Issue #2931339 by manuel.adan: Unused variable $admin_permission in EntityAccessControlHandler::checkAccess
+aee6bea5cd Issue #2921033 by Jo Fitzgerald, masipila, phenaproxima, xjm, Wim Leers: Improve API documentation of DrupalSqlBase source plugin
+4851f311e2 Issue #2862671 by masipila, Jo Fitzgerald, kleog, phenaproxima, quietone: Add documentation to SqlBase source plugin
+be64202643 Issue #2825487 by damiankloip, Wim Leers, garphy, cburschka, tedbow, dpovshed, tstoeckler, Munavijayalakshmi, Berdir, dawehner, e0ipso: Fix normalization of File entities: file entities should expose the file URL as a computed property on the 'uri' base field
+0308764eb4 Issue #2551259 by Mile23, gaurav.kapoor, Jo Fitzgerald, googletorp, Jeremy, xjm, webchick: Deprecate dead code locale_translation_manual_status()
+8e9f1b6120 Issue #2929496 by plach, hchonov, timmillwood, catch, Wim Leers, amateescu, Calystod, andypost: Add dedicated interfaces to group methods dealing with revision translation and clean up the related documentation
+2e16f2a35d Issue #2926914 by tim.plunkett, xjm, larowlan, tedbow, EclipseGc: Rewrite \Drupal\layout_builder\Section to represent the entire section, not just the block info
+3cf0815a54 Issue #2930072 by vaplas, Lendude: Module: Convert system functional tests to phpunit
+dad8d64eed Issue #2913864 by Jo Fitzgerald, chiranjeeb2410, matslats, phenaproxima: badly constructred link in drupal_set_message
+a44a23e64f Issue #1489692 by Liam Morland, pfrenssen, YesCT, geekinpink, sudishth, josmera01, David_Rothstein: Incorrect handling of file upload limit exceeded - file widget disappears
+522ed00526 Issue #2914938 by timmillwood, RajabNatshah, xjm, Manuel Garcia, amateescu, Wim Leers: Preview of content - Notice: Undefined offset: 0 in _quickedit_entity_is_latest_revision() (line 196 of core/modules/quickedit/quickedit.module)
+968da88d76 Issue #2928846 by alexpott, Berdir: [PHP 7.2] count() parameter must be an array or an object that implements Countable
+40856ccd26 Issue #2760167 by kim.pepper, markcarver, jibran, dawehner, znerol, Wim Leers, larowlan, xjm, tim.plunkett: Add \Drupal\Core\Messenger\Messenger
+5ea62f1d3e Issue #2876085 by heddn, maxocub, phenaproxima, Jo Fitzgerald, vasi, quietone, yoroy, masipila, larowlan, neclimdul, krystalcode, catch: Before upgrading, audit for potential ID conflicts
+66d19eaa71 Issue #2927566 by Wim Leers: Unit test EntityReferenceFieldItemNormalizerTest mocks incorrectly
+ee22a47cd2 Issue #2928702 by Wim Leers, borisson_, tedbow: Make EntityResourceTestBase's field_rest_test_multivalue test field less invasive: omit it from normalizations
+8fb5919181 Issue #2880445 by pjcdawkins, japerry, gargsuchi, q0rban: Config sync should not throw a warning when not being writable
+6f6abec964 Issue #2894014 by adriancid, Cottser: Additional space in a field setting schema label
+4a338bf833 Issue #2928522 by yo30, dawehner: \Drupal\FunctionalJavascriptTests\WebDriverWebAssert misses some deprecations
+0ee253116f Issue #2928778 by plach: Exception when trying to save a new revision after manually setting the original revision ID
+0b67173a1f Issue #2929464 by tedbow, mpdonadio: Tests under "core/modules/ckeditor/tests/modules/src/Kernel" are in the wrong folder and do not get tested
+4d629c4d81 Issue #2627512 by gambry, jhedstrom, mpdonadio, Jo Fitzgerald, jibran, tedbow, bkosborne, alexpott, vprocessor, xjm: Datetime Views plugins don't support timezones
+8c44f2085e Issue #2930197 by mondrake, amateescu: EntityDefinitionUpdateTest fails with contrib db driver (again)
+89e64c1fe0 Issue #2928249 by alexpott, mondrake: Introduce a PHPUnit 6+ compatibility layer for Drupal\Tests\Listeners classes
+f320141dda Issue #2795317 by hswong3i, alexpott, Lendude, bircher, dawehner, martin107, Jo Fitzgerald, mondrake: Allow PHPUnit 6+ support for object mocking
+b5b3949b14 Issue #2928256 by marcoscano, seanB: Users shouldn't be able to change the media source plugin after the media type is created
+de9e2d7061 Issue #2865184 by chr.fritsch, phenaproxima, larowlan, marcoscano, xjm: Allow MediaSource plugins provide default field form/view display settings
+5564bba7d7 Issue #2862745 by masipila, quietone: Add documentation to EntityFieldInstance destination plugin
+8859f625ad Issue #2862746 by masipila, quietone, phenaproxima: Add documentation to EntityFieldStorageConfig destination plugin
+d98f9b8e17 Issue #2927844 by Jo Fitzgerald, quietone, heddn: Correct references to 'iterator' plugin to be 'sub_process'
+017e42ed76 Issue #2928137 by blakemorgan, dawehner: Correct deprecation note in ajax.es6.js
+297092718a Issue #2929477 by alexpott, droplet: Update jcalderonzumba/mink-phantomjs-driver
+8da25f6fb7 Issue #2927563 by tstoeckler, amateescu: Aggregator feed "refresh" field should have a default value
+7d1545b32a Issue #2927569 by tstoeckler, amateescu: Various tests do not set values for required field when creating entities
+bdba2942e1 Issue #2923567 by Sam152, amateescu: Select from correct entity tables for additional entity/field definitions when moving data to dedicated table storage from shared table storage for the purposes of purging
+e4c874e18c Issue #2862207 by kalpaitch, jmmarquez, jeetendrakumar: Config import change profile message
+eca600bdb6 Issue #2500521 by Jo Fitzgerald, RytoEX, quietone, gaurav.kapoor, hussainweb, phenaproxima: Upgrade path for Statistics 7.x and 6.x
+bc1e39c66b Issue #2929076 by marcoscano: Fix wrong \Drupal\Core\Entity\EntityTypeInterface::getBundleLabel() docblock
+1aab6ab23d Issue #2927758 by Wim Leers, dagmar: Update DbLogResourceTest to use the ResourceTestBase base class instead of the deprecated RESTTestBase
+66fc18077a Issue #2717965 by Yogesh Pawar, pguillard, alexpott, Liam Morland, skylord, oxy86, cilefen, balagan, Anthony Fok: Site name is not UTF-8 encoded in email headers
+8203805823 Issue #2929124 by Wim Leers, tstoeckler: Remove EntityResource::getCastedValueFromFieldItemList() helper in favor of FieldItemList::equals()
+723712ca3d Issue #2791571 by chr.fritsch, kristiaanvandeneynde, phenaproxima, Berdir, seanB, tstoeckler, Wim Leers, xjm: Automatically supply contextual links for entities
+a4dd446ee9 Issue #2895001 by marcoscano, vijaycs85, Wim Leers, benjifisher, xjm, Berdir, amateescu: Use the bundle label (e.g. "Media type") instead of "Bundles" in the Entity Reference field configuration
+04dccf9472 Issue #2853503 by Aki Tendo, alexpott, larowlan, Wim Leers, klausi, fgm, dawehner, mondrake, catch, Berdir, neclimdul, borisson_: Remove all assert('string') calls from Drupal core because deprecated in PHP 7.2
+730c5a97a9 Issue #2808217 by Wim Leers, tedbow, YesCT, dawehner, xjm, Berdir, damiankloip, slucero: To be able to view Vocabulary config entities via REST, one should not have to grant the 'administer taxonomy' permission
+4204b0b29a Issue #2928433 by webchick, nod_, drpal, effulgentsia, justafish, lauriii: Add @justafish as JavaScript subsystem maintainer in MAINTAINERS.txt
+d6fb4a503c Issue #2662574 by RajeevK, Adita, pritish.kumar, afi13, greyghost, tstoeckler, xjm, Cottser, dawehner: Theme suggestions may not be in theme include files, Search and Views UI suggestions are not (always) found
+acaf93a810 Revert "Issue #2662574 by RajeevK, Adita, pritish.kumar, afi13, AjitS, greyghost: Theme suggestions may not be in theme include files, Search and Views UI suggestions are not (always) found"
+81d17351e0 Issue #2662574 by RajeevK, Adita, pritish.kumar, afi13, AjitS, greyghost: Theme suggestions may not be in theme include files, Search and Views UI suggestions are not (always) found
+e382945bb7 Issue #2850973 by alexpott, kferencz91, jonathan1055, catch, dawehner: ConfigEntityInterface::onDependencyRemoval() called with incorrect dependency list
+85267fa243 Revert "https://www.drupal.org/files/issues/2850973-38.patch"
+c6d6c4d8d1 Issue #2915820 by martin107, tim.plunkett, dawehner: [PHP 7.2] FormValidator: Parameter must be an array or an object that implements Countable
+6d0a2eaa46 Issue #2927766 by Wim Leers: Update ResponseGeneratorTest to use the BrowserTestBase base class instead of the deprecated RESTTestBase
+8d06691e00 Issue #2927230 by drpal, dawehner: 3/3 JS codestyle: camelcase
+01576f24da Issue #2927228 by drpal, mikejw, dawehner, webchick, xjm: 2/3 JS codestyle: camelcase
+ce86e09d3a Issue #2915784 by dawehner, drpal, mikejw, justafish, tedbow, xjm, webchick: 1/3 JS codestyle: camelcase
+148db4bef4 Issue #2927476 by Lendude, tstoeckler: Using testing.services.yml in a kernelTest fatals when trying to copy this to the test site
+9f26cfb2ae Issue #2670966 by xjm, Crell, claudiu.cristea, alexpott, timmillwood, rakesh.gectcr, catch, dawehner, David_Rothstein, hchonov, martin107, tstoeckler, andypost, cilefen, RobLoach, Fabianx, salvis, hussainweb, JeroenT, larowlan, pfrenssen, daffie, webchick, wturrell: Warn users of old PHP versions
+c9678f5979 Issue #2909676 by Miraya, rang501, ericbellot, Jo Fitzgerald, Daniel_Rose: Improve messages about image resizing
+707740e09c Issue #2919872 by vaplas, dawehner: Move part of DownloadTest::testFileCreateUrl() to a new Kernel test
+7185860006 Issue #2641518 by dimaro, Mac_Weber, pk188, Mile23, anya_m, naveenvalecha, heykarthikwithu, aditya_anurag, nesta_, anchal29, rakesh.gectcr, sdstyles: Replace deprecated usage of  entity_create('config_test') with a direct call to ConfigTest::create()
+dbfe03c000 Issue #2916300 by amateescu: Use ComputedFieldItemListTrait for the path field type
+e8b84d93ff Issue #2843139 by vaplas, Wim Leers, harings_rob, catch, Berdir, alexpott: EntityResource: Provide comprehensive test coverage for File entity, and tighten access control handler
+dcfee314ad Revert "Issue #2925064 by drpal, dawehner, xjm, justafish, droplet: [1/2] JS codestyle: no-restricted-syntax"
+f7e2d52e5c Revert "Issue #2927228 by drpal, dawehner: 2/3 JS codestyle: camelcase"
+59b1bac3d6 Revert "Issue #2915784 by dawehner, drpal, justafish, tedbow, xjm: 1/3 JS codestyle: camelcase"
+42634ef62d Issue #2927520 by marcoscano: Fix wrong documentation in comment module
+27253f7214 Issue #2927228 by drpal, dawehner: 2/3 JS codestyle: camelcase
+17e2ab99f4 Issue #2421001 by eiriksm, pfrenssen, YesCT, DuaelFr, gnuget, StryKaizer, Lendude, Jo Fitzgerald, andrewmacpherson, mgifford, geertvd, John Cook, mohit_aghera, Sinan Erdem, yoroy, thorandre, xjm, catch, joelpittet, idebr, alexpott, cilefen, dawehner, Cottser: Fix regression in the link widget where help text does not show
+3f49bda7e7 Issue #2139467 by vaplas, Gábor Hojtsy, andypost, Sutharsan, alexpott, dillix: format_plural() does not handle D7 translations with a plural form after @count
+9b874acf9f Issue #2915784 by dawehner, drpal, justafish, tedbow, xjm: 1/3 JS codestyle: camelcase
+9bcfe6d59f https://www.drupal.org/files/issues/2850973-38.patch
+07c81f124b Revert "Issue #2850973 by alexpott, kferencz91, jonathan1055, dawehner: ConfigEntityInterface::onDependencyRemoval() called with incorrect dependency list"
+ff6908850e Issue #2870465 by naveenvalecha, vaplas, Lendude, Jo Fitzgerald, michielnugter, Gábor Hojtsy: Convert web tests to browser tests for user module
+dd63977226 Issue #2765959 by davidwbarratt, Wim Leers, dawehner, borisson_, tstoeckler, tedbow, catch: Make 4xx REST responses cacheable by (Dynamic) Page Cache + comprehensive cacheability test coverage
+f9cde09bd1 Issue #2850973 by alexpott, kferencz91, jonathan1055, dawehner: ConfigEntityInterface::onDependencyRemoval() called with incorrect dependency list
+06c7b727bc Issue #2926540 by amateescu, plach, xjm, hchonov, Berdir: Split revision-handling methods to a separate entity storage interface
+7fb8c07f2a Issue #2918570 by xjm: Hotfix for ToolkitGdTest take 3
+fdc8bc3260 Revert "Issue #2918570 by xjm: Hotfix for ToolkitGdTest take 2"
+a303c45eb1 Issue #2918570 by xjm: Hotfix for ToolkitGdTest take 2
+7ea6068f6d Issue #2918570 by xjm: Hotfix for ToolkitGdTest
+8e461b3682 Issue #2926121 by zaporylie, borisson_: Multiple data types must be separated by a vertical bar
+dad79553d6 Issue #2791405 by alexpott, Thew, flocondetoile, eyilmaz, bsnodgrass, cilefen, aralnoth, xjm, mikeohara, jaybee@baelemans.eu, szeidler, Gábor Hojtsy, catch, gagarine, vaplas, claudiu.cristea, ckaotik, idebr: When installing a site in a language besides English, the site name is not saved and reverts to "Drupal"
+3ed16f08d7 Issue #2923884 by mfernea: Fix 'Squiz.WhiteSpace.SemicolonSpacing' coding standard
+4daa23c89b Issue #2923886 by mfernea: Fix 'Squiz.WhiteSpace.LanguageConstructSpacing' coding standard
+14b732bb97 Issue #2925657 by tim.plunkett, amateescu: EntityDisplayBase::init() should use ::setComponent() for fields
+0b90895a78 Issue #1730874 by amateescu, e2thex, indytechcook, disasm, googletorp, hchonov, Berdir: Add support for loading multiple revisions at once
+b0a4d7e017 Issue #2925064 by drpal, dawehner, xjm, justafish, droplet: [1/2] JS codestyle: no-restricted-syntax
+67207f792b Issue #2905686 by Wim Leers: Expand EntityResourceTestBase to test PATCHing multi-value fields: both adding and removing items
+34965ce1fd Issue #2925913 by alexpott, amateescu: EntityReferenceItem logs critical errors in onDependencyRemoval()
+33368a5257 Issue #2894501 by cspitzlay, dawehner, zaporylie, larowlan, alexpott, hchonov, Lendude: Allow for separate mink driver settings for Javascript tests
+3cf53f5ff2 Issue #2897936 by arunkumark, somepal, Chi, Cottser: check_markup() and FilterInterface refer to non-existent function filter_process_text()
+3410d78199 Issue #2613924 by heykarthikwithu, oknate, Mac_Weber, pguillard, attiks, aerozeppelin, claudiu.cristea, Prasun, alozie, lokapujya, Wim Leers: Link text isn't marked as required
+5f9a75f26f Issue #2920598 by Jo Fitzgerald, quietone: Move d6_taxonomy_term_translation and test to content_translation
+3516185109 Issue #2925550 by Berdir, amateescu: Fields with a manually defined initial value in the schema have an Entity schema definition mismatch after updating to Drupal 8.4
+892c0f3c4e Issue #2922343 by amateescu, dawehner: \Drupal\views\Tests\ViewResultAssertionTrait::assertIdenticalResultsetHelper() does not cast entity field values to strings
+5bba892a36 Issue #2925750 by mondrake, amateescu, xjm: EntityDefinitionUpdateTest fails with contrib db driver
+d0518c2596 Issue #2865616 by Sam152, plach, dawehner, timmillwood, amateescu, tim.plunkett: Add an option for EntityConverter to load the latest entity revision and fix all entity forms to use this option
+99025a1020 Issue #2925651 by tim.plunkett: Config schema for \Drupal\Core\Block is wrongly in block.module
+c53b64f6bc Issue #2800873 by Wim Leers, lhangea, damiankloip, Yogesh Pawar, dawehner, alexpott: Add XML GET REST test coverage, work around XML encoder quirks
+3bc8b66549 Issue #2544790 by hchonov, amateescu, tstoeckler: ContentEntityBase::setNewRevision(FALSE) is broken if ::setNewRevision(TRUE) was called previously
+1b8dea09d2 Issue #2907863 by tucho, Sutharsan, Gábor Hojtsy: Prefer HTTPS protocol over HTTP when fetching translations
+435bae86a1 Issue #2868035 by Wim Leers, vaplas, dawehner, larowlan: Test that all core content+config entity types have functional REST test coverage
+752fd5a721 Issue #2924780 by zaporylie: Missing @var annotation for scalars that provide default values
+5d2b7fba92 Issue #2924779 by zaporylie, martin107: Fix existing but somehow invalid @var annotation
+378693165f Issue #2922371 by Mile23, dawehner, caseylau: Numerous deprecation messages for test traits do not reference the correct replacement
+d8dc1a0cad Issue #2924683 by kiamlaluno: Variable is uselessly initialized three times
+3874554783 Issue #2924365 by yo30, gaurav.kapoor, xjm: Wrap JS comments in Settings Tray to 80 character limit
+e9b1184d03 Issue #2902381 by neclimdul, mfernea, Mile23, alexpott: Revert phpcs.xml.dist changes from "Ensure that we're using the right ruleset for coding standards checking"
+e59a03df3d Issue #2923670 by duozersk, Saviktor, joachim: The one-line summary of ImageEffectInterface::getDerivativeExtension() is too long
+c53606edc9 Issue #2918569 by amateescu, Sam152: Simplify ModerationInformation::getLatestRevisionId()
+db16f75405 Issue #1748410 by wesleydv, c.nish2k3, dasha_v, Thomasdbcklr, John Cook, dagmar, sgarrahy, falc0, doublejosh, alexpott: Include !severity in logged events by syslog
+f0a9699064 Issue #2924055 by TuWebO: Wrong description for "view latest version" permission
+a64943deaa Issue #2880387 by Kingdutch: Avoid unnecessary array operations in update_get_update_list
+d361241585 Issue #2897979 by karthikkumarbodu, svetoslav.dragoev: image.module should use FileInterface instead of File
+c90392875c Issue #2923302 by MaskOta, tstoeckler, andrewmacpherson: Module install table is missing the "Show all columns" link
+7dbf76d75a Issue #2897134 by MaskOta, Sam152, Dinesh18, xjm: Enforce that weights are numeric when settings state/transition weights
+df5ddd22ae Issue #2923747 by morsok, drpal: Wrong declaration of no-mutable-exports JS coding standard rule
+8f300f534f Issue #1174892 by chr.fritsch, travist, Dave Reid, keithm, webchick, phenaproxima, Everett Zufelt, slashrsm, Wim Leers, RobW, seanB, xjm, Gábor Hojtsy, larowlan, ericduran, webflo, Berdir, pschuelke: File field formatters for rich media display with <video> and <audio> HTML5 elements
+f7c9dd9352 Issue #2905922 by tim.plunkett, tedbow, xjm, EclipseGc, webchick, vijaycs85, larowlan, andrewmacpherson, droplet, Bojhan, mgifford, drpal, phenaproxima, DyanneNova, japerry: Implementation issue for Layout Builder
+596837b6ec Issue #2919891 by Darvanen, tstoeckler: Make Vocabulary use a route provider instead of hard-coded routes
+08d676a2ec Revert "Issue #2905922 by tim.plunkett, xjm, EclipseGc, vijaycs85, webchick, larowlan, andrewmacpherson, Bojhan, droplet, mgifford, drpal, japerry, tedbow, DyanneNova, phenaproxima: Implementation issue for Layout Builder"
+916e6ba952 Issue #2121119 by ACF, Sam152, BR0kEN: setDialogTitle in the OpenDialogCommand doesn't set the title
+622d5c47cf Issue #2923572 by Sam152: Account for NULL base field values in shared table storage when copying to dedicated table storage for field purging
+88a22ddacc Issue #2905922 by tim.plunkett, xjm, EclipseGc, vijaycs85, webchick, larowlan, andrewmacpherson, Bojhan, droplet, mgifford, drpal, japerry, tedbow, DyanneNova, phenaproxima: Implementation issue for Layout Builder
+86267049db Issue #2875148 by martin107, dawehner: BrowserTestBase: Steer new test development away from translation
+4d176b95ea Issue #2902407 by mfernea, zaporylie: Fix 'Drupal.Commenting.DataTypeNamespace' coding standard
+21707245a5 Issue #2864816 by Wim Leers, dawehner, larowlan, tedbow: HAL LinkManager doesn't add 'url.site' cache context when needed
+f73e805702 Issue #2850684 by daffie, RoSk0: Default Database Schema::fieldExists() is slow for PostgreSQL
+2d859f2c01 Issue #2923305 by Saviktor, tstoeckler, MaskOta: Module (un-)install tables have a useless "data-striping" attribute
+2bd52f5d50 Issue #2922285 by mstef, timmillwood: Classes should use StateTransitionValidationInterface rather than StateTransitionValidation
+37d0cad9e7 Issue #2914292 by quietone, masipila, xjm: Remove hard coded reference to node/2179269
+700a72fa37 Issue #1472946 by gnuget, andypost, mmrares, sidharthap, kiamlaluno, Himanshu5050, dineshkumares, amit.drupal: Remove usages of deprecated function drupal_realpath() throughout core functions
+839d67fa83 Issue #2922018 by jhedstrom, amateescu: Set revision creation time when moderating content
+20564b99a0 Issue #2282119 by amateescu, jibran, Jo Fitzgerald, yched, plach, timmillwood, fago, Sam152, larowlan: Make the Entity Field API handle field purging
+dbc01628d1 Issue #2921862 by alexpott, vaplas, tacituseu: Segfault on PHP5.5 and PostgreSQL
+431e90f8cc Issue #2909366 by zaporylie, iKb, mfernea: Fix 'Drupal.Commenting.VariableComment.EmptyVar' coding standard
+26b822d697 Issue #2922786 by xjm, dawehner, plach, vaplas: Add plach to MAINTAINERS.txt as a provisional framework manager
+c2346e0075 Issue #2920014 by billywardrop, shashikant_chauhan, anyaabchiche, dinarcon, sthomps5, mairi: Add Change record to @deprecated for Renderer service
+8886b4d237 Issue #2920005 by shashikant_chauhan, Janec, davemckain, dinarcon: Add Change record to @deprecated for email-validator service
+72c6aff06e Issue #2920009 by shashikant_chauhan, tedbow, dinarcon, kwhite: Add Change record to @deprecated for Date format changes
+3f20ff5fbc Issue #2906600 by amateescu, Wim Leers, tstoeckler, cburschka: FieldItemList::equals() doesn't work correctly for computed fields with custom storage
+300d00abd3 Issue #2920010 by shashikant_chauhan, tedbow, dinarcon, kwhite, xjm: Add Change record to @deprecated for AssetCollectionOptimizerInterface::getAll() and ::deleteAll()
+f03cb20eac Issue #2921916 by spideep: Add Change record to @deprecated for function rightJoin
+324d55801a Issue #2894482 by dawehner, cspitzlay: MINK_DRIVER_ARGS does not support associative arrays
+ffa979ba1c Issue #2563069 by DuaelFr, ecarty, idebr: Unclosed conditional comments in html tag result in broken html head
+623461231b Issue #2685957 by neclimdul, mpp, pguillard, fomenkoandrey, alexpott, larowlan, pingwin4eg: Warning: mkdir(): File exists in Drupal\Component\PhpStorage\FileStorage->createDirectory
+7206f5d9c9 Issue #2885309 by vaplas, drewklein, pk188, alexpott, Ayesh, arunkumark, andypost, klausi, xjm, mondrake: [PHP 7.2] each() function is deprecated
+9830ef98bc Issue #2920003 by mairi, shashikant_chauhan, tedbow, dinarcon, kwhite: Add Change record to @deprecated for redirect.destination service
+40fb0c8b74 Issue #2886279 by dawehner, alexpott, drpal, zaporylie, Wim Leers, neclimdul, Mile23, Chi: Add PHPCS and PHPCBF as Composer scripts
+754883a074 Issue #2920008 by shashikant_chauhan: Add Change record to @deprecated for UrlHelper::stripDangerousProtocols()
+91e668f575 Issue #2572795 by mfernea, zaporylie, pfrenssen, andypost, attiks, alexpott, xjm, Mile23, catch, borisson_: Fix coding standard for closures - Drupal.WhiteSpace.ScopeClosingBrace and Generic.Functions.OpeningFunctionBraceKernighanRitchie
+f1adffe2b4 Issue #2392845 by amateescu, nuez, seanB, Alumei, penyaskito, vprocessor, steveoliver, lokapujya, tim.plunkett, yched, Sam152, Wim Leers, jibran, kristiaanvandeneynde, Berdir, larowlan, hchonov, fago: Add a trait to standardize handling of computed item lists
+43812961b6 Revert "Issue #2225681 by quietone, Jo Fitzgerald, dipakmdhrm, Adita, maxocub, Gábor Hojtsy, phenaproxima, iMiksu, Manuel Garcia, catch: Migrate D6 i18n blocks translated strings"
+b53e50d7d4 Issue #2225681 by quietone, Jo Fitzgerald, dipakmdhrm, Adita, maxocub, Gábor Hojtsy, phenaproxima, iMiksu, Manuel Garcia, catch: Migrate D6 i18n blocks translated strings
+0f64348e6d Issue #2862673 by masipila, Pavan B S, Jo Fitzgerald, phenaproxima: Add documentation to EmptySource source plugin
+2a9dc18b4b Issue #2728869 by masipila, gaurav.kapoor, pk188, quietone, heddn, phenaproxima, generalredneck, mikeryan, eojthebrave: Document public function MigrateSourceInterface::getIds return value better
+6dc062eb45 Issue #2901562 by mfernea, Jo Fitzgerald, Yogesh Pawar, 3ssom, Mile23, borisson_: Fix 'Squiz.WhiteSpace.SuperfluousWhitespace' coding standard
+edf57d8ab8 Revert "Issue #2572795 by mfernea, pfrenssen, attiks, andypost, alexpott, xjm, Mile23, catch, borisson_: Fix coding standard for closures - Drupal.WhiteSpace.ScopeClosingBrace and Generic.Functions.OpeningFunctionBraceKernighanRitchie"
+6afd12c00a Issue #2921282 by xjm, Gábor Hojtsy: Promote the provisional product and framework managers
+c422bdfa53 Issue #2572795 by mfernea, pfrenssen, attiks, andypost, alexpott, xjm, Mile23, catch, borisson_: Fix coding standard for closures - Drupal.WhiteSpace.ScopeClosingBrace and Generic.Functions.OpeningFunctionBraceKernighanRitchie
+5f17a2715e Issue #2912080 by tim.plunkett, hchonov, Wim Leers, tstoeckler: Add hchonov as an Entity API maintainer
+b63fe9691f Issue #2921931 by dravenk: \Drupal\simpletest\UserCreationTrait  @deprecated references new class in the incorrect namespace
+3fd58b8619 Issue #2921942 by caseylau: \Drupal\simpletest\ContentTypeCreationTrait @deprecated references new class in the incorrect namespace
+ab172aa608 Issue #2921860 by laughnan, tedbow: \Drupal\simpletest\NodeCreationTrait @deprecated references new class in the incorrect namespace
+75dcf9af44 Issue #2870194 by alexpott, Mile23, jibran, larowlan, tim.plunkett: Ensure that process-isolated tests can use Symfony's PHPunit bridge to catch usages of deprecated code
+b83782a74b Issue #2920001 by Wim Leers, dawehner, borisson_, aheimlich, davidwbarratt: Add cacheable HTTP exceptions: Symfony HTTP exceptions + Drupal cacheability metadata
+52a598e2bf Issue #2910211 by tedbow, Wim Leers: Allow computed exposed properties in ComplexData to support cacheability
+33818be2d8 Issue #2917883 by quietone, TR, Jo Fitzgerald, masipila, phenaproxima: Rename 'migration_templates' directories in core modules to 'migrations'
+3af361c83c Issue #2874938 by Wim Leers, tim.plunkett, borisson_, effulgentsia: AdminRouteSubscriber must only mark HTML routes as administrative
+a8e7de393b Issue #2892821 by tedbow, zaporylie, alexpott, Wim Leers, dagmar, yoroy, effulgentsia, Bojhan: Core modules check node module's "access content" permission for displaying things that have nothing to do with nodes
+1e850835d9 Issue #2910682 by Wim Leers, jhedstrom, damiankloip, dawehner, Grayside: Mark serializer encoders @internal
+3cadcd5df4 Issue #2903161 by voleger, tacituseu, xjm, benjifisher, andypost, Berdir: Fix incorrect FieldFormatter id for weight field in base field definition in display options
+2c2e85c348 Issue #2695109 by dpi, willzyx, Sam152, dawehner: Cache bins are not deleted when the module that declares them is uninstalled
+113c6dc258 Issue #2840392 by Wim Leers, JacobSanford, Yogesh Pawar, dawehner, xjm, effulgentsia, Mixologic, Bojhan, webchick, Gábor Hojtsy, yoroy: Enable BigPipe by default in the Standard install profile
+c74c39e133 Issue #2871591 by tedbow, Wim Leers, dagmar, borisson_, amateescu, dawehner, damiankloip, tstoeckler, mradcliffe, larowlan: Allow ComplexData in TypedData to specify computed properties that should be exposed in normalization and other contexts
+f2c1ef4f16 Issue #2920015 by mairi, tedbow, dinarcon: Add change record to @deprecated for drupal_render_children()
+8b86801fa6 Issue #2920394 by tim.plunkett: Field Layout should not alter fields placed into regions it doesn't know about
+d0e3796991 Issue #2920018 by sergiuteaca, billywardrop, anyaabchiche, Janec, JO0st, davemckain, dinarcon, sthomps5, mairi, jyraya, kwhite: Add Change record to @deprecated for element_info service
+355462ba34 Revert "Issue #2908864 by Wim Leers, eleleka: Update CKEditor library to 4.7.3"
+4e83abc5e4 Issue #2911306 by alexpott, roynilanjan, mondrake, quicksketch, quietone: Migration module breaks with PHP 7.2 due to inherited method signature differences
+7f15792516 Issue #2913912 by alexpott, phenaproxima, dawehner, amateescu, catch: URL generator may have a stale route provider during module installation
+0a81f02d63 Issue #2917915 by PCate: providerTestCleanCssIdentifier line comments reference wrong lines
+7c4d8e4765 Issue #2920322 by zaporylie: Unused local variable in TaxonomyTermViewTest
+9debb7d597 Issue #2902707 by Jo Fitzgerald, mpdonadio, Adita, gambry, JayKandari, jhedstrom, refman1073: Document magic methods in DateTimePlus and DrupalDateTime using phpDoc @method
+8e03638edc Issue #2914677 by zaporylie: Unused member variable in GlossaryViewTest
+b5e3cc53e9 Revert "Issue #2913912 by alexpott, phenaproxima: URL generator may have a stale route provider during module installation"
+61df34e066 Issue #2859304 by quietone, heddn, Jo Fitzgerald, maxocub, rivimey, phenaproxima, jhodgdon: Show field type migrations correctly in Migrate Drupal UI
+8d2a2ec230 Issue #2545520 by sdstyles, BarisW, David_Rothstein, owenpm3, mgifford, xjm, rovo, xlin, lukas.fischer, Anicky, tar_inet, a11y.matters, hussainweb, benjifisher, NikitaJain, steverossnyc, shwetaneelsharma, mradcliffe, rosschive, jhodgdon, yoroy, drnikki, YesCT, Gábor Hojtsy, edorsini: The same link "available updates" links to two different pages in the same paragraph when there is a problem checking available updates
+b4291de299 Issue #2874700 by dhruveshdtripathi, billywardrop, Dinesh18, maryedith, sorabh.v6, Gábor Hojtsy, Mile23, tedbow: Add Change record to @deprecated for Domain::Config Language Negotations
+391b71037b Issue #2913912 by alexpott, phenaproxima: URL generator may have a stale route provider during module installation
+d743db4f94 Issue #2919901 by pasan.gamage: Incorrect class comment for BlockContentTypeForm class
+1ebb2e1f32 Issue #2660124 by tim.plunkett, samuel.mortenson, phenaproxima, tstoeckler, yoroy, dead_arm, xjm, Manuel Garcia, EclipseGc, larowlan, DyanneNova, tedbow: Dynamically build layout icons based on well formed config
+334beedad6 Issue #2919130 by masipila, heddn: Add masipila to MAINTAINERS.txt for migrate subsystem
+93045afbe4 Issue #2895544 by Ginovski, Lendude, mpdonadio, jhedstrom, Berdir, dawehner: Datetime module missing view plugin config schema
+fdce9b702e Issue #2915673 by borisson_, alexpott, Gábor Hojtsy: Ignore coding standards in sites/* PHP files as they are for configuration and not real code
+f16783ad59 Issue #2862308 by Yogesh Pawar, joelpittet, amateescu: Log a message when skipping deleted fields during field_purge_batch()
+5951ea0d1b Issue #2914713 by droplet, drpal, dawehner, nod_: JS codestyle: no-throw-literal
+ccde72d345 Issue #2914668 by Jo Fitzgerald, shashikant_chauhan, heddn, quietone: MigrateNodeDeriverTest::testNoTranslations() does not install node module
+2483ca130f Issue #2913460 by Eric_A: drupal/core-class-finder missing from replace section
+06ca70fdba Issue #2913459 by Eric_A: drupal/core-class-finder missing in ComposerIntegrationTest
+c586b21786 Issue #2784443 by tedbow, Wim Leers, Cottser, tim.plunkett, droplet, drpal, nod_, lauriii: Move off-canvas functionality from Settings tray module into drupal.dialog.ajax library so that other modules can use it
+850f03b9be Issue #2825204 by dawehner, BR0kEN, xjm, pcambra, Wim Leers, tim.plunkett, tstoeckler, damiankloip, larowlan, effulgentsia, alexpott: REST views: authentication is broken
+7fbb5e990e Issue #2916294 by dawehner: JS codestyle: no-useless-escape
+ff6381f7cf Issue #2915490 by Wim Leers: Modernize & harden HalLinkManagerTest
+8e7dff7a3c Issue #2905227 by maxocub, yoroy, jjpoole, heddn, phenaproxima, vulcanr, quietone, wturrell, xjm: Migrate UI: Improve 'Review Upgrade' page UX
+c2e3b2d595 Issue #2912120 by phenaproxima, heddn, Berdir, quietone, maxocub: Migrations with a highwater property are not applying correct orderBy() on first run
+9032c68faa Issue #2916154 by drpal, droplet, dawehner, alexpott, xjm: JS codestyle: no-multi-assign
+97346f0d28 Issue #2826404 by mpdonadio, Jo Fitzgerald, jhedstrom, larowlan: Create DateTimeItemInterface and deprecate global constants in datetime.module
+58b16f4e91 Revert "Issue #2701393 by tim.plunkett, Wim Leers, thpoul, xjm: Switching between editors on the format configuration causes errors upon save"
+0f42cd0566 Issue #2917031 by mallezie: NodeTranslationHandler references old publish and unpublish actions
+90c4ab5c2f Revert "Issue #2912399 by wengerk, Wim Leers: Extend the CKEditorIntegrationTest for DrupalImage"
+8145b33836 Issue #2888905 by vaplas, Lendude: ConvertConfigTranslationUiTest WTB to JTB & BTB for config_translation module
+1cbbff1503 Issue #2883680 by dawehner, Wim Leers, tim.plunkett, larowlan: Force all route filters and route enhancers to be non-lazy
+51f6344c8c Issue #2843764 by Wim Leers, arshadcn: EntityResource: Provide comprehensive test coverage for EntityFormDisplay entity
+50f08589d0 Issue #2843765 by vaplas: EntityResource: Provide comprehensive test coverage for EntityViewDisplay entity
+5f158ec5bb Issue #2909164 by drunken monkey, dawehner: Fatal error with stub container in DependencySerializationTrait::__wakeup()
+d4006a684e Issue #2917916 by arunkumark, Chi, yoroy: Improve usability of create action dropdown
+4d4365299c Issue #2843755 by Wim Leers, larowlan, andypost, jibran, Berdir: EntityResource: Provide comprehensive test coverage for Message entity
+e9c9ee5282 Issue #2912399 by wengerk, Wim Leers: Extend the CKEditorIntegrationTest for DrupalImage
+31d6b580cc Issue #2701393 by tim.plunkett, Wim Leers, thpoul, xjm: Switching between editors on the format configuration causes errors upon save
+8f022a6234 Revert "Issue #2825204 by dawehner, BR0kEN, pcambra, Wim Leers, tim.plunkett, tstoeckler, damiankloip: REST views: authentication is broken"
+e119f672a5 Issue #2915767 by heddn: CckFieldPluginBase doesn't implement MigrateCckFieldInterface
+66cbd7c9e5 Issue #2864995 by amateescu, Dinesh18, Sam152: Allow entity query to query the latest revision
+df1dd607ad Issue #2897254 by Jo Fitzgerald, heddn, rakesh.gectcr, maxocub, masipila, phenaproxima, larowlan: URLs without http:// are broken after migration from d6 or d7
+df974e5b19 Issue #2887311 by naveenvalecha, vaplas, Lendude: Convert BlockContentTypeTest web tests to browser tests for block_content module
+99ea6ac083 Issue #2809483 by michielnugter, ApacheEx, Lendude, dawehner: Convert AJAX part of \Drupal\field\Tests\FormTest::testFieldFormJSAddMore to JavascriptTestBase
+eef3306f17 Issue #2887813 by vaplas: Convert web tests to browser tests for content_translation module Part 2
+62b010ef8f Issue #2763433 by 20th, harsha012, Munavijayalakshmi, Prashant.c, hass: Hardcoded ellipsis in actions configuration form
+093b148abf Issue #2870439 by vaplas, andypost, Jo Fitzgerald, jonathan1055, dawehner, Lendude, GoZ: Convert web tests to browser tests for config module
+27266234c2 Revert "Issue #2916154 by drpal, dawehner, xjm: JS codestyle: no-multi-assign"
+169e867159 Issue #2916154 by drpal, dawehner, xjm: JS codestyle: no-multi-assign
+2f1622a8c3 Issue #2908600 by neclimdul: YamlTest writes temporary files but never uses them
+2e4eccc2d2 Issue #2907110 by adriancid, Bojhan: Add a Entity type column in Field list page
+c203575397 Issue #2916451 by Lendude, xjm: Move everything related to Bulk Form to Views module
+b912d77400 Issue #1543858 by danquah, pp, alexpott, dawehner, cilefen, jmolivas, esod, jhedstrom, andypost, kenorb, bserem: Add a startup configuration for the built-in PHP server that supports clean URLs
+40698c6c8b Issue #2870457 by ApacheEx, andypost, dawehner, naveenvalecha, vaplas, nlisgo, Wim Leers, Lendude, alexpott: Convert web tests to browser tests for page_cache module
+5d01c25222 Issue #2917303 by alexpott: JS codestyle: padded-blocks revisited
+119362cef9 Issue #2914033 by alexpott, borisson_: Complete deprecation of install_ensure_config_directory()
+40b143ff9a Issue #2825204 by dawehner, BR0kEN, pcambra, Wim Leers, tim.plunkett, tstoeckler, damiankloip: REST views: authentication is broken
+96452be02f Issue #2915414 by Wim Leers, dawehner: Omit "_core" key from normalized config entities, which includes the default config hash
+a13555adf6 Issue #2866666 by vaplas, Wim Leers, dawehner, gaurav.kapoor, pk188, tstoeckler, effulgentsia: Add proper access handlers for view and form displays
+5abe312c94 Issue #2915900 by David_Rothstein: MAINTAINERS.txt doesn't indicate that the database API is in need of a maintainer
+af3691e651 Issue #2909163 by mfernea: Fix 'Drupal.Commenting.InlineComment.WrongStyle' coding standard
+cf52b419be Issue #2915534 by drpal, nod_: JS codestyle: prefer-rest-params
+969cafbf57 Issue #2916642 by quietone, heddn: Private and Public file migrations use the same name
+a08af1ac93 Issue #2870456 by ApacheEx, Lendude: Convert web tests to browser tests for Settings Tray module
+505f3bf8d4 Issue #2573807 by 20th, Sam152, msgph, sherakama, heikki, jcnventura, Wim Leers: Fatal error: Call to a member function getTimestamp()
+15c029974f Issue #2910081 by mpdonadio, neclimdul, gambry, jhedstrom, alexpott: DateTimePlus calls should be chainable
+43c0eca73b Issue #2843781 by vaplas, Wim Leers: EntityResource: Provide comprehensive test coverage for EntityViewMode entity
+831450a1f2 Issue #2909183 by Wim Leers, tedbow: Add path alias (PathItem) field PATCH test coverage
+daf25aa9f6 Issue #2677990 by DuaelFr, agomezmoron, heykarthikwithu, gvso, alexpott, Wim Leers, larowlan: Add a setting on "Table of files" and "Generic files" formatters to use files descriptions (or not)
+2d25dc4c2d Issue #2435607 by neclimdul, markdorison, Mile23, dawehner: Tests for Annotation Component
+18f322a212 Issue #2764931 by tedbow, tim.plunkett, nod_, drpal, droplet, dawehner, Wim Leers, phenaproxima: Contextual links don't work with 'use-ajax' links
+fd8d98399a Issue #2901722 by mfernea: Fix 'Squiz.Functions.FunctionDeclarationArgumentSpacing' coding standard
+7b05eebfcf Issue #2843780 by vaplas, jamesdesq, Wim Leers: EntityResource: Provide comprehensive test coverage for EntityFormMode entity
+9500017a23 Issue #2578485 by Mile23, mayeco, TamCalderwood, alduya, Gravypower, Andy_D, alexpott, slde_rorschach: Composer::preAutoloadDump fails with no specified classmap
+e84da2fa3b Issue #2915664 by alexpott, dawehner: Sites installed by InstallerTestBase should have a timezone of 'Australia/Sydney'
+7655c87004 Issue #2914718 by droplet, alexpott, nod_, dawehner: JS codestyle: no-empty
+58c46869be Issue #2916025 by Wim Leers: Rename $denormalized to $normalized in \Drupal\hal\Normalizer\FieldItemNormalizer::normalizedFieldValues()
+a28fb181fb Issue #2915766 by dawehner, drpal: JS codestyle: vars-on-top
+db5e8289f2 Issue #2572787 by alexpott, mfernea, attiks, andriyun, andypost, RoSk0, hussainweb, klausi, martin107: Fix 'Drupal.WhiteSpace.CloseBracketSpacing' coding standard
+2fc85e7f0f Issue #2901572 by Jo Fitzgerald, bluccas, mfernea, klausi: Fix 'Drupal.Commenting.PostStatementComment' coding standard
+3c76c819ef Issue #2908864 by Wim Leers, eleleka: Update CKEditor library to 4.7.3
+990aa5c5ba Issue #2711353 by Jo Fitzgerald, rakesh.gectcr, quietone, chx, Yogesh Pawar, Pavan B S, biguzis, mikeryan, vasi, catch, iMiksu, dawehner, Berdir, benjy: Migrate never unsets existing data for content entitites
+d26fe82972 Issue #2903551 by fazni, chenderson, valthebald, dawehner, joachim: Replace REQUEST_TIME with time service in cron service
+19fa2eb58c Issue #2911806 by tim.plunkett: Remove unnecessary Crypt::hashBase64() call from Action UI
+a22c5d30d6 Revert "Issue #2894068 by Jo Fitzgerald, davidsickmiller, Yogesh Pawar, heddn, quietone: datetime_type is not set correctly when migrating datetime fields from D7"
+ee0f806896 Issue #2873696 by nvexler, wengerk, gido, Jo Fitzgerald, xjm: Add @internal to core classes, methods, properties to Form Classes
+c36743b99e Issue #2482783 by dmsmidt, alexpott, mgifford, 20th, Sutharsan, Jo Fitzgerald, tim.plunkett, dandaman, xjm: File upload errors not set or shown correctly
+af68144f05 Issue #2356913 by jmolivas, mgifford, maurizio.ganovelli, zhuber: Fix rebuild_token_calculator
+0c0c63e9af Issue #2881348 by benjifisher, guncha25, Jo Fitzgerald, anya_m, Dinesh18, pritish.kumar, andypost, alexpott, James Nesbitt, larowlan, znerol, dawehner: SessionCacheContext calls getId() on null
+a151cef151 Issue #2894068 by Jo Fitzgerald, davidsickmiller, Yogesh Pawar, heddn, quietone: datetime_type is not set correctly when migrating datetime fields from D7
+693aed2acc Issue #2912542 by jibran: Update twig/twig from v1.32.0 to v1.35.0
+b85856f417 Issue #2909368 by mfernea, reflie, zaporylie: Fix 'Drupal.Commenting.VariableComment.InlineVariableName' coding standard
+e113f8fbab Issue #2914723 by droplet, dawehner: JS codestyle: no-mixed-operators
+b61c2592f0 Issue #2915526 by drpal: JS codestyle: prefer-const
+8dc5009970 Issue #2914379 by alexpott: Remove minimal_install(), ship with default configuration instead
+a58ee8d676 Issue #2892377 by Wim Leers, Gábor Hojtsy: Document relationship of entities, entity revisions and entity translations
+0d93e20766 Issue #2805449 by joelpittet: Comment out 'extension_discovery_scan_tests' in example.settings.local.php
+03c7c8a2e9 Issue #2680097 by maxocub, quietone, vg3095, heddn, xjm: Update Migrate entries in MAINTAINERS.txt
+8e883161f6 Issue #2914738 by _gradient_: Fix typo in MapperInterface::getInstance() description
+52f65aa662 Issue #2862670 by Jo Fitzgerald, pk188, heddn, edysmp, shashikant_chauhan, dhruveshdtripathi, pritish.kumar, quietone, maxocub, mikeryan: Add documentation to SourcePluginBase source plugin
+29cd930e59 Issue #2914946 by drpal, dawehner, droplet: JS codestyle: no-var
+6c9c95e1eb Issue #2913957 by geertvd, mpdonadio: Fix invalid casing in date argument's namespace
+090d4688dd Issue #2914408 by fgm: Incorrect code/endcode in API files
+428362c1b6 Issue #2912666 by shashikant_chauhan, tobiberlin, dawehner: Clarify param in KernelTestBase::installConfig()
+d034b44814 Issue #2898373 by Mile23, Jo Fitzgerald, joachim, dawehner, Gábor Hojtsy, Lendude: Gaps in docs for KernelTestBase
+4a80851b41 Issue #2896724 by Eric115, kim.pepper, Sam152, Wim Leers: Create constants for transition directions.
+aaefc3f3c1 Issue #2770065 by joseph.olstad, joelpittet, dawehner, catch, willzyx: array_key_exists() micro-optimization
+f37dea08c2 Issue #2796393 by Jo Fitzgerald, tacituseu, Stefan Freudenberg, Yogesh Pawar, heddn, mpp, GaëlG: Migration process plugin not working with multiple source IDs
+844b6d3bf6 Issue #2914716 by droplet: JS codestyle: no-lonely-if
+336d30dc4d Issue #2914719 by nod_, droplet: JS codestyle: newline-per-chained-call
+fa985778ad Issue #2914717 by droplet: JS codestyle: array-callback-return
+0b1741f7fb Issue #2901744 by mfernea, catch: Fix 'PSR2.Namespaces' coding standard
+5a8337cfd0 Issue #2914595 by _gradient_: \Drupal\Core\Theme\ThemeInitialization declares $moduleHandler dynamically
+00b4d8c074 Issue #2909367 by iKb, zaporylie, mfernea: Fix 'Drupal.Commenting.VariableComment.DuplicateVar' coding standard
+fe0e5feeb7 Issue #2914708 by droplet: JS codestyle: comma-dangle
+2656a846ca Issue #2914710 by droplet: JS codestyle: padded-blocks
+4d263489bf Issue #2914711 by droplet: JS codestyle: no-useless-concat
+e4d6d9683f Issue #2914715 by droplet: JS codestyle: no-confusing-arrow
+a2a199a737 Issue #2236789 by singh_haneet, Neograph734, petruk.dmitriy, idebr, herom, joelpittet, LewisNyman, xjm: Styling of inline radios broken: inappropriate trailing colons (breaks EditorImageDialog)
+4997192be0 Issue #2449143 by damiankloip, tedbow, Wim Leers, dawehner, Pavan B S, Tybor, effulgentsia, larowlan: REST views specify HTML as a possible request format, so if there is a "regular" HTML view on the same path, it will serve JSON
+342b49212e Issue #2912298 by chr.fritsch, phenaproxima: Make media name available on manage display
+0d11cb1f4c Issue #2909373 by karthikkumarbodu, xjm, mfernea, dawehner: Views TaxonomyIndexTidDepth has a weird commented IN condition
+4d006efcf3 Issue #2901789 by mfernea, andriyun, borisson_: Fix 'PEAR.Functions.FunctionCallSignature' coding standard
+9188516f1b Issue #2572699 by rajeshwari10, andriyun, mfernea, pashupathi nath gajawada, marvin_B8, attiks, andypost, alexpott: Fix 'Drupal.ControlStructures.InlineControlStructure' coding standard
+64fa6ad712 Issue #2901744 by mfernea: Fix 'PSR2.Namespaces' coding standard
+f659d6ca8e Issue #2901726 by mfernea, gmario, finn.lewis, robertoperuzzo, rachel_norfolk: Fix 'Squiz.Functions.MultiLineFunctionDeclaration' coding standard
+942b70b4dd Issue #2873750 by eheller: Add Change record to @deprecated for install_ensure_config_directory()
+5b3fdce48b Issue #2887142 by maxocub, phenaproxima, Jo Fitzgerald, Adita, heddn, andypost: NodeType source plugin should include comment information
+e88751566c Issue #2846614 by damiankloip, dawehner, claudiu.cristea, effulgentsia, tstoeckler, gaurav.kapoor, Berdir, Jo Fitzgerald, Wim Leers, jibran: Incorrect field name is used in views integration for multi-value base fields (follow-up)
+3b684e5774 Issue #2846614 by damiankloip, dawehner, claudiu.cristea, effulgentsia, tstoeckler, gaurav.kapoor, Berdir, Jo Fitzgerald, Wim Leers, jibran: Incorrect field name is used in views integration for multi-value base fields
+48649a8532 Issue #2911280 by alexpott, andypost, dawehner: RectangleTest.php takes a very long time to scan for coding standards
+0bbac0e12a Issue #2851468 by tameeshb, dhirendra.mishra, alexpott, joelpittet: Wrong usage of file_prepare_directory in hook_install documentation
+6ffadcb913 Issue #2857789 by vegantriathlete, snte, narnua, xjm, lauriii: Correct spelling/non-standard use of "therefor"
+5c214594ce Issue #2902190 by chenderson: Docblock on FileUsageTemporaryDeletionConfigurationUpdateTest::testUpdateHookN() is incorrect
+deac2594b1 Issue #2911164 by mfernea, Jo Fitzgerald: Undo accidental commenting of message in MetadataGeneratorTest
+1bc64f1187 Issue #2911166 by mfernea, Jo Fitzgerald: Undo accidental commenting of message in EntityDefinitionUpdateTest
+93b36cb7dc Issue #2873768 by dhopki12, WidgetsBurritos, harsha012, Mile23, catch: Add Change record to @deprecated for *.modules constants
+3442528240 Issue #2744663 by jholding, rivimey, John Cook, hctom, mahalingam_cs: Batch missing title on screen
+581984949d Issue #2901478 by Sam152, Jo Fitzgerald, timmillwood: Test ModerationStateWidget::isApplicable with a BaseFieldOverride
+0d239c45bc Issue #2877480 by Yogesh Pawar, hardik.p, eojthebrave, Cyberschorsch: Update #cache example code on Render API overview to use Node::getCacheTags instead of hard coding
+17bf4688b2 Issue #2908699 by Jo Fitzgerald, heddn, xjm: Several textual and markup improvements to the Migrate Upgrade UI
+3e2d434028 Issue #2883813 by chr.fritsch, Wim Leers, Berdir, phenaproxima, catch: Move File/Image media type into Standard once Media is stable
+50caae081d Issue #2914649 by masipila, dipakmdhrm, phenaproxima, maxocub: [D7] Vocabulary migration: vid incorrectly mapped from vocabulary name instead of machine_name
+7d63b2a245 Issue #2902247 by Sam152, dave.mikolaj, xjm, Bojhan: Make #title of the "label" fields in the Workflow(Transition|State)(Add|Edit)Form clearer and remove the description
+8265b7736c Issue #2857843 by vaplas, mpdonadio, Jo Fitzgerald, gambry: Random fail in Drupal\KernelTests\Core\Entity\ContentEntityChangedTest::testChanged
+a20201a5ab Issue #2914249 by maxocub, dillix, masipila, phenaproxima: Translated forum vocabulary migration creates duplicate forum vocabularies
+2c7b21d24b Issue #2903007 by rakesh.gectcr, dipakmdhrm, maxocub, dillix, masipila, quietone, phenaproxima: [D7] Forum containers are migrated as forums
+4210adf6b9 Issue #2902018 by harsha012, Meenakshi Gupta, vijaycs85, Sam152, timmillwood, amateescu: Use array_column instead of array_map where possible in the Workflows module
+e9542e5d6e Issue #2894765 by bendev, Sam152, arunkumark, cedric_a: BlockContentModerationHandler::enforceRevisionsEntityFormAlter sets incorrect keys in form
+eefc5fccec Issue #2864613 by vaplas, Jo Fitzgerald, andypost, dawehner: Convert ViewEditTest in views_ui module to BrowserTestBase
+2c77fff9e8 Issue #2907420 by DyanneNova, tedbow: The Off-Canvas CSS reset prevents SVGs from displaying
+24959f64e8 Issue #2674292 by starshaped, tim.clifford, sskt, nesta_, kostyashupenko, mukeshMukesh12, alamowo, ironkiat, emma.maria, Manjit.Singh, kiwimind, Cottser, phenaproxima, yoroy, AaronChristian: Remove styling of select elements (improves appearance in Firefox)
+d0fa5b7239 Issue #2912961 by dawehner, droplet, drpal: Step 0 JS codestyle: Exclude non passing eslint rules
+e9b7716305 Issue #2909882 by Manuel Garcia, yoroy: Throbbers showing within dropbuttons jump to next line
+e00e9cbb8c Issue #2907282 by BramDriesen, joachim: EntityTypeBundleInfoInterface::getBundleInfo() param should say 'ID'
+a52185cfd2 Issue #2425101 by Wim Leers, mgifford: system.performance_settings should be declared in system.links.task.yml
+9835299452 Issue #2759757 by gambry, claudiu.cristea, heldercor, dawehner, -enzo-, TimRutherford, amateescu, joachim: EntityQuery wrong SQL with two reference fields conditions targetting same entity type
+e394fff41d Issue #2908832 by mr.baileys: Remove unused module dependency from UserEditedOwnAccountTest
+50ab19584f Issue #2830094 by mpdonadio, Yogesh Pawar, arunkumark, jhedstrom, larowlan, alexpott: Deprecate and remove usages of datetime_date_default_time()
+f1aa6b3e1c Issue #2810097 by Lendude, larowlan, jp.stacey, Meenakshi Gupta, rachel_norfolk, dawehner, alexpott: Allow views to provide the canonical entity URL of all entities, not just nodes
+251698bd37 Issue #2913445 by Ashley George: Incorrect description of cache invalidation tags
+a3223117e3 Issue #2549789 by Jo Fitzgerald, Jaesin, rajeshwari10, googletorp: Remove entity_load* usage for block_content entity type
+2225b0afd5 Issue #2862659 by Jo Fitzgerald, Yogesh Pawar, phenaproxima: Add documentation to Entity destination plugin
+12a28a5eba Issue #2901943 by amateescu, Berdir: Content entity form validation does not respect the #limit_validation_errors property from field widgets
+3529e208aa Issue #1848686 by Johnny vd Laar, Berdir, JeroenT, geertvd, mogtofu33, hauruck, Manuel Garcia, pfrenssen, Bambell, realityloop, ParisLiakos, webflo, cyborg_572, Algeron, zniki.ru, xjm, Wim Leers, dawehner, yoroy: Add a dedicated permission to access the term overview page (without 'administer taxonomy' permission)
+5f9fe90988 Issue #2701335 by kekkis, hchonov, Ben Buske: Run garbage collection during migration memory reclamation
+e2c898ccd1 Issue #2905213 by chr.fritsch, marcoscano, xjm, Berdir: Bring back 'access media overview' permission
+278c50e0dc Issue #2781103 by Dom., k4v, gaurav.kapoor, mpdonadio, dawehner, Lendude: Date FAPI element type do not allow AJAX via #ajax API
+1188f1c144 Issue #2876725 by Eric_A, pk188, Mixologic: Fix trivial core component composer bugs before 8.4.0
+4a1d43fb69 Issue #2524284 by Hubbs, Sabreena, Tony-Mac, AlviMurtaza, Aleksandar_P, Saphyel, aj2r, vulcanr, snehi, rashid_786, vijay.mayilsamy, bandanasharma, kapil17, ironkiat, yoroy, LewisNyman, leanderl, aliyakhan, xjm, emma.maria, jcventura, leanderl, sannastrand, marikaj: The spacing of the buttons in the preview bar is cramped on narrow screens
+3d5d727716 Issue #2902413 by vaplas, fisherman90: Hangnail on the active task in Seven theme
+4dee1624c7 Issue #2910005 by catch, samuel.mortenson: JavaScript errors thrown when viewing non-latest default revision of entity
+210ca8a14c Issue #2912333 by vijaycs85, gilesmc, phenaproxima: Revision log field doesn't appear under 'Revision Information' tab
+5cfa420d7e Issue #2853872 by heddn, maxocub, masipila, phenaproxima, quietone, andypost, larowlan: Migration for forum and article comments: duplicate comment types and incorrect comment_entity_statistics
+2df0fc02ef Issue #2850085 by maxocub, heddn, Jo Fitzgerald, Gábor Hojtsy, catch, larowlan, mikeryan: Redirects for translation set migration path in Drupal 6 and 7
+8685e7c72f Issue #2907233 by quietone, madlobz, heddn, maxocub: File migration from D6 to D8 version using Migrate Drupal UI
+df0b92d351 Issue #2912636 by wengerk, valthebald, gido: Add @internal to schemaDefinition() methods
+6054570079 Issue #2911221 by xjm: Ungrammatical validation message for paths
+b4ce4af60c Issue #2911165 by mfernea, Jo Fitzgerald: LoggingTest.php - Weird comments
+c783750b20 Revert "Issue #2711353 by rakesh.gectcr, Jo Fitzgerald, quietone, chx, Yogesh Pawar, Pavan B S, biguzis, phenaproxima, mikeryan, vasi, iMiksu, Berdir, dawehner, benjy: Migrate never unsets existing data for content entitites"
+3d524aaae5 Issue #2711353 by rakesh.gectcr, Jo Fitzgerald, quietone, chx, Yogesh Pawar, Pavan B S, biguzis, phenaproxima, mikeryan, vasi, iMiksu, Berdir, dawehner, benjy: Migrate never unsets existing data for content entitites
+2d0182426a Issue #2906879 by xjm, Sam152: WorkflowTypeBase:: labelWeightMultisort() has meaningful param/return keys, but docs do not indicate this
+57762d192d Issue #2783615 by k4v, Dom., dawehner: Datetime FAPI element type do not allow AJAX via #ajax API
+e64d7536a6 Issue #2898886 by Sam152, timmillwood: ContentModerationConfigureForm should use inline list in place of concatenated markup
+d1227108d2 Issue #2910715 by Sam152: The assertions in ModerationFormTest::testWorkflowInUse are inadequate
+cf553a00b5 Issue #2715589 by claudiu.cristea, jibran, amateescu: Remove stale 'handler_submit' setting from the ER field configs
+b0a7be53fb Issue #2902766 by maxocub, masipila, Jo Fitzgerald: Node 'comment open / closed' status not migrated
+6487eda3f8 Issue #2907654 by joelpittet, amateescu, Patrick R., mikran, alisonjo2786: Orphaned menu routes breaking site installs and module uninstalls
+cfb2af03b8 Issue #2901790 by mfernea: Fix 'PEAR.Functions.ValidDefaultValue' coding standard
+2e18fe9373 Issue #2715485 by harsha012, mfernea, malavya, himanshu-dixit, vprocessor, tameeshb, Mile23, RajeevK, Jo Fitzgerald, tiago.urbano, xjm, klausi: Fix 'Drupal.Commenting.InlineComment.NoSpaceBefore' coding standard
+4005f93bbd Issue #2901735 by mfernea: Fix 'Squiz.Arrays.ArrayBracketSpacing' coding standard
+3bc858ecf5 Issue #2782833 by Mile23, martin107, larowlan, effulgentsia: Remove usages of deprecated EntityManager from Entity class
+5f3b66ed0d Issue #2728579 by Mile23, neclimdul, Munavijayalakshmi, klausi, dawehner: Explicitly skip @requires module in PHPUnit Kernel and Browser tests
+c9b30844be Issue #2875896 by Sam152, timmillwood: EntityRevisionConverter isn't invoked if an entity definition doesn't explicitly set an "edit" form handler
+73bba855dc Issue #2866513 by michielnugter, jonathan1055, mpdonadio, Jo Fitzgerald, Lendude, dawehner, Wim Leers: Convert web tests to browser tests for comment module
+5c503f4a2e Issue #2825078 by Mile23, dawehner, Wim Leers, Gábor Hojtsy: Deprecate UnitTestCase dependency on block module
+63a95d5824 Issue #2909425 by jibran: Add the $field_storage parameter to Tables::addNextBaseTable
+867ecd845e Issue #2908674 by tedbow: When using get() method directly on PathItem the alias is not loaded
+647b586b22 Issue #2901704 by Wim Leers, damiankloip: Allow REST routes to use different request formats and content type formats
+4e2d3ba4c8 Issue #2909952 by edwardaa: Flood MemoryBackend::isAllowed() throws exception: 'Undefined index: xxx'
+4577185c9b Issue #2572791 by Mile23, andriyun, attiks, RoSk0: Fix 'Drupal.WhiteSpace.OpenBracketSpacing' coding standard
+7bf7cebeb7 Issue #2864610 by Manuel Garcia, andypost, Lendude: Convert ExposedFormUITest in views_ui module to BrowserTestBase
+fbb8a06f91 Issue #2909349 by claudiu.cristea, Wim Leers: UrlHelper::parse() is wrong with absolute URLs having fragment but not query
+5c31080600 Issue #2821724 by tedbow, tim.plunkett: Create Javascript Tests for Contextual Links
+dff09a9d5c Issue #2905527 by EclipseGc, amateescu, tim.plunkett, larowlan: Introduce a sample value entity method to ease plugin filtering via context
+3b6a05b573 Issue #2835767 by Wim Leers, vaplas, xjm, dawehner, Gábor Hojtsy, Berdir, seanB, larowlan: Media + REST: comprehensive test coverage for Media + MediaType entity types
+301152f8c6 Issue #2835845 by vaplas, Wim Leers, arshadcn, Berdir: EntityResource: Provide comprehensive test coverage for BlockContent entity
+b62515363c Issue #2908605 by jibran, jhedstrom, xjm, amateescu: Pass field storage to Tables::addNextBaseField()
+214c6b589c Issue #2909743 by jibran, mpdonadio, Mile23: Again update non-Symfony dependencies in lock file before 8.4.0
+2257e63468 Issue #2859246 by Jo Fitzgerald, phenaproxima, alexpott, xjm: Allow MigrateExecutable to be constructed without a message object
+d79a838e14 Issue #2791269 by amateescu, Peacog, drumm, Berdir: Allow saving pre-existing references to inaccessible items
+6fc52f12a7 Issue #2705925 by heddn, Adita, jibran, Berdir, joelpittet, jazzdrive3: ImageItem presave() fails when pointing to a non-existing file entity
+76fd2bdbde Issue #2886567 by timmillwood, Sam152, Manuel Garcia, Vj, xjm, tstoeckler: Adding a workflow state or transition with an integer ID results in unrecoverable fatal errors
+a00387129f Issue #2900112 by jibran, mpdonadio, Mile23, xjm, Issue #2900112 by jibran, mpdonadio, Mile23, xjm: Update non-Symfony dependencies in lock file before 8.4.0: Update non-Symfony dependencies in lock file before 8.4.0
+1f628331a3 Issue #2902191 by tedbow, vaplas, xjm, droplet, drpal: Determine cause and fix random fail in \Drupal\Tests\settings_tray\FunctionalJavascript\SettingsTrayBlockFormTest::testBlocks
+465348f98d Issue #2759789 by mfernea, Mile23, andriyun, dawehner, klausi: Fix 'Drupal.Semantics.FunctionAlias' coding standard
+2242f4ad9e Issue #2901785 by mfernea, xjm, andriyun: Fix 'Generic.Formatting.SpaceAfterCast' coding standard
+aa7c4ab09d Issue #2900047 by karthikkumarbodu, Sam152: Add a link to install content_moderation when no workflow types are present
+864c9ed6c1 Issue #2908557 by neerajsingh: Optional migration dependency specified twice for d7_field_instance
+cc30270e9a Revert "Revert "Revert "Issue #2715485 by harsha012, malavya, himanshu-dixit, mfernea, vprocessor, tameeshb, Mile23, Jo Fitzgerald, klausi, xjm: Fix 'Drupal.Commenting.InlineComment.NoSpaceBefore' coding standard"""
+90d49768c9 Issue #2907348 by karthikkumarbodu, dawehner, jhodgdon, Gábor Hojtsy: Enable new users to learn about the user guide
+b06757615a Revert "Revert "Issue #2715485 by harsha012, malavya, himanshu-dixit, mfernea, vprocessor, tameeshb, Mile23, Jo Fitzgerald, klausi, xjm: Fix 'Drupal.Commenting.InlineComment.NoSpaceBefore' coding standard""
+964954e1f3 Revert "Issue #2715485 by harsha012, malavya, himanshu-dixit, mfernea, vprocessor, tameeshb, Mile23, Jo Fitzgerald, klausi, xjm: Fix 'Drupal.Commenting.InlineComment.NoSpaceBefore' coding standard"
+2df73e2c00 Issue #2715485 by harsha012, malavya, himanshu-dixit, mfernea, vprocessor, tameeshb, Mile23, Jo Fitzgerald, klausi, xjm: Fix 'Drupal.Commenting.InlineComment.NoSpaceBefore' coding standard
+5ee33d6341 Issue #2829845 by mpdonadio, Jo Fitzgerald, xjm, jhedstrom: Record timezone in DateTime test assertions and verbose output
+fdf6bf90f3 Issue #2863750 by adriancid, tstoeckler: Add inheritdoc function doc comment to schema classes
+44a5c4cbe0 Issue #2901739 by andriyun, Jo Fitzgerald, mfernea, xjm: Fix 'Squiz.Arrays.ArrayDeclaration' coding standard
+cc34cb8055 Issue #2843776 by Wim Leers, vaplas: EntityResource: Provide comprehensive test coverage for EntityTestBundle entity
+065888cbd6 Issue #2905738 by vaplas, Wim Leers: Media::setOwnerId() doesn't return the Media entity
+7e427d5c5e Issue #2391829 by amateescu, cilefen, Berdir, yched, fago: ContentUninstallValidator relies on the not required ContentEntityStorage::hasData() method
+32e402231e Issue #2905000 by amateescu, timmillwood: Add a default filter on the 'published' field in the base views wizard plugin for publishable entity types
+9271178dea Issue #2820848 by timmillwood, amateescu, Pavan B S, Berdir, Jo Fitzgerald, claudiu.cristea: Make BlockContent entities publishable
+f39127cef8 Issue #2901718 by mfernea: Fix 'Squiz.ControlStructures.ForEachLoopDeclaration' coding standard
+da9c5ba24d Issue #2902728 by mfernea: Fix 'Drupal.Semantics.FunctionT.BackslashSingleQuote' coding standard
+a739c2183f Issue #2864088 by jonathan1055, GoZ, naveenvalecha: Convert web tests to browser tests for shortcut module
+8cec5c8b90 Issue #2905720 by vaplas: Media specifies a add-page link relation, but core.link_relation_types does not have this
+6cbb549574 Issue #2905222 by heddn, edysmp, Jo Fitzgerald, quietone, yoroy, jjpoole: Migrate UI: Initial Screen UX improvements
+a87e8aafdb Issue #2843778 by Wim Leers: EntityResource: Provide comprehensive test coverage for ContactForm entity
+d2f5b62f07 Issue #2907485 by Lendude, jonathan1055: Add getAllOptions() to AssertLegacyTrait
+2e3db91553 Issue #2892304 by Manuel Garcia, amateescu: Introduce footer region to ContentEntityForm
+a603e0f240 Issue #2887259 by Tessa Bakker, Sutharsan: Code style issues of require_once in ImportForm::submitForm
+3148d1c44f Issue #2906203 by maxocub: Widgets/formatters: D7 Plain text fields incorrectly migrated to D8 as Text (formatted)
+73347e1c7e Issue #2722699 by anoopjohn, mfernea, Mile23, martin107: Fix Drupal.Commenting.FunctionComment.InvalidReturnNotVoid
+a05469232d Issue #1381140 by Lendude, himanshu-dixit, tameeshb, babruix, IRuslan, sun, blazey, esoteric1, mkalkbrenner, ceardach, dcam, bapi_22, dan2k3k4, tim.plunkett, Pavan B S, tanmayk, lomasr, xjm, andypost: A #default_value = 0 for #type radios checks all radios
+932db614e6 Issue #2900292 by vaplas, Manuel Garcia, Meenakshi Gupta, shashikant_chauhan, Lendude, dawehner: For BC purposes \Drupal\Tests\BrowserTestBase::drupalPostForm should return the HTML of the rendered page
+d64ec77c95 Issue #2890380 by timmillwood, amateescu, acrosman: Remove descriptions of permissions in Content Moderation
+dacdef95b9 Issue #2878673 by Berdir, amateescu, larowlan: Cache loadEntityByUuid() calls for block_content
+9b674084d3 Issue #2526150 by catch, Wim Leers, Denchev, hussainweb, dawehner, mpdonadio, borisson_, fgm, olli, alexpott, vaplas, flocondetoile, Berdir, Fabianx, cilefen: Database cache bins allow unlimited growth: cache DB tables of gigabytes!
+8b52ba08ce Issue #2863607 by Lendude, naveenvalecha, Wim Leers, Jo Fitzgerald: Convert WebTestBaseTests of BigPipe to BrowserTestBase
+9c240f96f2 Issue #2905748 by vaplas: MediaAccessControlHandler does not provide a helpful reason for when access is denied for the view operation
+c3f080e737 Issue #2905722 by vaplas: Media specifies an admin-form link relation, but should not
+3018eb8a41 Issue #2904142 by Wim Leers: Update CKEditor library to 4.7.2
+52477f6d8b Issue #2901574 by Wim Leers: Requests to log in (cookie auth) via /user/login?_format=json result in 403 without helpful message
+0f36528a54 Issue #2904798 by dawehner, ahebrank: 8.3.7 Views SA patch should use ajaxEnabled() and not check option 'use_ajax' directly
+a338aac96a Issue #2905641 by klabowterman: Wrong unit given in documentation for parameter delay in LockBackendInterface::wait
+0fa72bdeea Issue #2853359 by vaplas, Lendude, tinny: Runtime debug statement in Views now prints out object
+e630c782ad Issue #2572631 by ZeiP, Mile23, mfernea, pk188, dimaro, kporras07, attiks, klausi, dawehner: Fix 'Drupal.Classes.InterfaceName' coding standard
+5da4584deb Issue #2756519 by ZeiP, timmillwood, xjm, mradcliffe, dawehner, joelpittet, Antti J. Salminen: Convert assertIdentical() to assertSame() for some uses in kernel tests that already have assertSame()'s parameter order
+5679964152 Issue #2720233 by dawehner, Wim Leers, catch: Use arguments resolver in RequestHandler to have consistent parameter ordering
+98f4e57ac5 Issue #2903297 by drpal, droplet, tedbow: [Performance] Remove unused event triggers and listeners
+5ce3293016 Issue #2905181 by tedbow: Remove useless if statement in ResourceTestBase::assertResourceResponse()
+7b4861f08c Issue #2901998 by vaplas, damiankloip, kim.pepper: File size of 0 is not set when file entities are saved
+9ef92a408b Issue #2905627 by Lendude, dawehner: Part-2: Convert UpdatePathTestBase to BrowserTestBase
+df074f63ba Issue #2907316 by timmillwood: The entity type dialog title is a little odd
+c28199f69f Issue #2842222 by maxocub, heddn, vasi, Jo Fitzgerald, masipila, jeffwpetersen, catch, phenaproxima, markabur, quietone, mikeryan: D7 Plain text fields incorrectly migrated to D8 as Text (formatted)
+1f6adcd816 Issue #2897130 followup by timmillwood, Wim Leers: Fix @internal documentation.
+34697034b7 Issue #2897130 by timmillwood, amateescu, Sam152, xjm: Mark workflows module as stable
+4207b307d3 Issue #2901727 by iainp999, mfernea: Fix 'Drupal.Methods.MethodDeclaration' coding standard
+38ac1327a1 Issue #2901791 by mfernea: Fix 'Squiz.ControlStructures.ForLoopDeclaration' coding standard
+32879bbbb6 Issue #2901779 by mfernea, ccjjmartin: Fix 'Generic.PHP.LowerCaseKeyword' coding standard
+f47a9ed980 Issue #2863644 by Lendude, zviryatko, Manuel Garcia, Jo Fitzgerald: Convert web tests of block
+7ba77154a0 Issue #2863644 by Lendude, zviryatko, Manuel Garcia, Jo Fitzgerald: Convert web tests of block
+69edc2a364 Issue #2903908 by mfernea, martin107: Fix 'Drupal.Commenting.FunctionComment.ParamCommentIndentation' coding standard
+297c35ebb1 Issue #2887099 by naveenvalecha, Lendude, Manuel Garcia: Menu: convert system functional tests to PHPUnit
+ff6eea71c5 Issue #2614504 by blackra, jibran, mohit_aghera, Yogesh Pawar, larowlan, lokapujya, Munavijayalakshmi, thpoul, andypost, xjm: Values of 'name' & 'email' fields should be NULL when comment has author (uid > 0)
+aaa668a1e1 Issue #2887860 by drumm, Cottser: Allow attributes to be passed to admin blocks (admin_block theme hook)
+4c7d0d172f Issue #2711855 by Meenakshi Gupta, toomanypets, derheap: Add binary font file types  to .gitattributes
+cb9b6d420f Issue #2722609 by anoopjohn, mfernea, Jo Fitzgerald, chishah92, druprad, martin107, Mile23: Fix Drupal.Commenting.FunctionComment.ParamNameNoMatch
+b0087ffeac Issue #2902396 by mfernea: Add sniffs already passing
+6ea40f4c73 Issue #2322421 by amateescu, alex.ksis, caspervoogt: Recoverable fatal error: Object of class Drupal\Core\Field\FieldItemList
+8ec6e83fcc Issue #2809471 by vaplas, michielnugter, dawehner, Lendude: Convert AJAX part of \Drupal\config\Tests\ConfigEntityTest::testCRUDUI to JavascriptTestBase
+8210ebe0ae Issue #2687773 by mikeker, sukanya.ramakrishnan, dawehner, amateescu, mroycroft, Lukas von Blarer, Lendude: Using checkboxes with an is
+4f24c9169b Issue #2734345 by danmuzyka, hchonov, Jo Fitzgerald, GoZ, kristiaanvandeneynde, Berdir, alexpott: Comments: entity_id base field not overridden correctly in comment bundle field definitions for comment bundles attached to different entity target_type
+d7d4998c83 Issue #2887052 by xjm, sugaroverflow, jibran: Ignore Diff component files in phpcs coding standards
+3d2b382493 Issue #2857437 by mfb: pass raw backtrace to loggers for errors, not just exceptions
+84bbc5730a Revert "Issue #2824851 by Wim Leers, arshadcn, amateescu, tedbow, timmillwood, Berdir, tstoeckler: EntityResource::patch() makes an incorrect assumption about entity keys, hence results in incorrect behavior"
+fe7caba729 Issue #2899553 by timmillwood, Sam152, Wim Leers: Architectural review of the Workflows module
+48a8e5307f Issue #2278383 by dawehner, Xano, kim.pepper, twistor, jibran, Jo Fitzgerald, joelpittet, pritish.kumar, Fabianx, Crell, larowlan, alexpott, catch, Wim Leers: Create an injectible service for drupal_set_message()
+aae0baf839 Issue #2905818 by Wim Leers, Lendude: Make sure \Drupal\Tests\BrowserTestBase::checkForMetaRefresh is case insensitive
+5f77cf76af Issue #2803621 by Mile23: Break BrowserTestBase & children dependency on Simpletest, deprecate stub BC traits
+bd2227e48f Issue #2893061 by maxocub, Jo Fitzgerald, heddn, phenaproxima: Create a ProcessField plugin to process the field types
+cfbe5da758 Issue #2867154 by Manuel Garcia, vaplas, naveenvalecha, Lendude, phenaproxima, dawehner: Form: Convert system functional tests to phpunit
+360994732e Issue #2868019 by michielnugter, Lendude, jonathan1055, dawehner, alexpott: AssertLegacyTrait field assertions not compatible with Simpletest assertions
+9fe92d9e20 Issue #2904834 by Lendude: Move BROWSERTEST_OUTPUT_FILE logic in BrowserTestBase::setUp to a method and make BrowserTestBase and and \Drupal\FunctionalTests\Update\UpdatePathTestBase use it
+3a4f6f2979 Issue #2901692 by tim.plunkett, xjm, Cottser, dawehner, EclipseGc: FieldDefinitionIntegrityTest does not respect module dependencies
+c8daa8d202 Issue #2897009 follow-up by Lendude: Remove stray code accidentally included in patch.
+e5493741a7 Issue #2350797 by pwolanin, amateescu, dawehner, dagmar: Orphaned menu links when nodes are deleted if menu_link_ui is not enabled
+d44acb469a Issue #2861383 by quietone, Jo Fitzgerald, heddn: Rename i18n migrations to _translation
+e2e1f61c5f Issue #2803375 by cilefen, tedbow, saurabh-chugh, Wim Leers: Rename Outside-in module to "Settings Tray" for real
+271134ee22 Issue #2884202 by Berdir, amateescu, phenaproxima: Non-persistent fields become unpurgeable zombies without their target entity type
+bf31e8cb98 Issue #2903524 by timmillwood, Sam152, amateescu, yoroy: Don't add quickedit to displays where entities have a forward revision
+30366ebaa8 Issue #2889600 by droplet, drpal, Gábor Hojtsy, effulgentsia, Wim Leers: [regression] Restore \LocaleJavascriptTranslationTest test coverage and keep testing processed JS file
+85eefe2b8d Revert "Issue #2868019 by michielnugter, jonathan1055, Lendude, dawehner, alexpott: AssertLegacyTrait field assertions not compatible with Simpletest assertions"
+48f9801edf Issue #2897009 by vaplas, seanB, phenaproxima, harsha012, Wim Leers, cburschka, bojanz: MediaInterface is missing setName() and getName()
+fcf01cc8cb Issue #2902429 by drpal, droplet, tedbow: Remove previous event handlers when opening new off-canvas block edit form in the off-canvas dialog
+21abcfded2 Issue #2903843 by joseph.olstad, joelpittet: views get_option() micro optimization
+3abc583d7e Issue #2904748 by volkswagenchick, loopduplicate, cilefen: Typo in Views UI
+7204a00a1b Issue #2870009 by Lendude, dawehner: Update: Convert system functional tests to phpunit
+7f9287e804 Issue #1862892 by oriol_e9g, joseph.olstad, vaplas, G.I.Joe, leopathu, peterpoe, cilefen, xjm, larowlan: When a theme has a managed_file field and a submit callback, call to undefined function error is thrown
+cdfcaea15f Issue #2904134 by Wim Leers, tedbow: Settings Tray uses the off-canvas dialog type, but "off_canvas" is not an accurate form plugin name, "settings_tray" is
+6eaa470d14 Issue #2902417 by drpal: Do not attempt to unlink not present *.js.map when watching JavaScript
+270628aa1d Revert "Issue #2526150 by catch, Wim Leers, Denchev, hussainweb, dawehner, mpdonadio, borisson_, fgm, olli, alexpott, flocondetoile, Berdir, Fabianx: Database cache bins allow unlimited growth: cache DB tables of gigabytes!"
+4c3c1f18b4 Issue #2868019 by michielnugter, jonathan1055, Lendude, dawehner, alexpott: AssertLegacyTrait field assertions not compatible with Simpletest assertions
+62974195b9 Issue #2897133 by Sam152, larowlan: Address performance issues in \Drupal\workflows\Plugin\WorkflowTypeBase::deleteState
+1fa12fb744 Issue #2852067 by Sam152, seanB, amateescu, jibran, dawehner, larowlan, tstoeckler, tim.plunkett: Add support for rendering computed fields to the "field" views field handler
+6496b03d54 Issue #2827014 by michielnugter, Lendude, marcoscano, dawehner, cilefen, larowlan, xjm, droplet, alexpott, Wim Leers: Throw an exception when testing status code or response headers in functional JavaScript tests
+401bd662cb Issue #2767857 by Berdir, tstoeckler: Add destination to edit, delete, enable, disable links in entity list builders
+30a133b0f4 Issue #2865579 by amateescu, Sam152: Rewrite the 'Latest revision' views filter and remove the revision_tracker table
+1a71b1a949 Issue #2526150 by catch, Wim Leers, Denchev, hussainweb, dawehner, mpdonadio, borisson_, fgm, olli, alexpott, flocondetoile, Berdir, Fabianx: Database cache bins allow unlimited growth: cache DB tables of gigabytes!
+517619e984 Issue #2899306 by Neograph734: Group content moderation permissions per workflow type
+b9d6ef3974 Issue #2899942 by tedbow: Correct data types in outside_in.links.contextual.yml
+22b8c33521 Issue #2900421 by timmillwood, tim.plunkett, catch, Sam152: Architectural review of the Content Moderation module
+98c5df8941 Revert "Issue #2900421 by timmillwood, tim.plunkett, Sam152: Architectural review of the Content Moderation module"
+ad36d819e1 Issue #2868880 by Lendude, michielnugter, vaplas: Random fails in ContextualFilterTest::testAddContextualFilterUI
+92cbc4cfc8 Issue #2803893 by mfernea: Fix 'Drupal.Commenting.FunctionComment.ParamTypeSpaces' coding standard
+c7c9a329ef Issue #2900421 by timmillwood, tim.plunkett, Sam152: Architectural review of the Content Moderation module
+061f38641b Issue #2902304 by droplet, tedbow: Remove `scroll.off-canvas` event
+10e67388cb Revert "Issue #2902361 by drpal: [regression] In Settings Tray when the form is longer than the page body it is tricky to scroll to the very bottom"
+3bbf3142c2 Issue #2900911 by scott_euser, Sam152, Lendude: \Drupal\workflows\Form\WorkflowTransitionAddForm::form sets a default value for radios as an empty array
+eb596f2961 Issue #2894422 by dpagini: AccessResult::forbiddenIf reason
+3b3daa353f Issue #2824851 by Wim Leers, arshadcn, amateescu, tedbow, timmillwood, Berdir, tstoeckler: EntityResource::patch() makes an incorrect assumption about entity keys, hence results in incorrect behavior
+4884fb154f Issue #2849674 by Lendude, mxh, tacituseu, podarok, andypost, pingwin4eg, axel.rutz, catch: Complex job in ViewExecutable::unserialize() causes data corruption
+98c68fdbfd Issue #2803891 by Jo Fitzgerald, pfrenssen, mfernea, gaurav.kapoor: Fix 'Drupal.Commenting.FunctionComment.ReturnTypeSpaces' coding standard
+0846b231ef Issue #2903183 by amateescu, jkovell, dawehner: Don't run cron after updating cron settings
+64ffc1ff4d Issue #2902726 by mfernea, martin107: Fix 'Drupal.Commenting.FunctionComment.ParamCommentNotCapital' coding standard
+6691587aa9 Revert "Issue #2902896 by quocnht, joachim: Replace REQUEST_TIME with time service in ChangedItem"
+fb3c8d4ed7 Issue #2143089 by imadalin, yched, dawehner, harsha012, Wim Leers, c.nish2k3, bradjones1, damiankloip, xjm: Clean up normalizer parameter and variable names to use 'field_items' consistently etc
+78ae240146 Issue #2897204 by cburschka: Contact message missing 'bundle_label' string
+145d1ea051 Issue #2903332 by amateescu: Regression: lost test coverage for handling default images in the Image field
+c8392465c3 Issue #2902529 by mfernea: Fix 'Drupal.WhiteSpace.EmptyLines' coding standard
+ebc6484967 Issue #2902717 by mfernea: Fix 'Drupal.Formatting.MultiLineAssignment' coding standard
+02a8ccbdcb Issue #2902406 by mfernea: Fix 'Drupal.Classes.UseLeadingBackslash' coding standard
+08bf5f7a06 Issue #2901787 by mfernea: Fix 'Generic.NamingConventions.ConstructorName' coding standard
+45524a7dfb Issue #2903331 by mfernea: Fix 'Drupal.NamingConventions.ValidVariableName.LowerStart' coding standard
+eb0da10e3e Issue #2902896 by quocnht, joachim: Replace REQUEST_TIME with time service in ChangedItem
+a0bb5da1bc Issue #2901665 by mfernea: Fix 'Drupal.Commenting.FunctionComment.ParamCommentNewLine' coding standard
+1f191080c1 Issue #2902723 by mfernea, ccjjmartin: Fix 'Drupal.Commenting.FunctionComment.ReturnCommentIndentation' coding standard
+fa6e4b2f4a Issue #2833206 by quietone, heddn, maxocub, Jo Fitzgerald, joelpittet, phenaproxima, jibran: Convert Migrate's cckfield plugins to use the new field plugins
+8ec06ce9a6 Issue #2901851 by maxocub: Replace the static map in the d7_field migration by field plugins
+8189fadc49 Issue #2782891 by tedbow, Wim Leers, pk188, tim.plunkett, Adita, RajeevK, xjm, webchick: The Page Title block's title behaves in a confusing way with Settings Tray and the Help block incorrectly has Settings Tray styling
+aa45adec15 Issue #2881645 by jhedstrom, tstoeckler, Sam152, timmillwood, plach: ContentModerationState 'workflow' column empty for all non-default translations
+ab03340bee Issue #2902287 by pektinasen: Doccomment in EmbeddedDataSource.php not formatted correctly
+81bb46eb96 Issue #2889443 by quietone: Some migrations missing a label
+9a666c18b7 Issue #2899014 by drunken monkey, Dinesh18, tstoeckler: Config entity query IS NOT NULL  conditions trigger warnings for non-scalar values
+9cf72c6086 Issue #2864563 by Jo Fitzgerald, NickWilde, larowlan, gaurav.kapoor, heddn: Migration lookup process plugin doesn't call setMessage on the migration idMap
+82284fa0bb Issue #2669030 by maxocub, sbogner: D6 Forum vocabulary is migrated to the wrong D8 field name
+a47d8c49b2 Issue #2896507 by heddn, maxocub: Update FieldPluginBase with a default processFieldValues() and getFieldFormatterMap()
+845b1c6c00 Issue #2902361 by drpal: [regression] In Settings Tray when the form is longer than the page body it is tricky to scroll to the very bottom
+7b7779f6ee Issue #2898808 by effulgentsia, larowlan, drpal, droplet, cilefen: [regression] With jQuery3, modal tour tips lose their grey background and centering
+11ef44a7f7 SA-CORE-2017-004 by arshadcn, amateescu, Wim Leers, Berdir, Lendude, dawehner, klausi, pwolanin, xjm, mpdonadio, mlhess, larowlan, milesw
+cff5bad8fb Issue #2893586 by Manuel Garcia, amateescu, vijaycs85, dawehner: Add #optional support to the Container render element
+4aa7190baa Issue #2899859 by Sam152: Remove incorrect documentation hint for "WorkflowTypeFormInterface"
+aefb4a2f45 Issue #2738563 by andypost, Wim Leers: HeadersCacheContext needs test coverage
+9a389442d4 Issue #2901778 by xjm, jibran, annajl: Provide correct display name and title for comment admin view displays
+5c2593d17b Issue #2859455 by Sam152, vijaycs85, timmillwood, dawehner, Wim Leers: Remove superfluous @todos from content moderation
+d70110cbf8 Revert "Issue #2901692 by tim.plunkett, EclipseGc: FieldDefinitionIntegrityTest does not respect experimental modules"
+b05897e9f9 Issue #2896427 by marcoscano, Wim Leers, xjm, Berdir, slashrsm: Prevent enabling the "media" module if "media_entity" contrib 1.x is already enabled
+7d1c57aada Issue #2787873 by claudiu.cristea, jibran, amateescu, catch, dawehner, cilefen, xjm, larowlan, vaplas: Add a base class for entity reference selection handlers and fix the structure of their configuration
+d7c496150e Issue #2569805 by quietone, Jo Fitzgerald, mikeryan, joelpittet, heddn, Adita, Miguel.kode, iMiksu, tvb, maxocub, juancasantito, phenaproxima, alexpott, neclimdul, xjm: For Drupal migration, identify the source module
+dc5ca923d0 Issue #2830882 by tedbow, droplet, drpal, Adita, Cottser, tim.plunkett, markcarver, Wim Leers, nod_, catch: Introduce Drupal.offCanvas, mirrored after Drupal.dialog, to avoid Settings Tray using Drupal.Dialog in unintended ways
+96de2d9e2b Issue #2901626 by tedbow, vaplas: CSS animations cause \Drupal\Tests\outside_in\FunctionalJavascript\OutsideInBlockFormTest random fails
+620cc4c752 Issue #2898344 by jibran, xjm, Lendude, dawehner, andypost, mradcliffe, larowlan, annajl, Bojhan: Add filters to the comments administration pages
+fdef8555ac Issue #2896480 by mpdonadio, dawehner, Berdir, martin107: Allow to reference permanent files with 0 usages
+f9c65b1160 Issue #2900700 by timmillwood: Add orderby to content_moderation schema sequences
+10a1e15fa3 Issue #2900320 by Sam152, timmillwood, Wim Leers: Remove workflow type checkWorkflowAcess() & "view content moderation" permission
+925f92bb70 Revert "Issue #2830882 by tedbow, droplet, drpal, Adita, tim.plunkett, markcarver, Wim Leers, nod_: Introduce Drupal.offCanvas, mirrored after Drupal.dialog, to avoid Settings Tray using Drupal.Dialog in unintended ways"
+b5ec4f1d6d Issue #2897938 by tedbow, drpal: Prevent accessing null elements when operating on ajax instances using the off_canvas renderer
+8972a66f2e Issue #2899724 by drpal, tedbow, DyanneNova, droplet, Cottser, Wim Leers: Fixes for settings tray CSS and JavaScript minor issues
+f630453b33 Issue #2900222 by dagmar: Remove coupling to minimal profile in ModuleHandlerTest::testUninstallProfileDependency() and use the testing profile instead
+aa76f9674f Issue #2830882 by tedbow, droplet, drpal, Adita, tim.plunkett, markcarver, Wim Leers, nod_: Introduce Drupal.offCanvas, mirrored after Drupal.dialog, to avoid Settings Tray using Drupal.Dialog in unintended ways
+455672e764 Issue #2767275 by GoZ, Jo Fitzgerald, claudiu.cristea, boaloysius, andypost, klausi, dawehner: Convert web tests to browser tests for tour module
+3f4174f99f Revert "Issue #2830882 by tedbow, droplet, Adita, drpal, markcarver, Wim Leers, nod_: Introduce Drupal.offCanvas, mirrored after Drupal.dialog, to avoid Settings Tray using Drupal.Dialog in unintended ways"
+88d1f67ece Issue #2896845 by amateescu, pk188, plach, timmillwood, Sam152: Provide the 'revision_translation_affected' base field by default for all revisionable and translatable entity types
+82f1a1ca6c Issue #2848775 by Sam152, eyilmaz, D34dMan, DuneBL, huzooka: BaseFieldOverride entities created by content_translation break content_moderation because they don't support computed fields
+48339450ee Issue #2830882 by tedbow, droplet, Adita, drpal, markcarver, Wim Leers, nod_: Introduce Drupal.offCanvas, mirrored after Drupal.dialog, to avoid Settings Tray using Drupal.Dialog in unintended ways
+8c9c8d3b93 Issue #2900687 by timmillwood, Sam152, DuneBL: Fatal error when saving a node type without content moderation
+4ff7617a62 Issue #2891935 by maxocub, Jo Fitzgerald, heddn: Refactor D7 FieldInstance source plugin and other field instance related source plugins
+5f833625e7 Issue #2900800 by Mile23, mpdonadio: Specify minimum phpspec/prophecy version in core/composer.json
+6211b5d7d5 Issue #2901692 by tim.plunkett, EclipseGc: FieldDefinitionIntegrityTest does not respect experimental modules
+47028f4ded Issue #2887000 by cilefen, Mile23, mpdonadio, Eric_A: composer.json does not constrain Symfony components to minor and patch versions that are compatible with Drupal
+ebfcdda2fb Issue #2900634 by Sam152: Mark WorkflowDeleteAccessCheck @internal until a UI pattern for access-restricted states has been established
+3cb53fef78 Issue #2898913 by Sam152, andrewmacpherson, Wim Leers: Review a11y concerns in ContentModerationConfigureForm
+8742371f7c Issue #2897320 by Wim Leers, tedbow, xjm, andrewmacpherson, Cottser, DyanneNova: Settings Tray causes the "pointer" cursor to be used both when hovering over inaccessible links (should use "default" cursor) and when in input[type=text] (should use "text" cursor)
+2059dc97a3 Issue #2900394 by rachel_norfolk, mradcliffe, valthebald, heddn: Update mentoring coordinators section of MAINTAINERS.txt
+c67c0e302c Issue #2901205 by tedbow, SKAUGHT: Settings tray leaves dashed outline on followup pages
+5583e7d583 Issue #2551727 by quietone, Jo Fitzgerald, phenaproxima, neclimdul, joelpittet, iMiksu, lostkangaroo, heddn, mikeryan, geste, alexpott, benjy: Menu link migrations should be defensive
+5ba1f0e147 Issue #2650434 by vijaycs85, anemes, duozersk, andypost, eiriksm, TwoD, chipway, pguillard, dawehner, tstoeckler, vaplas, robert-os, Yogesh Pawar, davidraijmakers: Clearing cache via UI in translated language resets config translation of field labels to default language
+e259a77888 Issue #2898020 by amateescu, timmillwood: Simplify ContentModerationStateTest
+d4165ff108 https://www.drupal.org/files/issues/2900046-20.patch
+69bf50fee0 Issue #2851111 by tedbow, tstoeckler, Munavijayalakshmi, dagmar, dawehner, catch, Fabianx, david_garcia, Nebel54, hchonov: fastcgi_finish_request and shutdown functions (e.g. batch) do not play nicely together
+10c87c672e Issue #2896381 by plach, Sam152, tacituseu, amateescu, Berdir: TranslationLanguageRenderer uses the wrong table for the langcode column with entity revision views
+e6f77992cd Issue #2893888 by plach, Sam152, amateescu, evilehk: Content moderation state entity field data not removed when the host field data is
+bff6783e98 Issue #2900247 by andypost, thejacer87: Hook seven_preprocess_menu_local_tasks is preprocess, not pre_render
+4ed19288b0 Issue #2899395 by timmillwood, Wim Leers, jojototh, xjm, Bojhan, DyanneNova: Content Moderation form in displayed entity looks broken
+87c8af27cd Issue #2887080 by edwardaa: Fix FieldItemInterface doc's parameter type and return type
+50a541b97f Issue #2551373 by drpal, danlinn, ruthleopold, Berdir, droplet, Wim Leers, prajaankit: contextual.js and quickedit.js should fail gracefully, with useful error messages, when Twig templates forget to print attributes
+2534957ae1 Issue #2900019 by tim.plunkett, joelpittet: \Drupal\content_moderation\EventSubscriber\ConfigImportSubscriber causes errors when importing any non-workflow config
+1da4fed2b9 Issue #2895382 by Wim Leers, chr.fritsch, xjm, marcoscano, dawehner, larowlan: Hide label, thumbnail, etc. for default display of media file and image references
+f589b8800a Issue #2856917 by amateescu, kriboogh: Moderating an entity that uses a special language (e.g. LANGCODE_NOT_SPECIFIED) throws exception
+42e575a2b9 Issue #2851603 by Sam152: Add inline documentation to content moderation onDependencyRemoval() that describes what's happening
+7d18091bc1 Issue #2854878 by maxocub, joelpittet, mikeryan, quietone, hansrossel, phenaproxima: Taxonomy vocabulary with name Type cannot migrate from d6 to d8
+3b04db8ada Issue #2897533 by claudiu.cristea: Documentation and example for FileCopy is wrong
+0ab00b4acd Issue #2893072 by maxocub: Modify the DateField Field plugin so it's used for D6 & D7
+3e6a3f0904 Issue #2898437 by andypost, dawehner, Lendude: Convert HistoryTimestampTest to kernel test
+13b5c9f075 Issue #2723745 by sonfd: TermStorageInterface::loadChildren() incorrectly states retrieving parents instead of children
+dd1dd45ca6 Issue #2897686 by xjm: Description for workflow label field does not add any information
+3fd781f158 Issue #2889814 by mpdonadio: DateTimePlus doesn't apply the correct time zone when converting a string with an offset
+a06e758506 Issue #2895180 by hussainweb: Fix documentation in MigrateSourcePluginManager
+ef16fa1c8a Issue #2775553 by Wim Leers, naveenvalecha: Convert web tests to browser tests for REST module
+42c492cd70 Issue #2892967 by amateescu, Sam152: \Drupal\content_moderation\EntityTypeInfo::formAlter() is half broken
+d9247c2ee0 Issue #2863318 by martin107, naveenvalecha, Lendude, Jo Fitzgerald: Cache: Convert system functional tests to phpunit
+a8a898420c Issue #2892179 by Wim Leers, Berdir: Follow-up for #2775381: clearing render cache in PerformanceForm::submitForm() is obsolete
+32d9c06a67 Issue #2863416 by zviryatko, michielnugter, naveenvalecha, alexpott, Jo Fitzgerald: Convert web tests to browser tests for filter module
+40f9a70441 Issue #2882784 by harsha012, douggreen, joelpittet: Fix ThemeHandlerInterface::setDefault() deprecation code example in header comment
+2304581303 Issue #2899156 by andypost: Update jquery-once to latest release
+0a42c06a9a Issue #2893978 by tedbow: Use newly supported 'options' in contextual links in Settings Tray contextual links
+d317372e63 Issue #2899082 by tim.plunkett: ElementInfoManagerInterface must extend DiscoveryInterface
+bbfe8a8811 Issue #2897652 by dmsmidt, andrewmacpherson, naiduharish: Move Inline Form Errors module out of Core (Experimental) package and into the Core package
+2d5e8d119d Issue #2753717 by timmillwood, amateescu, alexpott, mtodor, boaloysius, Jo Fitzgerald, phenaproxima, plach, gaurav.kapoor, tkoleary, yoroy, larowlan, karlos007, Berdir, Sam152: Add select field to choose moderation state on entity forms
+2983a0d440 Issue #2533498 by Manuel Garcia, effulgentsia, nod_, Dom., larowlan, drpal, Wim Leers, droplet: Update jQuery to version 3
+279b57d1ad Issue #2892942 by Wim Leers, Chi, tedbow: Contextual links support options but not use them to generate links
+36ee6b39da Issue #2826722 by tkoleary, tedbow, DyanneNova, starshaped, drpal, jian he, pk188, xjm, yoroy, EclipseGc, rikki_iki, Wim Leers, droplet: Add a 'fence' around settings tray with aggressive CSS reset
+2174766ce5 Issue #2898261 by droplet, effulgentsia, nod_, andrewmacpherson, cilefen, dmsmidt, drpal, larowlan: In jQuery 3, $('#') throws syntax errors
+f9e40fa790 Issue #2834025 by tim.plunkett, Manuel Garcia, swentel, japerry: Mark Layout Discovery as a stable module
+f7f742ef56 Issue #2896722 by Sam152, Wim Leers, tim.plunkett, larowlan, timmillwood: Leverage PluginWithFormsInterface to encapsulate @WorkflowType schema and clean up state/transition form methods
+cd0a65b28e Revert "Issue #2849674 by mxh, Lendude, podarok, pingwin4eg, andypost, axel.rutz, catch: Complex job in ViewExecutable::unserialize() causes data corruption"
+e715e5f6e2 Issue #2885595 by droplet: Log JavaScript transpile errors instead of crashing the watcher process
+d4f4b3d168 Issue #2896960 by tedbow, Wim Leers: Updated inline docs for data-off-canvas-main-canvas in twig template
+7dd5ef1dfd Issue #2897306 by Wim Leers, tedbow: Remove dead CSS
+a50adc9f18 Issue #2867325 by tstoeckler: SqlContentEntityStorageSchema needlessly fetches storage definitions it already has
+43c568a715 Issue #2849674 by mxh, Lendude, podarok, pingwin4eg, andypost, axel.rutz, catch: Complex job in ViewExecutable::unserialize() causes data corruption
+14c2920589 Issue #2891911 by vaplas: Random fail in Drupal\Tests\locale\Functional\LocaleTranslationUiTest::testStringTranslation
+89bdb05cd1 Issue #2897576 by Lendude, Ismaels: Resaving a view display results in deletion of view display
+38fd4cebd1 Issue #2879512 by bkosborne: Path aliases can be forgotten after a cache rebuild due to race condition in CacheCollector
+aee577b8a7 Issue #2890364 by timmillwood, amateescu, plach, xjm: Replace all uses of "forward revision" with "pending revision"
+13e93c0476 Issue #2866894 by maxocub: Component tests should not use Drupal\Tests\UnitTestCase but PHPUnit\Framework\TestCase
+2d691d50ab Issue #2891075 by Berdir, dawehner, larowlan: PathBasedBreadcrumbBuilder always displays Home in Breadcrumb when using path language prefixes
+1ab1078b98 Issue #2896725 by Sam152, Wim Leers: Entirely remove the concept of WorkflowType(Interface|Base)::initializeWorkflow()
+0d6d6736eb Issue #2898267 by tim.plunkett: Mark Place Block as a hidden module
+42a76cf1ef Issue #2896721 by Sam152, Wim Leers: Remove the concept of decorated states/transitions from worfklow type plugins.
+a16b9c74c2 Issue #2893778 by timmillwood, Sam152, Wim Leers: Remove deprecated Workflows methods
+04d69926b4 Issue #1986606 by jibran, pcambra, vijaycs85, dawehner, andypost, mbovan, Arla, adnen, vprocessor, tkuldeep17, xjm, kim.pepper, dobe, snig, larowlan, miro_dietiker, tim.plunkett, Berdir, Lendude, plach, olli, damiankloip: Convert the comments administration screen to a view
+bcc7d03859 Drupal 8.5.x-dev
