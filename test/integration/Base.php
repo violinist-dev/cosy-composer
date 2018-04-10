@@ -7,18 +7,12 @@ use eiriksm\ArrayOutput\ArrayOutput;
 use eiriksm\CosyComposer\CommandExecuter;
 use eiriksm\CosyComposer\CosyComposer;
 use eiriksm\CosyComposerTest\GetCosyTrait;
+use eiriksm\CosyComposerTest\GetExecuterTrait;
 
 class Base extends \PHPUnit_Framework_TestCase
 {
     use GetCosyTrait;
-
-    protected function getMockExecuterWithReturnCallback($function)
-    {
-        $mock_executer = $this->createMock(CommandExecuter::class);
-        $mock_executer->method('executeCommand')
-            ->will($this->returnCallback($function));
-        return $mock_executer;
-    }
+    use GetExecuterTrait;
 
     protected function createComposerFileFromFixtures($dir, $filename)
     {

@@ -869,7 +869,7 @@ class CosyComposer
         $output = $this->executer->getLastOutput();
         $changelog_string = $output['stdout'];
         if (empty($changelog_string)) {
-            throw new \Exception('The changelog string was empty');
+            throw new \Exception('The changelog string was empty for package ' . $package_name);
         }
         // If the changelog is too long, truncate it.
         if (mb_strlen($changelog_string) > 60000) {
@@ -895,7 +895,7 @@ class CosyComposer
     {
         // First find the repo source.
         if (!isset($data->source) || $data->source->type != 'git') {
-            throw new \Exception('Unknown source or non-git source. Aborting.');
+            throw new \Exception(sprintf('Unknown source or non-git source found for %s. Aborting.', $data->name));
         }
         // We could have this cached in the md5 of the package name.
         $clone_path = '/tmp/' . md5($data->name);
