@@ -373,7 +373,7 @@ class CosyComposer
         $request = new Request('GET', $this->tokenUrl . '/' . $this->project->getNid() . '?token=' . $this->githubUser . '&action=delete');
         $resp = $this->getHttpClient()->sendRequest($request);
         if ($resp->getStatusCode() != 204) {
-            throw new \Exception('Wrong status code on temp token request.');
+            throw new \Exception('Wrong status code on temp token delete request.');
         }
         $this->tempToken = null;
     }
@@ -559,7 +559,7 @@ class CosyComposer
             $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUserName, $this->tempToken->token, $this->forkUser, $user_repo);
             $this->execCommand('git remote add fork ' . $fork_url, false);
             // Sync the fork.
-            if (!$this->execCommand('git push fork ' . $default_branch, false)) {
+            if ($this->execCommand('git push fork ' . $default_branch, false)) {
                 throw new \Exception('Coulld not push to our own fork.');
             }
             $this->deleteTempToken();
