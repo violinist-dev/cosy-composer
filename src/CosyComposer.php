@@ -720,7 +720,9 @@ class CosyComposer
                     'body'  => $body,
                 ]);
                 if (!empty($pullRequest['html_url'])) {
-                    $this->log($pullRequest['html_url'], Message::PR_URL);
+                    $this->log($pullRequest['html_url'], Message::PR_URL, [
+                        'package' => $package_name,
+                    ]);
                 }
             } catch (CanNotUpdateException $e) {
                 $this->log($e->getMessage(), Message::UNUPDATEABLE, [
