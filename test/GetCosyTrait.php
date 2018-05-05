@@ -14,7 +14,7 @@ trait GetCosyTrait
         $app = $this->createMock(Application::class);
         $output = $this->createMock(ArrayOutput::class);
         $executer = $this->createMock(CommandExecuter::class);
-        $c = new CosyComposer('token', 'a/b', $app, $output, $executer);
+        $c = new CosyComposer('a/b', $app, $output, $executer);
         return $c;
     }
 }

@@ -346,7 +346,8 @@ class CosyComposer
         $this->forkUser = $user;
     }
 
-    private function createTempToken() {
+    private function createTempToken()
+    {
         if (empty($this->project)) {
             throw new \Exception('No project data was found, so no temp token can be generated.');
         }
@@ -688,8 +689,7 @@ class CosyComposer
                 $origin = 'fork';
                 if ($this->isPrivate) {
                     $origin = 'origin';
-                }
-                else {
+                } else {
                     $this->preparePrClient();
                     $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUserName, $this->tempToken->token, $this->forkUser, $user_repo);
                     $this->execCommand('git remote set-url fork ' . $fork_url, false);
@@ -1035,7 +1035,8 @@ class CosyComposer
         return $this->providerFactory->createFromHost($slug);
     }
 
-    private function getPrClient() {
+    private function getPrClient()
+    {
         if ($this->isPrivate) {
             return $this->privateClient;
         }
