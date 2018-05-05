@@ -18,11 +18,13 @@ use Github\Exception\RuntimeException;
 use Github\Exception\ValidationFailedException;
 use Github\HttpClient\Builder;
 use Github\ResultPager;
+use GuzzleHttp\Psr7\Request;
 use League\Flysystem\Adapter\Local;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use violinist\ProjectData\ProjectData;
 use Violinist\Slug\Slug;
 use Wa72\SimpleLogger\ArrayLogger;
 
@@ -83,11 +85,6 @@ class CosyComposer
     /**
      * @var string
      */
-    private $githubUserPass;
-
-    /**
-     * @var string
-     */
     private $githubEmail;
 
     /**
@@ -126,6 +123,83 @@ class CosyComposer
      * @var LoggerInterface
      */
     protected $logger;
+
+    /**
+     * @var null|ProjectData
+     */
+    protected $project;
+
+
+    /**
+     * @var \Http\Adapter\Guzzle6\Client
+     */
+    protected $httpClient;
+
+    /**
+     * @var string
+     */
+    protected $tokenUrl;
+
+    /**
+     * @var null|object
+     */
+    private $tempToken = null;
+
+    /**
+     * @var bool
+     */
+    private $isPrivate = false;
+
+    /**
+     * @return string
+     */
+    public function getTokenUrl()
+    {
+        return $this->tokenUrl;
+    }
+
+    /**
+     * @param string $tokenUrl
+     */
+    public function setTokenUrl($tokenUrl)
+    {
+        $this->tokenUrl = $tokenUrl;
+    }
+
+    /**
+     * @return \Http\Adapter\Guzzle6\Client
+     */
+    public function getHttpClient()
+    {
+        if (!$this->httpClient) {
+            $this->httpClient = new \Http\Adapter\Guzzle6\Client();
+        }
+        return $this->httpClient;
+    }
+
+    /**
+     * @param \Http\Adapter\Guzzle6\Client $httpClient
+     */
+    public function setHttpClient($httpClient)
+    {
+        $this->httpClient = $httpClient;
+    }
+
+    /**
+     * @return ProjectData|null
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
+
+    /**
+     * @param ProjectData|null $project
+     */
+    public function setProject($project)
+    {
+        $this->project = $project;
+    }
 
     /**
      * @return LoggerInterface
@@ -235,9 +309,8 @@ class CosyComposer
      * @param string $token
      * @param string $slug
      */
-    public function __construct($token, $slug, Application $app, OutputInterface $output, CommandExecuter $executer)
+    public function __construct($slug, Application $app, OutputInterface $output, CommandExecuter $executer)
     {
-        $this->token = $token;
         // @todo: Move to create from URL.
         $this->slug = new Slug();
         $this->slug->setProvider('github.com');
@@ -257,10 +330,9 @@ class CosyComposer
         $this->githubPass = $pass;
     }
 
-    public function setGithubForkAuth($user, $pass, $mail)
+    public function setGithubForkAuth($user, $mail)
     {
         $this->githubUserName = $user;
-        $this->githubUserPass = $pass;
         $this->githubEmail = $mail;
     }
 
@@ -272,6 +344,38 @@ class CosyComposer
     public function setForkUser($user)
     {
         $this->forkUser = $user;
+    }
+
+    private function createTempToken()
+    {
+        if (empty($this->project)) {
+            throw new \Exception('No project data was found, so no temp token can be generated.');
+        }
+        if (empty($this->tokenUrl)) {
+            throw new \Exception('No token URL specified for project');
+        }
+        $request = new Request('GET', $this->tokenUrl . '/' . $this->project->getNid() . '?token=' . $this->githubUser);
+        $resp = $this->getHttpClient()->sendRequest($request);
+        if ($resp->getStatusCode() != 200) {
+            throw new \Exception('Wrong status code on temp token request (' . $resp->getStatusCode() . ').');
+        }
+        if (!$json = @json_decode((string) $resp->getBody())) {
+            throw new \Exception('No json parsed in the temp token response');
+        }
+        $this->tempToken = $json;
+    }
+
+    private function deleteTempToken()
+    {
+        if (!$this->tempToken) {
+            return;
+        }
+        $request = new Request('GET', $this->tokenUrl . '/' . $this->project->getNid() . '?token=' . $this->githubUser . '&action=delete');
+        $resp = $this->getHttpClient()->sendRequest($request);
+        if ($resp->getStatusCode() != 204) {
+            throw new \Exception('Wrong status code on temp token delete request.');
+        }
+        $this->tempToken = null;
     }
 
     /**
@@ -395,27 +499,26 @@ class CosyComposer
         $this->log($updates_string, Message::UPDATE, [
             'packages' => $data,
         ]);
-        $client = $this->getClient($this->slug);
-        $client->authenticate($this->token, null);
+        $this->client = $this->getClient($this->slug);
         // Get the default branch of the repo.
-        $private_client = $this->getClient($this->slug);
-        $private_client->authenticate($this->githubUser, null);
-        $private = $private_client->repoIsPrivate($user_name, $user_repo);
-        $default_branch = $private_client->getDefaultBranch($user_name, $user_repo);
+        $this->privateClient = $this->getClient($this->slug);
+        $this->privateClient->authenticate($this->githubUser, null);
+        $this->isPrivate = $this->privateClient->repoIsPrivate($user_name, $user_repo);
+        $default_branch = $this->privateClient->getDefaultBranch($user_name, $user_repo);
         // Try to see if we have already dealt with this (i.e already have a branch for all the updates.
-        $pr_client = $client;
         $branch_user = $this->forkUser;
-        if ($private) {
-            $pr_client = $private_client;
+        if ($this->isPrivate) {
             $branch_user = $user_name;
         }
         try {
-            $branches_flattened = $pr_client->getBranchesFlattened($branch_user, $user_repo);
-            $default_base = $pr_client->getDefaultBase($branch_user, $user_repo, $default_branch);
-            if ($default_base_upstream = $private_client->getDefaultBase($user_name, $user_repo, $default_branch)) {
+            $branches_flattened = $this->getPrClient()->getBranchesFlattened($branch_user, $user_repo);
+            $this->deleteTempToken();
+            $default_base = $this->getPrClient()->getDefaultBase($branch_user, $user_repo, $default_branch);
+            $this->deleteTempToken();
+            if ($default_base_upstream = $this->privateClient->getDefaultBase($user_name, $user_repo, $default_branch)) {
                 $default_base = $default_base_upstream;
             }
-            $prs_named = $private_client->getPrsNamed($user_name, $user_repo);
+            $prs_named = $this->privateClient->getPrsNamed($user_name, $user_repo);
         } catch (RuntimeException $e) {
             // Safe to ignore.
             $this->log('Had a runtime exception with the fetching of branches and Prs: ' . $e->getMessage());
@@ -450,12 +553,16 @@ class CosyComposer
         // Unshallow the repo, for syncing it.
         $this->execCommand('git pull --unshallow', false, 300);
         // If the repo is private, we need to push directly to the repo.
-        if (!$private) {
-            $fork = $client->createFork($user_name, $user_repo, $this->forkUser);
-            $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUserName, $this->githubUserPass, $this->forkUser, $user_repo);
+        if (!$this->isPrivate) {
+            $this->preparePrClient();
+            $fork = $this->client->createFork($user_name, $user_repo, $this->forkUser);
+            $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUserName, $this->tempToken->token, $this->forkUser, $user_repo);
             $this->execCommand('git remote add fork ' . $fork_url, false);
             // Sync the fork.
-            $this->execCommand('git push fork ' . $default_branch, false);
+            if ($this->execCommand('git push fork ' . $default_branch, false)) {
+                throw new \Exception('Coulld not push to our own fork.');
+            }
+            $this->deleteTempToken();
         }
         // Now read the lockfile.
         $lockdata = json_decode(file_get_contents($this->tmpDir . '/composer.lock'));
@@ -580,12 +687,17 @@ class CosyComposer
                     throw new \Exception('Error committing the composer files. They are probably not changed.');
                 }
                 $origin = 'fork';
-                if ($private) {
+                if ($this->isPrivate) {
                     $origin = 'origin';
+                } else {
+                    $this->preparePrClient();
+                    $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUserName, $this->tempToken->token, $this->forkUser, $user_repo);
+                    $this->execCommand('git remote set-url fork ' . $fork_url, false);
                 }
                 if ($this->execCommand("git push $origin $branch_name --force")) {
                     throw new GitPushException('Could not push to ' . $branch_name);
                 }
+                $this->deleteTempToken();
                 $this->log('Trying to retrieve changelog for ' . $package_name);
                 $changelog = null;
                 try {
@@ -597,11 +709,11 @@ class CosyComposer
                 }
                 $this->log('Creating pull request from ' . $branch_name);
                 $head = $this->forkUser . ':' . $branch_name;
-                if ($private) {
+                if ($this->isPrivate) {
                     $head = $branch_name;
                 }
                 $body = $this->createBody($item, $changelog);
-                $pullRequest = $pr_client->createPullRequest($user_name, $user_repo, [
+                $pullRequest = $this->getPrClient()->createPullRequest($user_name, $user_repo, [
                     'base'  => $default_branch,
                     'head'  => $head,
                     'title' => $this->createTitle($item),
@@ -746,9 +858,9 @@ class CosyComposer
         return $result;
     }
 
-  /**
-   * Executes a command.
-   */
+    /**
+     * Executes a command.
+     */
     protected function execCommand($command, $log = true, $timeout = 120)
     {
         $this->executer->setCwd($this->getCwd());
@@ -921,5 +1033,22 @@ class CosyComposer
             $this->setProviderFactory(new ProviderFactory());
         }
         return $this->providerFactory->createFromHost($slug);
+    }
+
+    private function getPrClient()
+    {
+        if ($this->isPrivate) {
+            return $this->privateClient;
+        }
+        $this->preparePrClient();
+        return $this->client;
+    }
+
+    private function preparePrClient()
+    {
+        if (!$this->isPrivate) {
+            $this->createTempToken();
+            $this->client->authenticate($this->tempToken->token, null);
+        }
     }
 }

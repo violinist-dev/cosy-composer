@@ -15,7 +15,8 @@
         "violinist-dev/slug-from-url": "dev-master",
         "wa72/simplelogger": "^1.0",
         "league/flysystem": "^1.0",
-        "eiriksm/symfony-console-array-output": "^1.0"
+        "eiriksm/symfony-console-array-output": "^1.0",
+        "violinist-dev/project-data": "dev-master"
     },
     "autoload": {
         "psr-4": {"eiriksm\\CosyComposer\\": "src"}

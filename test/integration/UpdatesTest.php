@@ -9,6 +9,9 @@ use eiriksm\CosyComposer\Message;
 use eiriksm\CosyComposer\ProviderFactory;
 use eiriksm\CosyComposer\Providers\Github;
 use Github\Exception\RuntimeException;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use Http\Adapter\Guzzle6\Client;
 use Symfony\Component\Console\Input\InputDefinition;
 
 class UpdatesTest extends Base
@@ -617,6 +620,102 @@ class UpdatesTest extends Base
         $this->assertEquals(false, $called);
         $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock');
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
+        $c->run();
+        $output = $c->getOutput();
+        $this->assertEquals($fake_pr_url, $output[15]->getMessage());
+        $this->assertEquals(Message::PR_URL, $output[15]->getType());
+        $this->assertEquals(true, $called);
+    }
+
+    public function testEndToEndNotPrivate()
+    {
+        $c = $this->getMockCosy();
+        $dir = '/tmp/' . uniqid();
+        mkdir($dir);
+        $c->setTmpDir($dir);
+        // Create a mock app, that can respond to things.
+        $mock_definition = $this->createMock(InputDefinition::class);
+        $mock_definition->method('getOptions')
+            ->willReturn([]);
+        $mock_app = $this->createMock(Application::class);
+        $mock_app->method('getDefinition')
+            ->willReturn($mock_definition);
+        $c->setApp($mock_app);
+        $mock_output = $this->createMock(ArrayOutput::class);
+        $mock_output->method('fetch')
+            ->willReturn([
+                [
+                    '{"installed": [{"name": "psr/log", "version": "1.0.0", "latest": "1.0.1", "latest-status": "semver-safe-update"}]}'
+                ]
+            ]);
+        $c->setOutput($mock_output);
+        $composer_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.json');
+        $composer_file = "$dir/composer.json";
+        file_put_contents($composer_file, $composer_contents);
+        $called = false;
+        $mock_executer = $this->createMock(CommandExecuter::class);
+        $mock_executer->method('executeCommand')
+            ->will($this->returnCallback(
+                function ($cmd) use (&$called, $dir) {
+                    $return = 0;
+                    if ($cmd == 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts psr/log --with-dependencies') {
+                        file_put_contents("$dir/composer.lock", file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock-updated'));
+                    }
+                    if (strpos($cmd, 'rm -rf /tmp/') === 0) {
+                        $called = true;
+                    }
+                    return $return;
+                }
+            ));
+        $c->setExecuter($mock_executer);
+        $this->assertEquals(false, $called);
+
+        // Then we are going to mock the provider factory.
+        $mock_provider_factory = $this->createMock(ProviderFactory::class);
+        $mock_provider = $this->createMock(Github::class);
+        $fake_pr_url = 'http://example.com/pr';
+        $mock_provider->expects($this->once())
+            ->method('createPullRequest')
+            ->willReturn([
+                'html_url' => $fake_pr_url,
+            ]);
+        $mock_provider->method('repoIsPrivate')
+            ->willReturn(false);
+        $mock_provider->method('getDefaultBranch')
+            ->willReturn('master');
+        $mock_provider->method('getBranchesFlattened')
+            ->willReturn([]);
+        $default_sha = 123;
+        $mock_provider->method('getDefaultBase')
+            ->willReturn($default_sha);
+        $mock_provider->method('getPrsNamed')
+            ->willReturn([]);
+        $mock_provider_factory->method('createFromHost')
+            ->willReturn($mock_provider);
+
+        $c->setProviderFactory($mock_provider_factory);
+        $this->assertEquals(false, $called);
+        $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock');
+        file_put_contents("$dir/composer.lock", $composer_lock_contents);
+        // Create a fake http client.
+        $mock_200_response = new Response(200, [], '{"token":123}');
+        $mock_204_response = new Response(204);
+        $mock_client = $this->createMock(Client::class);
+        $mock_client->method('sendRequest')
+            ->willReturnOnConsecutiveCalls(
+                $mock_200_response,
+                $mock_204_response,
+                $mock_200_response,
+                $mock_204_response,
+                $mock_200_response,
+                $mock_204_response,
+                $mock_200_response,
+                $mock_204_response,
+                $mock_200_response,
+                $mock_204_response
+            );
+        $c->setHttpClient($mock_client);
+        $c->setGithubAuth('test', 'pass');
         $c->run();
         $output = $c->getOutput();
         $this->assertEquals($fake_pr_url, $output[15]->getMessage());
