@@ -378,6 +378,12 @@ class CosyComposer
             sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->githubUser),
             false
         );
+        if (!empty($_SERVER['violinist_hostname'])) {
+            $this->log(sprintf('Running update check on %s', $_SERVER['violinist_hostname']));
+        }
+        if (!empty($_SERVER['violinist_revision'])) {
+            $this->log(sprintf('Queue runner revision %s', $_SERVER['violinist_revision']));
+        }
         $this->log(sprintf('Starting update check for %s', $this->slug->getSlug()));
         $user_name = $this->slug->getUserName();
         $user_repo = $this->slug->getUserRepo();
