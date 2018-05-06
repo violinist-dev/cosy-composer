@@ -40,4 +40,20 @@ class CosyComposerUnitTest extends \PHPUnit_Framework_TestCase
         $c->setExecuter($mock_exec);
         $this->assertEquals('output', $c->getLastStdOut());
     }
+
+    public function testCreateTempTokenNoProject()
+    {
+        $c = $this->getMockCosy();
+        $c->setProject(null);
+        $this->expectExceptionMessage('No project data was found, so no temp token can be generated.');
+        $c->createTempToken();
+    }
+
+    public function testCreateTempTokenNoTokenUrl()
+    {
+        $c = $this->getMockCosy();
+        $c->setTokenUrl(null);
+        $this->expectExceptionMessage('No token URL specified for project');
+        $c->createTempToken();
+    }
 }

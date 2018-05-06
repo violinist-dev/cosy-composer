@@ -330,7 +330,10 @@ class CosyComposer
         $this->forkUser = $user;
     }
 
-    private function createTempToken()
+    /**
+     * @throws \Http\Client\Exception
+     */
+    public function createTempToken()
     {
         if (empty($this->project)) {
             throw new \Exception('No project data was found, so no temp token can be generated.');
