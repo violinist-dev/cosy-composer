@@ -151,14 +151,6 @@ class CosyComposer
     private $isPrivate = false;
 
     /**
-     * @return string
-     */
-    public function getTokenUrl()
-    {
-        return $this->tokenUrl;
-    }
-
-    /**
      * @param string $tokenUrl
      */
     public function setTokenUrl($tokenUrl)
@@ -183,14 +175,6 @@ class CosyComposer
     public function setHttpClient($httpClient)
     {
         $this->httpClient = $httpClient;
-    }
-
-    /**
-     * @return ProjectData|null
-     */
-    public function getProject()
-    {
-        return $this->project;
     }
 
     /**
