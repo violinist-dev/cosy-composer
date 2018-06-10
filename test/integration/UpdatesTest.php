@@ -16,6 +16,16 @@ use Symfony\Component\Console\Input\InputDefinition;
 
 class UpdatesTest extends Base
 {
+    private function createUpdateJsonFromData($package, $version, $new_version)
+    {
+        return sprintf('{"installed": [{"name": "%s", "version": "%s", "latest": "%s", "latest-status": "semver-safe-update"}]}', $package, $version, $new_version);
+    }
+
+    private function createExpectedCommandForPackage($package)
+    {
+        return "COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts $package --with-dependencies";
+    }
+
     public function testUpdatesFoundButProviderDoesNotAuthenticate()
     {
         $c = $this->getMockCosy();
@@ -34,7 +44,7 @@ class UpdatesTest extends Base
         $mock_output->method('fetch')
             ->willReturn([
                 [
-                    '{"installed": [{"name": "eiriksm/fake-package", "version": "1.0.0", "latest": "1.0.1", "latest-status": "semver-safe-update"}]}'
+                    $this->createUpdateJsonFromData('eiriksm/fake-package', '1.0.0', '1.0.1'),
                 ]
             ]);
         $c->setOutput($mock_output);
@@ -79,7 +89,7 @@ class UpdatesTest extends Base
         $mock_output->method('fetch')
             ->willReturn([
                 [
-                    '{"installed": [{"name": "eiriksm/fake-package", "version": "1.0.0", "latest": "1.0.1", "latest-status": "semver-safe-update"}]}'
+                    $this->createUpdateJsonFromData('eiriksm/fake-package', '1.0.0', '1.0.1'),
                 ]
             ]);
         $c->setOutput($mock_output);
@@ -151,7 +161,7 @@ class UpdatesTest extends Base
         $mock_output->method('fetch')
             ->willReturn([
                 [
-                    '{"installed": [{"name": "eiriksm/fake-package", "version": "1.0.0", "latest": "1.0.1", "latest-status": "semver-safe-update"}]}'
+                    $this->createUpdateJsonFromData('eiriksm/fake-package', '1.0.0', '1.0.1'),
                 ]
             ]);
         $c->setOutput($mock_output);
@@ -215,7 +225,7 @@ class UpdatesTest extends Base
         $mock_output->method('fetch')
             ->willReturn([
                 [
-                    '{"installed": [{"name": "psr/log", "version": "1.0.0", "latest": "2.0.1", "latest-status": "semver-safe-update"}]}'
+                    $this->createUpdateJsonFromData('psr/log', '1.0.0', '2.0.1'),
                 ]
             ]);
         $c->setOutput($mock_output);
@@ -281,7 +291,7 @@ class UpdatesTest extends Base
         $mock_output->method('fetch')
             ->willReturn([
                 [
-                    '{"installed": [{"name": "psr/log", "version": "1.0.0", "latest": "1.0.1", "latest-status": "semver-safe-update"}]}'
+                    $this->createUpdateJsonFromData('psr/log', '1.0.0', '1.0.2'),
                 ]
             ]);
         $c->setOutput($mock_output);
@@ -354,7 +364,7 @@ class UpdatesTest extends Base
         $mock_output->method('fetch')
             ->willReturn([
                 [
-                    '{"installed": [{"name": "psr/log", "version": "1.0.0", "latest": "1.0.1", "latest-status": "semver-safe-update"}]}'
+                    $this->createUpdateJsonFromData('psr/log', '1.0.0', '1.0.2'),
                 ]
             ]);
         $c->setOutput($mock_output);
@@ -422,7 +432,7 @@ class UpdatesTest extends Base
         $mock_output->method('fetch')
             ->willReturn([
                 [
-                    '{"installed": [{"name": "psr/log", "version": "1.0.0", "latest": "1.0.1", "latest-status": "semver-safe-update"}]}'
+                    $this->createUpdateJsonFromData('psr/log', '1.0.0', '1.0.2'),
                 ]
             ]);
         $c->setOutput($mock_output);
@@ -495,7 +505,7 @@ class UpdatesTest extends Base
         $mock_output->method('fetch')
             ->willReturn([
                 [
-                    '{"installed": [{"name": "psr/log", "version": "1.0.0", "latest": "1.0.1", "latest-status": "semver-safe-update"}]}'
+                    $this->createUpdateJsonFromData('psr/log', '1.0.0', '1.0.2'),
                 ]
             ]);
         $c->setOutput($mock_output);
@@ -511,7 +521,7 @@ class UpdatesTest extends Base
                     if ($cmd == 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts psr/log --with-dependencies') {
                         file_put_contents("$dir/composer.lock", file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock-updated'));
                     }
-                    if ($cmd == 'git push origin psrlog100101 --force') {
+                    if ($cmd == 'git push origin psrlog100102 --force') {
                         $return = 1;
                     }
                     if (strpos($cmd, 'rm -rf /tmp/') === 0) {
@@ -546,7 +556,7 @@ class UpdatesTest extends Base
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals('Caught an exception: Could not push to psrlog100101', $output[12]->getMessage());
+        $this->assertEquals('Caught an exception: Could not push to psrlog100102', $output[12]->getMessage());
         $this->assertEquals(true, $called);
     }
 
@@ -568,7 +578,7 @@ class UpdatesTest extends Base
         $mock_output->method('fetch')
             ->willReturn([
                 [
-                    '{"installed": [{"name": "psr/log", "version": "1.0.0", "latest": "1.0.1", "latest-status": "semver-safe-update"}]}'
+                    $this->createUpdateJsonFromData('psr/log', '1.0.0', '1.0.2'),
                 ]
             ]);
         $c->setOutput($mock_output);
@@ -645,7 +655,7 @@ class UpdatesTest extends Base
         $mock_output->method('fetch')
             ->willReturn([
                 [
-                    '{"installed": [{"name": "psr/log", "version": "1.0.0", "latest": "1.0.1", "latest-status": "semver-safe-update"}]}'
+                    $this->createUpdateJsonFromData('psr/log', '1.0.0', '1.0.2'),
                 ]
             ]);
         $c->setOutput($mock_output);
@@ -741,7 +751,7 @@ class UpdatesTest extends Base
         $mock_output->method('fetch')
             ->willReturn([
                 [
-                    '{"installed": [{"name": "psr/log", "version": "1.0.0", "latest": "2.0.1", "latest-status": "semver-safe-update"}]}'
+                    $this->createUpdateJsonFromData('psr/log', '1.0.0', '2.0.1'),
                 ]
             ]);
         $c->setOutput($mock_output);
@@ -791,7 +801,7 @@ class UpdatesTest extends Base
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals('Creating pull request from psrlog100201', $output[13]->getMessage());
+        $this->assertEquals('Creating pull request from psrlog100201', $output[14]->getMessage());
         $this->assertEquals(true, $called);
         $this->assertEquals(true, $install_called);
     }
@@ -814,7 +824,7 @@ class UpdatesTest extends Base
         $mock_output->method('fetch')
             ->willReturn([
                 [
-                    '{"installed": [{"name": "psr/log", "version": "1.0.0", "latest": "1.0.1", "latest-status": "semver-safe-update"}]}'
+                    $this->createUpdateJsonFromData('psr/log', '1.0.0', '1.0.2'),
                 ]
             ]);
         $c->setOutput($mock_output);
@@ -866,6 +876,91 @@ class UpdatesTest extends Base
         $output = $c->getOutput();
         $this->assertEquals($fake_pr_url, $output[15]->getMessage());
         $this->assertEquals(Message::PR_URL, $output[15]->getType());
+        $this->assertEquals(true, $called);
+    }
+
+    public function testUpdateAvailableButUpdatedToOther()
+    {
+        $c = $this->getMockCosy();
+        $dir = '/tmp/' . uniqid();
+        mkdir($dir);
+        $c->setTmpDir($dir);
+        // Create a mock app, that can respond to things.
+        $mock_definition = $this->createMock(InputDefinition::class);
+        $mock_definition->method('getOptions')
+            ->willReturn([]);
+        $mock_app = $this->createMock(Application::class);
+        $mock_app->method('getDefinition')
+            ->willReturn($mock_definition);
+        $c->setApp($mock_app);
+        $mock_output = $this->createMock(ArrayOutput::class);
+        $mock_output->method('fetch')
+            ->willReturn([
+                [
+                    $this->createUpdateJsonFromData('drupal/core', '8.4.7', '8.5.4'),
+                ]
+            ]);
+        $c->setOutput($mock_output);
+        $this->createComposerFileFromFixtures($dir, 'composer-drupal-847.json');
+        $called = false;
+        $mock_executer = $this->getMockExecuterWithReturnCallback(
+            function ($cmd) use (&$called, $dir) {
+                $return = 0;
+                $expected_command = $this->createExpectedCommandForPackage('drupal/core');
+                if ($cmd == $expected_command) {
+                    file_put_contents("$dir/composer.lock", file_get_contents(__DIR__ . '/../fixtures/composer-drupal-847-updated.lock'));
+                }
+                if (strpos($cmd, 'rm -rf /tmp/') === 0) {
+                    $called = true;
+                }
+                return $return;
+            }
+        );
+        $c->setExecuter($mock_executer);
+        $this->assertEquals(false, $called);
+
+        // Then we are going to mock the provider factory.
+        $mock_provider_factory = $this->createMock(ProviderFactory::class);
+        $mock_provider = $this->createMock(Github::class);
+        $fake_pr_url = 'http://example.com/pr';
+        $mock_provider->expects($this->once())
+            ->method('createPullRequest')
+            ->with('a', 'b', [
+                'base' => 'master',
+                'head' => 'drupalcore847854',
+                'title' => 'Update drupal/core from 8.4.7 to 8.4.8
+',
+                'body' => 'If you have a decent test suite, and your tests pass, it should be both safe and smart to merge this update.
+
+
+***
+This is an automated pull request from [Violinist](https://violinist.io/): Continuously and automatically monitor and update your composer dependencies. Have ideas on how to improve this message? All violinist messages are open-source, and [can be improved here](https://github.com/violinist-dev/violinist-messages).
+'
+            ])
+            ->willReturn([
+                'html_url' => $fake_pr_url,
+            ]);
+        $mock_provider->method('repoIsPrivate')
+            ->willReturn(true);
+        $mock_provider->method('getDefaultBranch')
+            ->willReturn('master');
+        $mock_provider->method('getBranchesFlattened')
+            ->willReturn([]);
+        $default_sha = 123;
+        $mock_provider->method('getDefaultBase')
+            ->willReturn($default_sha);
+        $mock_provider->method('getPrsNamed')
+            ->willReturn([]);
+        $mock_provider_factory->method('createFromHost')
+            ->willReturn($mock_provider);
+
+        $c->setProviderFactory($mock_provider_factory);
+        $this->assertEquals(false, $called);
+        $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-drupal-847.lock');
+        file_put_contents("$dir/composer.lock", $composer_lock_contents);
+        $c->run();
+        $output = $c->getOutput();
+        $this->assertEquals($fake_pr_url, $output[16]->getMessage());
         $this->assertEquals(true, $called);
     }
 }

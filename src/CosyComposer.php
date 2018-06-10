@@ -664,7 +664,18 @@ class CosyComposer
                     ]);
                     throw new NotUpdatedException('The version installed is still the same after trying to update.');
                 }
+                // Now, see if it the update was actually to the version we are expecting.
+                if ($post_update_data->version != $item->latest) {
+                    $new_branch_name = $this->createBranchNameFromVersions(
+                        $item->name,
+                        $item->version,
+                        $post_update_data->version
+                    );
+                    $this->log('Changing branch because of an unexpected update result: ' . $branch_name);
+                    $this->execCommand('git checkout -b ' . $new_branch_name, false);
+                }
                 $this->log('Successfully ran command composer update for package ' . $package_name);
+                // Clean up the composer.lock file if it was not part of the repo.
                 $this->execCommand('git clean -f composer.*');
                 // This might have cleaned out the auth file, so we re-export it.
                 $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->githubUser));
@@ -705,11 +716,11 @@ class CosyComposer
                 if ($this->isPrivate) {
                     $head = $branch_name;
                 }
-                $body = $this->createBody($item, $changelog);
+                $body = $this->createBody($item, $post_update_data, $changelog);
                 $pullRequest = $this->getPrClient()->createPullRequest($user_name, $user_repo, [
                     'base'  => $default_branch,
                     'head'  => $head,
-                    'title' => $this->createTitle($item),
+                    'title' => $this->createTitle($item, $post_update_data),
                     'body'  => $body,
                 ]);
                 if (!empty($pullRequest['html_url'])) {
@@ -813,12 +824,12 @@ class CosyComposer
    * @return string
    *   A string ready to use.
    */
-    protected function createTitle($item)
+    protected function createTitle($item, $post_update_data)
     {
         $update = new ViolinistUpdate();
         $update->setName($item->name);
         $update->setCurrentVersion($item->version);
-        $update->setNewVersion($item->latest);
+        $update->setNewVersion($post_update_data->version);
         return $this->messageFactory->getPullRequestTitle($update);
     }
 
@@ -827,12 +838,12 @@ class CosyComposer
    *
    * @return string
    */
-    public function createBody($item, $changelog = null)
+    public function createBody($item, $post_update_data, $changelog = null)
     {
         $update = new ViolinistUpdate();
         $update->setName($item->name);
         $update->setCurrentVersion($item->version);
-        $update->setNewVersion($item->latest);
+        $update->setNewVersion($post_update_data->version);
         if ($changelog) {
           /** @var \eiriksm\GitLogFormat\ChangeLogData $changelog */
             $update->setChangelog($changelog->getAsMarkdown());
@@ -840,14 +851,19 @@ class CosyComposer
         return $this->messageFactory->getPullRequestBody($update);
     }
 
-  /**
-   * @param $item
-   *
-   * @return mixed
-   */
+    /**
+     * @param $item
+     *
+     * @return mixed
+     */
     protected function createBranchName($item)
     {
-        $item_string = sprintf('%s%s%s', $item->name, $item->version, $item->latest);
+        return $this->createBranchNameFromVersions($item->name, $item->version, $item->latest);
+    }
+
+    protected function createBranchNameFromVersions($package, $version_from, $version_to)
+    {
+        $item_string = sprintf('%s%s%s', $package, $version_from, $version_to);
         // @todo: Fix this properly.
         $result = preg_replace('/[^a-zA-Z0-9]+/', '', $item_string);
         return $result;
