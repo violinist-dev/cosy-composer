@@ -576,7 +576,6 @@ class CosyComposer
                 } else {
                     $req_item = $cdata->{'require'}->{$package_name_in_composer_json};
                 }
-                continue;
                 $can_update_beyond = true;
                 $should_update_beyond = false;
                 // See if the new version seems to satisfy the constraint. Unless the constraint is dev related somehow.
