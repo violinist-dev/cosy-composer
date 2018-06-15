@@ -567,14 +567,16 @@ class CosyComposer
                 $version_to = $item->latest;
                 // See where this package is.
                 $req_command = 'require';
+                $package_name_in_composer_json = self::getComposerJsonName($cdata, $package_name);
                 $lockfile_key = 'require';
-                if (!empty($cdata->{'require-dev'}->{$package_name})) {
+                if (!empty($cdata->{'require-dev'}->{$package_name_in_composer_json})) {
                     $lockfile_key = 'require-dev';
                     $req_command = 'require --dev';
-                    $req_item = $cdata->{'require-dev'}->{$package_name};
+                    $req_item = $cdata->{'require-dev'}->{$package_name_in_composer_json};
                 } else {
-                    $req_item = $cdata->{'require'}->{$package_name};
+                    $req_item = $cdata->{'require'}->{$package_name_in_composer_json};
                 }
+                continue;
                 $can_update_beyond = true;
                 $should_update_beyond = false;
                 // See if the new version seems to satisfy the constraint. Unless the constraint is dev related somehow.
@@ -1025,6 +1027,33 @@ class CosyComposer
             }
         }
         return $lockdata->{$lockfile_key}[$key];
+    }
+
+    public static function getComposerJsonName($cdata, $name)
+    {
+        if (!empty($cdata->{'require-dev'}->{$name})) {
+            return $name;
+        }
+        if (!empty($cdata->require->{$name})) {
+            return $name;
+        }
+        // If we can not find it, we have to search through the names, and try to normalize them. They could be in the
+        // wrong casing, for example.
+        $possbile_types = [
+            'require',
+            'require-dev',
+        ];
+        foreach ($possbile_types as $type) {
+            if (empty($cdata->{$type})) {
+                continue;
+            }
+            foreach ($cdata->{$type} as $package => $version) {
+                if (strtolower($package) == strtolower($name)) {
+                    return $package;
+                }
+            }
+        }
+        throw new \Exception('Could not find ' . $name . ' in composer.json.');
     }
 
     private function getPackagesKey($package_name, $lockfile_key, $lockdata)
