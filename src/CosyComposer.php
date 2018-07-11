@@ -63,7 +63,7 @@ class CosyComposer
     /**
      * @var string
      */
-    private $githubUser;
+    private $userToken;
 
     /**
      * Github pass.
@@ -307,11 +307,21 @@ class CosyComposer
         $this->executer = $executer;
     }
 
+    public function setUrl($url = null)
+    {
+        $this->slug = Slug::createFromUrl($url);
+    }
+
     public function setGithubAuth($user, $pass)
     {
-        $this->githubUser = $user;
+        $this->userToken = $user;
         $this->forkUser = $user;
         $this->githubPass = $pass;
+    }
+
+    public function setUserToken($user_token)
+    {
+        $this->userToken = $user_token;
     }
 
     public function setGithubForkAuth($user, $mail)
@@ -341,7 +351,7 @@ class CosyComposer
         if (empty($this->tokenUrl)) {
             throw new \Exception('No token URL specified for project');
         }
-        $request = new Request('GET', $this->tokenUrl . '/' . $this->project->getNid() . '?token=' . $this->githubUser);
+        $request = new Request('GET', $this->tokenUrl . '/' . $this->project->getNid() . '?token=' . $this->userToken);
         $resp = $this->getHttpClient()->sendRequest($request);
         if ($resp->getStatusCode() != 200) {
             throw new \Exception('Wrong status code on temp token request (' . $resp->getStatusCode() . ').');
@@ -357,7 +367,7 @@ class CosyComposer
         if (!$this->tempToken) {
             return;
         }
-        $request = new Request('GET', $this->tokenUrl . '/' . $this->project->getNid() . '?token=' . $this->githubUser . '&action=delete');
+        $request = new Request('GET', $this->tokenUrl . '/' . $this->project->getNid() . '?token=' . $this->userToken . '&action=delete');
         $resp = $this->getHttpClient()->sendRequest($request);
         if ($resp->getStatusCode() != 204) {
             throw new \Exception('Wrong status code on temp token delete request.');
@@ -373,11 +383,6 @@ class CosyComposer
      */
     public function run()
     {
-        // Export the user token so composer can use it.
-        $this->execCommand(
-            sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->githubUser),
-            false
-        );
         if (!empty($_SERVER['violinist_hostname'])) {
             $this->log(sprintf('Running update check on %s', $_SERVER['violinist_hostname']));
         }
@@ -392,7 +397,26 @@ class CosyComposer
         if (!$this->chdir($this->getTmpParent())) {
             throw new ChdirException('Problem with changing dir to ' . $this->getTmpParent());
         }
-        $url = sprintf('https://%s:%s@github.com/%s', $this->githubUser, $this->githubPass, $this->slug->getSlug());
+        $hostname = $this->slug->getProvider();
+        $url = null;
+        switch ($hostname) {
+            case 'github.com':
+                $this->execCommand(
+                    sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->userToken),
+                    false
+                );
+                $url = sprintf('https://%s:%s@github.com/%s', $this->userToken, $this->githubPass, $this->slug->getSlug());
+                break;
+
+            case 'gitlab.com':
+                // @todo: Not sure what this is on gitlab yet.
+                $this->execCommand(
+                    sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->userToken),
+                    false
+                );
+                $url = sprintf('https://%s:%s@gitlab.com/%s', $this->userToken, $this->githubPass, $this->slug->getSlug());
+                break;
+        }
         $this->log('Cloning repository');
         $clone_result = $this->execCommand('git clone --depth=1 ' . $url . ' ' . $this->tmpDir, false, 120);
         if ($clone_result) {
@@ -495,7 +519,7 @@ class CosyComposer
         $this->client = $this->getClient($this->slug);
         // Get the default branch of the repo.
         $this->privateClient = $this->getClient($this->slug);
-        $this->privateClient->authenticate($this->githubUser, null);
+        $this->privateClient->authenticate($this->userToken, null);
         $this->isPrivate = $this->privateClient->repoIsPrivate($user_name, $user_repo);
         $default_branch = $this->privateClient->getDefaultBranch($user_name, $user_repo);
         // Try to see if we have already dealt with this (i.e already have a branch for all the updates.
@@ -679,7 +703,7 @@ class CosyComposer
                 // Clean up the composer.lock file if it was not part of the repo.
                 $this->execCommand('git clean -f composer.*');
                 // This might have cleaned out the auth file, so we re-export it.
-                $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->githubUser));
+                $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->userToken));
                 $command = sprintf(
                     'GIT_AUTHOR_NAME="%s" GIT_AUTHOR_EMAIL="%s" GIT_COMMITTER_NAME="%s" GIT_COMMITTER_EMAIL="%s" git commit composer.* -m "Update %s"',
                     $this->githubUserName,
