@@ -414,7 +414,7 @@ class CosyComposer
                     sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->userToken),
                     false
                 );
-                $url = sprintf('https://%s:%s@gitlab.com/%s', $this->userToken, $this->githubPass, $this->slug->getSlug());
+                $url = sprintf('https://oauth2:%s@gitlab.com/%s', $this->userToken, $this->slug->getSlug());
                 break;
         }
         $this->log('Cloning repository');
