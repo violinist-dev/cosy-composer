@@ -503,6 +503,7 @@ class CosyComposer
         if ($this->isPrivate) {
             $branch_user = $user_name;
         }
+        $branches_flattened = [];
         try {
             $branches_flattened = $this->getPrClient()->getBranchesFlattened($branch_user, $user_repo);
             $this->deleteTempToken();
