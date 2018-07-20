@@ -18,6 +18,9 @@ class ProviderFactory
                 $provider = new Github($client);
                 break;
 
+            case 'gitlab.com':
+                break;
+
             default:
                 throw new \InvalidArgumentException('No provider found for host ' . $host);
         }
