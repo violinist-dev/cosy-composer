@@ -20,7 +20,7 @@ class Gitlab implements ProviderInterface
 
     public function authenticate($user, $token)
     {
-        $this->client->authenticate($user,  Client::AUTH_OAUTH_TOKEN);
+        $this->client->authenticate($user, Client::AUTH_OAUTH_TOKEN);
     }
 
     public function authenticatePrivate($user, $token)
@@ -31,7 +31,7 @@ class Gitlab implements ProviderInterface
     public function repoIsPrivate($user, $repo)
     {
         // Consider all gitlab things private, since we have the API key to do so anyway-
-        return TRUE;
+        return true;
     }
 
     public function getDefaultBranch($user, $repo)
