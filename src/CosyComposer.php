@@ -701,6 +701,7 @@ class CosyComposer
                     $this->execCommand('git remote set-url fork ' . $fork_url, false);
                 }
                 if ($this->execCommand("git push $origin $branch_name --force")) {
+                    $this->deleteTempToken();
                     throw new GitPushException('Could not push to ' . $branch_name);
                 }
                 $this->deleteTempToken();
