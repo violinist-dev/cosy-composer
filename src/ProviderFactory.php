@@ -3,6 +3,7 @@
 namespace eiriksm\CosyComposer;
 
 use eiriksm\CosyComposer\Providers\Github;
+use eiriksm\CosyComposer\Providers\Gitlab;
 use Github\Client;
 use Violinist\Slug\Slug;
 
@@ -16,6 +17,11 @@ class ProviderFactory
             case 'github.com':
                 $client = new Client();
                 $provider = new Github($client);
+                break;
+
+            case 'gitlab.com':
+                $client = new \Gitlab\Client();
+                $provider = new Gitlab($client);
                 break;
 
             default:
