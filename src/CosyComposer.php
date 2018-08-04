@@ -30,6 +30,8 @@ use Wa72\SimpleLogger\ArrayLogger;
 
 class CosyComposer
 {
+    private $urlArray;
+
     /**
      * @var ProviderFactory
      */
@@ -309,7 +311,14 @@ class CosyComposer
 
     public function setUrl($url = null)
     {
-        $this->slug = Slug::createFromUrl($url);
+        // Make it possible without crashing.
+        $slug_url_obj = parse_url($url);
+        $this->urlArray = $slug_url_obj;
+        if (!empty($slug_url_obj['host'])) {
+            $providers = Slug::getSupportedProviders();
+            $providers = array_merge($providers, [$slug_url_obj['host']]);
+        }
+        $this->slug = Slug::createFromUrlAndSupportedProvidersl($url, $providers);
     }
 
     public function setGithubAuth($user, $pass)
