@@ -425,11 +425,16 @@ class CosyComposer
                 );
                 $url = sprintf('https://oauth2:%s@gitlab.com/%s', $this->userToken, $this->slug->getSlug());
                 break;
+
+            default:
+                $url = sprintf('%s://oauth2:%s@%s:%d/%s', $this->urlArray['scheme'], $this->userToken, $hostname, $this->urlArray['port'], $this->slug->getSlug());
+                break;
         }
         $this->log('Cloning repository');
         $clone_result = $this->execCommand('git clone --depth=1 ' . $url . ' ' . $this->tmpDir, false, 120);
         if ($clone_result) {
             // We had a problem.
+            $this->log($this->getLastStdErr(), Message::COMMAND);
             throw new GitCloneException('Problem with the execCommand git clone. Exit code was ' . $clone_result);
         }
         $this->log('Repository cloned');
