@@ -5,7 +5,8 @@ namespace eiriksm\CosyComposer\Providers;
 
 use Gitlab\Client;
 
-class SelfHostedGitlab extends Gitlab {
+class SelfHostedGitlab extends Gitlab
+{
 
     /**
      * {@inheritdoc}
