@@ -26,7 +26,10 @@ class ProviderFactory
                 break;
 
             default:
-                throw new \InvalidArgumentException('No provider found for host ' . $host);
+                // @todo: Support more self-hosted at some point.
+                $client = new \Gitlab\Client();
+                $provider = new SelfHostedGitlab($client, $url);
+                break;
         }
         return $provider;
     }
