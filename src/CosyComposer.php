@@ -1111,7 +1111,7 @@ class CosyComposer
         if (!$this->providerFactory) {
             $this->setProviderFactory(new ProviderFactory());
         }
-        return $this->providerFactory->createFromHost($slug);
+        return $this->providerFactory->createFromHost($slug, $this->urlArray);
     }
 
     private function getPrClient()

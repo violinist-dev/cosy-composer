@@ -4,12 +4,13 @@ namespace eiriksm\CosyComposer;
 
 use eiriksm\CosyComposer\Providers\Github;
 use eiriksm\CosyComposer\Providers\Gitlab;
+use eiriksm\CosyComposer\Providers\SelfHostedGitlab;
 use Github\Client;
 use Violinist\Slug\Slug;
 
 class ProviderFactory
 {
-    public function createFromHost(Slug $slug)
+    public function createFromHost(Slug $slug, $url)
     {
         $host = $slug->getProvider();
         $provider = null;
