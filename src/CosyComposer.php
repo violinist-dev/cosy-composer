@@ -30,6 +30,8 @@ use Wa72\SimpleLogger\ArrayLogger;
 
 class CosyComposer
 {
+    private $urlArray;
+
     /**
      * @var ProviderFactory
      */
@@ -309,7 +311,14 @@ class CosyComposer
 
     public function setUrl($url = null)
     {
-        $this->slug = Slug::createFromUrl($url);
+        // Make it possible without crashing.
+        $slug_url_obj = parse_url($url);
+        $this->urlArray = $slug_url_obj;
+        if (!empty($slug_url_obj['host'])) {
+            $providers = Slug::getSupportedProviders();
+            $providers = array_merge($providers, [$slug_url_obj['host']]);
+        }
+        $this->slug = Slug::createFromUrlAndSupportedProvidersl($url, $providers);
     }
 
     public function setGithubAuth($user, $pass)
@@ -416,11 +425,16 @@ class CosyComposer
                 );
                 $url = sprintf('https://oauth2:%s@gitlab.com/%s', $this->userToken, $this->slug->getSlug());
                 break;
+
+            default:
+                $url = sprintf('%s://oauth2:%s@%s:%d/%s', $this->urlArray['scheme'], $this->userToken, $hostname, $this->urlArray['port'], $this->slug->getSlug());
+                break;
         }
         $this->log('Cloning repository');
         $clone_result = $this->execCommand('git clone --depth=1 ' . $url . ' ' . $this->tmpDir, false, 120);
         if ($clone_result) {
             // We had a problem.
+            $this->log($this->getLastStdErr(), Message::COMMAND);
             throw new GitCloneException('Problem with the execCommand git clone. Exit code was ' . $clone_result);
         }
         $this->log('Repository cloned');
@@ -1097,7 +1111,7 @@ class CosyComposer
         if (!$this->providerFactory) {
             $this->setProviderFactory(new ProviderFactory());
         }
-        return $this->providerFactory->createFromHost($slug);
+        return $this->providerFactory->createFromHost($slug, $this->urlArray);
     }
 
     private function getPrClient()
