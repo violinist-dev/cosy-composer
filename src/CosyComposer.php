@@ -313,6 +313,18 @@ class CosyComposer
     {
         // Make it possible without crashing.
         $slug_url_obj = parse_url($url);
+        if (empty($slug_url_obj['port'])) {
+            // Set it based on scheme.
+            switch ($slug_url_obj['scheme']) {
+                case 'http':
+                    $slug_url_obj['port'] = 80;
+                    break;
+
+                case 'https':
+                    $slug_url_obj['port'] = 443;
+                    break;
+            }
+        }
         $this->urlArray = $slug_url_obj;
         if (!empty($slug_url_obj['host'])) {
             $providers = Slug::getSupportedProviders();
