@@ -801,7 +801,7 @@ class UpdatesTest extends Base
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals('Creating pull request from psrlog100201', $output[14]->getMessage());
+        $this->assertEquals('Creating pull request from psrlog100102', $output[14]->getMessage());
         $this->assertEquals(true, $called);
         $this->assertEquals(true, $install_called);
     }
@@ -927,7 +927,7 @@ class UpdatesTest extends Base
             ->method('createPullRequest')
             ->with('a', 'b', [
                 'base' => 'master',
-                'head' => 'drupalcore847854',
+                'head' => 'drupalcore847848',
                 'title' => 'Update drupal/core from 8.4.7 to 8.4.8
 ',
                 'body' => 'If you have a decent test suite, and your tests pass, it should be both safe and smart to merge this update.
