@@ -592,7 +592,7 @@ class CosyComposer
             $this->execCommand('git remote add fork ' . $fork_url, false);
             // Sync the fork.
             if ($this->execCommand('git push fork ' . $default_branch, false)) {
-                throw new \Exception('Coulld not push to our own fork.');
+                throw new \Exception('Could not push to our own fork.');
             }
             $this->deleteTempToken();
         }
