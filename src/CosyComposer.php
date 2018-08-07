@@ -554,6 +554,8 @@ class CosyComposer
             $branch_user = $user_name;
         }
         $branches_flattened = [];
+        $prs_named = [];
+        $default_base = null;
         try {
             $branches_flattened = $this->getPrClient()->getBranchesFlattened($branch_user, $user_repo);
             $this->deleteTempToken();
