@@ -72,7 +72,11 @@ class Gitlab implements ProviderInterface
         $prs = $pager->fetchAll($api, $method, [$this->getProjectId($user, $repo)]);
         $prs_named = [];
         foreach ($prs as $pr) {
-            $prs_named[$pr['head']['ref']] = $pr;
+            $prs_named[$pr['source_branch']] = [
+                'base' => [
+                    'sha' => $pr['sha'],
+                ],
+            ];
         }
         return $prs_named;
     }
