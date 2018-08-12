@@ -448,7 +448,7 @@ class CosyComposer
             // We had a problem.
             $this->log($this->getLastStdOut(), Message::COMMAND);
             $this->log($this->getLastStdErr(), Message::COMMAND);
-            throw new GitCloneException('Problem with the execCommand git clone. Exit code was ' . $clone_result, Message::ERROR);
+            throw new GitCloneException('Problem with the execCommand git clone. Exit code was ' . $clone_result);
         }
         $this->log('Repository cloned');
         if (!$this->chdir($this->tmpDir)) {
