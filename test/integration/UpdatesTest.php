@@ -8,6 +8,7 @@ use eiriksm\CosyComposer\CommandExecuter;
 use eiriksm\CosyComposer\Message;
 use eiriksm\CosyComposer\ProviderFactory;
 use eiriksm\CosyComposer\Providers\Github;
+use eiriksm\CosyComposer\Providers\PublicGithubWrapper;
 use Github\Exception\RuntimeException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -682,7 +683,7 @@ class UpdatesTest extends Base
 
         // Then we are going to mock the provider factory.
         $mock_provider_factory = $this->createMock(ProviderFactory::class);
-        $mock_provider = $this->createMock(Github::class);
+        $mock_provider = $this->createMock(PublicGithubWrapper::class);
         $fake_pr_url = 'http://example.com/pr';
         $mock_provider->expects($this->once())
             ->method('createPullRequest')

@@ -10,6 +10,7 @@ use eiriksm\CosyComposer\Exceptions\ComposerInstallException;
 use eiriksm\CosyComposer\Exceptions\GitCloneException;
 use eiriksm\CosyComposer\Exceptions\GitPushException;
 use eiriksm\CosyComposer\Exceptions\NotUpdatedException;
+use eiriksm\CosyComposer\Providers\PublicGithubWrapper;
 use eiriksm\GitLogFormat\ChangeLogData;
 use eiriksm\ViolinistMessages\ViolinistMessages;
 use eiriksm\ViolinistMessages\ViolinistUpdate;
@@ -602,14 +603,7 @@ class CosyComposer
         // If the repo is private, we need to push directly to the repo.
         if (!$this->isPrivate) {
             $this->preparePrClient();
-            $fork = $this->client->createFork($user_name, $user_repo, $this->forkUser);
-            $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUserName, $this->tempToken->token, $this->forkUser, $user_repo);
-            $this->execCommand('git remote add fork ' . $fork_url, false);
-            // Sync the fork.
-            if ($this->execCommand('git push fork ' . $default_branch, false)) {
-                throw new \Exception('Could not push to our own fork.');
-            }
-            $this->deleteTempToken();
+            $this->client->createFork($user_name, $user_repo, $this->forkUser);
         }
         // Now read the lockfile.
         $lockdata = json_decode(file_get_contents($this->tmpDir . '/composer.lock'));
@@ -749,16 +743,13 @@ class CosyComposer
                 $origin = 'fork';
                 if ($this->isPrivate) {
                     $origin = 'origin';
+                    if ($this->execCommand("git push $origin $branch_name --force")) {
+                        throw new GitPushException('Could not push to ' . $branch_name);
+                    }
                 } else {
                     $this->preparePrClient();
-                    $fork_url = sprintf('https://%s:%s@github.com/%s/%s', $this->githubUserName, $this->tempToken->token, $this->forkUser, $user_repo);
-                    $this->execCommand('git remote set-url fork ' . $fork_url, false);
+                    $this->client->forceUpdateBranch($branch_name, $default_base);
                 }
-                if ($this->execCommand("git push $origin $branch_name --force")) {
-                    $this->deleteTempToken();
-                    throw new GitPushException('Could not push to ' . $branch_name);
-                }
-                $this->deleteTempToken();
                 $this->log('Trying to retrieve changelog for ' . $package_name);
                 $changelog = null;
                 try {
@@ -1130,6 +1121,9 @@ class CosyComposer
         return $this->providerFactory->createFromHost($slug, $this->urlArray);
     }
 
+    /**
+     * @return ProviderInterface
+     */
     private function getPrClient()
     {
         if ($this->isPrivate) {
@@ -1142,8 +1136,12 @@ class CosyComposer
     private function preparePrClient()
     {
         if (!$this->isPrivate) {
-            $this->createTempToken();
-            $this->client->authenticate($this->tempToken->token, null);
+            if (!$this->client instanceof PublicGithubWrapper) {
+                $this->client = new PublicGithubWrapper(new Client());
+            }
+            $this->client->setUserToken($this->userToken);
+            $this->client->setUrlFromTokenUrl($this->tokenUrl);
+            $this->client->setProject($this->project);
         }
     }
 }
