@@ -749,6 +749,7 @@ class CosyComposer
                 } else {
                     $this->preparePrClient();
                     $this->client->forceUpdateBranch($branch_name, $default_base);
+                    $this->client->commitNewFiles($this->tmpDir, $default_base, $branch_name, sprintf("Update %s", $package_name));
                 }
                 $this->log('Trying to retrieve changelog for ' . $package_name);
                 $changelog = null;
