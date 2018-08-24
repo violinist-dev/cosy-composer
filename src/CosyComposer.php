@@ -738,8 +738,8 @@ class CosyComposer
                                 'package' => $item->name,
                             ]);
                             continue;
-                      }
-                  }
+                        }
+                    }
                 }
                 $this->log('Successfully ran command composer update for package ' . $package_name);
                 // Clean up the composer.lock file if it was not part of the repo.
