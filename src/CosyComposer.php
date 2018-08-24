@@ -1148,6 +1148,7 @@ class CosyComposer
             return $this->privateClient;
         }
         $this->preparePrClient();
+        $this->client->authenticate($this->userToken, null);
         return $this->client;
     }
 
