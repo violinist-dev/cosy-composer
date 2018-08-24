@@ -729,8 +729,8 @@ class UpdatesTest extends Base
         $c->setGithubAuth('test', 'pass');
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals($fake_pr_url, $output[15]->getMessage());
-        $this->assertEquals(Message::PR_URL, $output[15]->getType());
+        $this->assertEquals($fake_pr_url, $output[16]->getMessage());
+        $this->assertEquals(Message::PR_URL, $output[16]->getType());
         $this->assertEquals(true, $called);
     }
 
