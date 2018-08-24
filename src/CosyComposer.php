@@ -724,6 +724,22 @@ class CosyComposer
                     $this->log('Changing branch because of an unexpected update result: ' . $branch_name);
                     $this->execCommand('git checkout -b ' . $new_branch_name, false);
                     $branch_name = $new_branch_name;
+                    // Check if this new branch name has a pr up-to-date.
+                    if (array_key_exists($branch_name, $prs_named)) {
+                        if (!$default_base) {
+                            $this->log(sprintf('Skipping %s because a pull request already exists', $item->name), Message::PR_EXISTS, [
+                                'package' => $item->name,
+                            ]);
+                            continue;
+                        }
+                        // Is the pr up to date?
+                        if ($prs_named[$branch_name]['base']['sha'] == $default_base) {
+                            $this->log(sprintf('Skipping %s because a pull request already exists', $item->name), Message::PR_EXISTS, [
+                                'package' => $item->name,
+                            ]);
+                            continue;
+                      }
+                  }
                 }
                 $this->log('Successfully ran command composer update for package ' . $package_name);
                 // Clean up the composer.lock file if it was not part of the repo.
