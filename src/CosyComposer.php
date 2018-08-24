@@ -574,7 +574,7 @@ class CosyComposer
         foreach ($data as $delta => $item) {
             $branch_name = $this->createBranchName($item);
             if (in_array($branch_name, $branches_flattened)) {
-              // Is there a PR for this?
+                // Is there a PR for this?
                 if (array_key_exists($branch_name, $prs_named)) {
                     if (!$default_base) {
                         $this->log(sprintf('Skipping %s because a pull request already exists', $item->name), Message::PR_EXISTS, [
