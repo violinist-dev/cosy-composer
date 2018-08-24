@@ -603,6 +603,7 @@ class CosyComposer
         // If the repo is private, we need to push directly to the repo.
         if (!$this->isPrivate) {
             $this->preparePrClient();
+            $this->log('Creating fork to ' . $this->forkUser);
             $this->client->createFork($user_name, $user_repo, $this->forkUser);
         }
         // Now read the lockfile.
