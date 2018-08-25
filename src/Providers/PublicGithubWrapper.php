@@ -104,9 +104,11 @@ class PublicGithubWrapper extends Github
         $plugin = new CookiePlugin($jar);
         $client = new PluginClient(HttpClientDiscovery::find(), [$plugin]);
         $factory = new MessageFactory\GuzzleMessageFactory();
-        $q = http_build_query($data, null, '&');
-        $request = new Request('GET', $this->baseUrl . '/api/github/create_pr?' . $q);
-        $request = $request->withBody(stream_for());
+        $request = new Request('POST', $this->baseUrl . '/api/github/create_pr', [
+            'Content-type' => 'application/json',
+            'Accept' => 'application/json',
+        ]);
+        $request = $request->withBody(stream_for(json_encode($data)));
         $resp = $client->sendRequest($request);
         if ($resp->getStatusCode() != 200) {
             throw new \Exception('Wrong status code on create PR request (' . $resp->getStatusCode() . ').');
