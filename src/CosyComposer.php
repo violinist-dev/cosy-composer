@@ -701,7 +701,8 @@ class CosyComposer
                 // read it for use later.
                 $new_lockdata = json_decode(file_get_contents($this->tmpDir . '/composer.lock'));
                 $post_update_data = $this->getPackageData($package_name, $new_lockdata);
-                if (isset($post_update_data->source) || $post_update_data->source->type == 'git') {
+                $version_to = $post_update_data->version;
+                if (isset($post_update_data->source) && $post_update_data->source->type == 'git') {
                     $version_from = $pre_update_data->source->reference;
                     $version_to = $post_update_data->source->reference;
                 }
