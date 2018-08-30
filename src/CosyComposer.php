@@ -332,7 +332,7 @@ class CosyComposer
             $providers = Slug::getSupportedProviders();
             $providers = array_merge($providers, [$slug_url_obj['host']]);
         }
-        $this->slug = Slug::createFromUrlAndSupportedProvidersl($url, $providers);
+        $this->slug = Slug::createFromUrlAndSupportedProviders($url, $providers);
     }
 
     public function setGithubAuth($user, $pass)
