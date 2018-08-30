@@ -1053,6 +1053,14 @@ class CosyComposer
         $log = ChangeLogData::createFromString($changelog_string);
         // Then assemble the git source.
         $git_url = preg_replace('/.git$/', '', $data->source->url);
+        $repo_parsed = parse_uri($git_url);
+        if (!empty($repo_parsed)) {
+            switch ($repo_parsed['_protocol']) {
+                case 'git@github.com':
+                    $git_url = sprintf('https://github.com/%s', $repo_parsed['path']);
+                    break;
+            }
+        }
         $log->setGitSource($git_url);
         return $log;
     }
