@@ -898,7 +898,7 @@ class CosyComposer
         $update->setName($item->name);
         $update->setCurrentVersion($item->version);
         $update->setNewVersion($post_update_data->version);
-        return $this->messageFactory->getPullRequestTitle($update);
+        return trim($this->messageFactory->getPullRequestTitle($update));
     }
 
   /**
