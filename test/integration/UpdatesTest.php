@@ -929,8 +929,7 @@ class UpdatesTest extends Base
             ->with('a', 'b', [
                 'base' => 'master',
                 'head' => 'drupalcore847848',
-                'title' => 'Update drupal/core from 8.4.7 to 8.4.8
-',
+                'title' => 'Update drupal/core from 8.4.7 to 8.4.8',
                 'body' => 'If you have a decent test suite, and your tests pass, it should be both safe and smart to merge this update.
 
 
