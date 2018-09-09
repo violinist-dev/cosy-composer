@@ -578,14 +578,14 @@ class CosyComposer
         }
         $one_pr_per_dependency = false;
         if (!empty($violinist_config->one_pull_request_per_package)) {
-            $one_pr_per_dependency = true;
+            $one_pr_per_dependency = (bool) $violinist_config->one_pull_request_per_package;
         }
         foreach ($data as $delta => $item) {
             $branch_name = $this->createBranchName($item, $one_pr_per_dependency);
-            if (!$one_pr_per_dependency && in_array($branch_name, $branches_flattened)) {
+            if (in_array($branch_name, $branches_flattened)) {
                 // Is there a PR for this?
                 if (array_key_exists($branch_name, $prs_named)) {
-                    if (!$default_base) {
+                    if (!$default_base && !$one_pr_per_dependency) {
                         $this->log(sprintf('Skipping %s because a pull request already exists', $item->name), Message::PR_EXISTS, [
                             'package' => $item->name,
                         ]);
@@ -593,6 +593,16 @@ class CosyComposer
                     }
                     // Is the pr up to date?
                     if ($prs_named[$branch_name]['base']['sha'] == $default_base) {
+                        // Only update one-per-dependency if the title matches the computed title for the dependency.
+                        if ($one_pr_per_dependency) {
+                            // Create a fake "post-update-data" object.
+                            $fake_post_update = (object) [
+                                'version' => $item->latest,
+                            ];
+                            if ($prs_named[$branch_name]['title'] != $this->createTitle($item, $fake_post_update)) {
+                                continue;
+                            }
+                        }
                         $this->log(sprintf('Skipping %s because a pull request already exists', $item->name), Message::PR_EXISTS, [
                             'package' => $item->name,
                         ]);
