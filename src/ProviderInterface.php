@@ -33,4 +33,6 @@ interface ProviderInterface
      * @return mixed
      */
     public function createPullRequest($user_name, $user_repo, $params);
+
+    public function updatePullRequest($user_name, $user_repo, $id, $params);
 }

@@ -73,6 +73,8 @@ class Gitlab implements ProviderInterface
         $prs_named = [];
         foreach ($prs as $pr) {
             $prs_named[$pr['source_branch']] = [
+                'title' => $pr['title'],
+                'number' => $pr["iid"],
                 'base' => [
                     'sha' => $pr['sha'],
                 ],
@@ -101,6 +103,20 @@ class Gitlab implements ProviderInterface
     public function createPullRequest($user_name, $user_repo, $params)
     {
         return $this->client->api('mr')->create($this->getProjectId($user_name, $user_repo), $params['head'], $params['base'], $params['title'], null, null, $params['body']);
+    }
+
+    public function updatePullRequest($user_name, $user_repo, $id, $params)
+    {
+
+        $gitlab_params = [
+            'source_branch' => $params['head'],
+            'target_branch' => $params['base'],
+            'title' => $params['title'],
+            'assignee_id' => null,
+            'target_project_id' => null,
+            'description' => $params['body'],
+        ];
+        return $this->client->api('mr')->update($this->getProjectId($user_name, $user_repo), $id, $gitlab_params);
     }
 
     protected function getProjectId($user, $repo)

@@ -572,9 +572,17 @@ class CosyComposer
             // Safe to ignore.
             $this->log('Had a runtime exception with the fetching of branches and Prs: ' . $e->getMessage());
         }
+        $violinist_config = (object) [];
+        if (!empty($cdata->extra) && !empty($cdata->extra->violinist)) {
+            $violinist_config = $cdata->extra->violinist;
+        }
+        $one_pr_per_dependency = false;
+        if (!empty($violinist_config->one_pull_request_per_package)) {
+            $one_pr_per_dependency = true;
+        }
         foreach ($data as $delta => $item) {
-            $branch_name = $this->createBranchName($item);
-            if (in_array($branch_name, $branches_flattened)) {
+            $branch_name = $this->createBranchName($item, $one_pr_per_dependency);
+            if (!$one_pr_per_dependency && in_array($branch_name, $branches_flattened)) {
                 // Is there a PR for this?
                 if (array_key_exists($branch_name, $prs_named)) {
                     if (!$default_base) {
@@ -651,7 +659,7 @@ class CosyComposer
                 }
 
                 // Create a new branch.
-                $branch_name = $this->createBranchName($item);
+                $branch_name = $this->createBranchName($item, $one_pr_per_dependency);
                 $this->log('Checking out new branch: ' . $branch_name);
                 $this->execCommand('git checkout -b ' . $branch_name, false);
                 // Make sure we do not have any uncommitted changes.
@@ -785,12 +793,13 @@ class CosyComposer
                     $head = $branch_name;
                 }
                 $body = $this->createBody($item, $post_update_data, $changelog);
-                $pullRequest = $this->getPrClient()->createPullRequest($user_name, $user_repo, [
+                $pr_params = [
                     'base'  => $default_branch,
                     'head'  => $head,
                     'title' => $this->createTitle($item, $post_update_data),
                     'body'  => $body,
-                ]);
+                ];
+                $pullRequest = $this->getPrClient()->createPullRequest($user_name, $user_repo, $pr_params);
                 if (!empty($pullRequest['html_url'])) {
                     $this->log($pullRequest['html_url'], Message::PR_URL, [
                         'package' => $package_name,
@@ -809,6 +818,16 @@ class CosyComposer
             } catch (ValidationFailedException $e) {
                 // @todo: Do some better checking. Could be several things, this.
                 $this->log('Had a problem with creating the pull request: ' . $e->getMessage(), 'error');
+                if ($one_pr_per_dependency && $prs_named[$branch_name] && $prs_named[$branch_name]['title'] != $pr_params['title']) {
+                    $this->log('Will try to update the PR based on settings.');
+                    $this->getPrClient()->updatePullRequest($user_name, $user_repo, $prs_named[$branch_name]['number'], $pr_params);
+                }
+            } catch (\Gitlab\Exception\RuntimeException $e) {
+                $this->log('Had a problem with creating the pull request: ' . $e->getMessage(), 'error');
+                if ($one_pr_per_dependency && $prs_named[$branch_name] && $prs_named[$branch_name]['title'] != $pr_params['title']) {
+                    $this->log('Will try to update the PR based on settings.');
+                    $this->getPrClient()->updatePullRequest($user_name, $user_repo, $prs_named[$branch_name]['number'], $pr_params);
+                }
             } catch (\Exception $e) {
                 // @todo: Should probably handle this in some way.
                 $this->log('Caught an exception: ' . $e->getMessage(), 'error');
@@ -924,8 +943,12 @@ class CosyComposer
      *
      * @return mixed
      */
-    protected function createBranchName($item)
+    protected function createBranchName($item, $one_per_package = false)
     {
+        if ($one_per_package) {
+            // Add a prefix.
+            return 'violinist' . $this->createBranchNameFromVersions($item->name, '', '');
+        }
         return $this->createBranchNameFromVersions($item->name, $item->version, $item->latest);
     }
 

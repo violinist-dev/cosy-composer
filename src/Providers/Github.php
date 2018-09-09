@@ -100,4 +100,9 @@ class Github implements ProviderInterface
     {
         return $this->client->api('pull_request')->create($user_name, $user_repo, $params);
     }
+
+    public function updatePullRequest($user_name, $user_repo, $id, $params)
+    {
+        return $this->client->api('pull_request')->update($user_name, $user_repo, $id, $params);
+    }
 }
