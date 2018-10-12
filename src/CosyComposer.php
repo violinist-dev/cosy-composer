@@ -10,6 +10,7 @@ use eiriksm\CosyComposer\Exceptions\ComposerInstallException;
 use eiriksm\CosyComposer\Exceptions\GitCloneException;
 use eiriksm\CosyComposer\Exceptions\GitPushException;
 use eiriksm\CosyComposer\Exceptions\NotUpdatedException;
+use eiriksm\CosyComposer\Exceptions\OutsideProcessingHoursException;
 use eiriksm\CosyComposer\Providers\PublicGithubWrapper;
 use eiriksm\GitLogFormat\ChangeLogData;
 use eiriksm\ViolinistMessages\ViolinistMessages;
@@ -398,6 +399,39 @@ class CosyComposer
         $this->tempToken = null;
     }
 
+    protected function handleTimeIntervalSetting($composer_json)
+    {
+        if (empty($composer_json->extra) ||
+            empty($composer_json->extra->violinist)) {
+            return;
+        }
+        // Default timezone is UTC.
+        $timezone = new \DateTimeZone('+0000');
+        if (!empty($composer_json->extra->violinist->timezone)) {
+            try {
+                $new_tz = new \DateTimeZone($composer_json->extra->violinist->timezone);
+                $timezone = $new_tz;
+            }
+            catch (\Exception $e) {
+                // Well then the default is used.
+            }
+        }
+        if (!empty($composer_json->extra->violinist->timeframe_disallowed)) {
+            // See if it is disallowed then.
+            $date = new \DateTime('now', $timezone);
+            $hour_parts = explode('-', $composer_json->extra->violinist->timeframe_disallowed);
+            if (count($hour_parts) != 2) {
+                throw new \Exception('Timeframe disallowed is in the wrong format');
+            }
+            $current_hour = $date->format('H');
+            $low_time_object = new \DateTime($hour_parts[0], $timezone);
+            $high_time_object = new \DateTime($hour_parts[1], $timezone);
+            if ($date->format('U') > $low_time_object->format('U') && $date->format('U') < $high_time_object->format('U')) {
+                throw new OutsideProcessingHoursException('Current hour is inside timeframe disallowed');
+            }
+        }
+    }
+
     /**
      * @throws \eiriksm\CosyComposer\Exceptions\ChdirException
      * @throws \eiriksm\CosyComposer\Exceptions\GitCloneException
@@ -465,6 +499,7 @@ class CosyComposer
         if (false == $cdata) {
             throw new \InvalidArgumentException('Invalid composer.json file');
         }
+        $this->handleTimeIntervalSetting($cdata);
         $lock_file = $this->tmpDir . '/composer.lock';
         $lock_file_contents = false;
         if (@file_exists($lock_file)) {
