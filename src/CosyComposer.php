@@ -411,8 +411,7 @@ class CosyComposer
             try {
                 $new_tz = new \DateTimeZone($composer_json->extra->violinist->timezone);
                 $timezone = $new_tz;
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 // Well then the default is used.
             }
         }
