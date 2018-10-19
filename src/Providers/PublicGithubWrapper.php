@@ -109,6 +109,7 @@ class PublicGithubWrapper extends Github
         if (!$json = @json_decode((string) $resp->getBody())) {
             throw new \Exception('No json parsed in the create PR response');
         }
+        return (array) $json;
     }
 
     public function updatePullRequest($user_name, $user_repo, $id, $params)
