@@ -637,9 +637,13 @@ class CosyComposer
                                 continue;
                             }
                         }
-                        $this->log(sprintf('Skipping %s because a pull request already exists', $item->name), Message::PR_EXISTS, [
+                        $context = [
                             'package' => $item->name,
-                        ]);
+                        ];
+                        if (!empty($prs_named[$branch_name]['html_url'])) {
+                            $context['url'] = $prs_named[$branch_name]['html_url'];
+                        }
+                        $this->log(sprintf('Skipping %s because a pull request already exists', $item->name), Message::PR_EXISTS, $context);
                         unset($data[$delta]);
                     }
                 }
