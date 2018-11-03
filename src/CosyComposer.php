@@ -825,6 +825,7 @@ class CosyComposer
                 $origin = 'fork';
                 if ($this->isPrivate) {
                     $origin = 'origin';
+                    // @todo: Make sure we do not push over and over to gitlab. No way to do that currently.
                     if ($this->execCommand("git push $origin $branch_name --force")) {
                         throw new GitPushException('Could not push to ' . $branch_name);
                     }

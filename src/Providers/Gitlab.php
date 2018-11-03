@@ -30,7 +30,7 @@ class Gitlab implements ProviderInterface
 
     public function repoIsPrivate($user, $repo)
     {
-        // Consider all gitlab things private, since we have the API key to do so anyway-
+        // Consider all gitlab things private, since we have the API key to do so anyway.
         return true;
     }
 
