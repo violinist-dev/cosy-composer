@@ -595,9 +595,7 @@ class CosyComposer
         $default_base = null;
         try {
             $branches_flattened = $this->getPrClient()->getBranchesFlattened($branch_user, $user_repo);
-            $this->deleteTempToken();
             $default_base = $this->getPrClient()->getDefaultBase($branch_user, $user_repo, $default_branch);
-            $this->deleteTempToken();
             if ($default_base_upstream = $this->privateClient->getDefaultBase($user_name, $user_repo, $default_branch)) {
                 $default_base = $default_base_upstream;
             }

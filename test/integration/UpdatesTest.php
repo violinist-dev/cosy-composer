@@ -640,10 +640,8 @@ class UpdatesTest extends Base
 
     public function testEndToEndNotPrivate()
     {
-        $c = $this->getMockCosy();
         $dir = '/tmp/' . uniqid();
-        mkdir($dir);
-        $c->setTmpDir($dir);
+        $c = $this->getMockCosy($dir);
         // Create a mock app, that can respond to things.
         $mock_definition = $this->createMock(InputDefinition::class);
         $mock_definition->method('getOptions')
@@ -708,24 +706,6 @@ class UpdatesTest extends Base
         $this->assertEquals(false, $called);
         $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock');
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
-        // Create a fake http client.
-        $mock_200_response = new Response(200, [], '{"token":123}');
-        $mock_204_response = new Response(204);
-        $mock_client = $this->createMock(Client::class);
-        $mock_client->method('sendRequest')
-            ->willReturnOnConsecutiveCalls(
-                $mock_200_response,
-                $mock_204_response,
-                $mock_200_response,
-                $mock_204_response,
-                $mock_200_response,
-                $mock_204_response,
-                $mock_200_response,
-                $mock_204_response,
-                $mock_200_response,
-                $mock_204_response
-            );
-        $c->setHttpClient($mock_client);
         $c->setGithubAuth('test', 'pass');
         $c->run();
         $output = $c->getOutput();

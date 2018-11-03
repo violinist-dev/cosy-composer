@@ -44,36 +44,6 @@ class CosyComposerUnitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('output', $c->getLastStdOut());
     }
 
-    public function testCreateTempTokenNoProject()
-    {
-        $c = $this->getMockCosy();
-        $c->setProject(null);
-        $this->expectExceptionMessage('No project data was found, so no temp token can be generated.');
-        $c->createTempToken();
-    }
-
-    public function testCreateTempTokenNoTokenUrl()
-    {
-        $c = $this->getMockCosy();
-        $c->setTokenUrl(null);
-        $this->expectExceptionMessage('No token URL specified for project');
-        $c->createTempToken();
-    }
-
-    public function testCreateTempTokenBadResponse()
-    {
-        $c = $this->getMockCosy();
-        $mock_418_response = new Response(418, [], '{"token":123}');
-        $mock_client = $this->createMock(Client::class);
-        $mock_client->method('sendRequest')
-            ->willReturnOnConsecutiveCalls(
-                $mock_418_response
-            );
-        $c->setHttpClient($mock_client);
-        $this->expectExceptionMessage('Wrong status code on temp token request (418).');
-        $c->createTempToken();
-    }
-
     /**
      * @dataProvider getComposerJsonVariations
      */
