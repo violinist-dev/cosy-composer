@@ -755,7 +755,16 @@ class CosyComposer
                 }
                 // Clean away the lock file if we are not supposed to use it. But first
                 // read it for use later.
-                $new_lockdata = json_decode(file_get_contents($this->tmpDir . '/composer.lock'));
+                $new_lockdata = @json_decode(@file_get_contents($this->tmpDir . '/composer.lock'));
+                if (!$new_lockdata) {
+                    $message = sprintf('No composer.lock found after updating %s', $package_name);
+                    $this->log($message);
+                    $this->log('This is the stdout:');
+                    $this->log($this->getLastStdOut());
+                    $this->log('This is the stderr:');
+                    $this->log($this->getLastStdErr());
+                    throw new \Exception($message);
+                }
                 $post_update_data = $this->getPackageData($package_name, $new_lockdata);
                 $version_to = $post_update_data->version;
                 if (isset($post_update_data->source) && $post_update_data->source->type == 'git') {
