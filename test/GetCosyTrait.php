@@ -10,7 +10,7 @@ use violinist\ProjectData\ProjectData;
 
 trait GetCosyTrait
 {
-    protected function getMockCosy()
+    protected function getMockCosy($dir = null)
     {
         $app = $this->createMock(Application::class);
         $output = $this->createMock(ArrayOutput::class);
@@ -20,6 +20,10 @@ trait GetCosyTrait
         $p->setNid(123);
         $c->setProject($p);
         $c->setTokenUrl('http://localhost:9988');
+        if ($dir) {
+            mkdir($dir);
+            $c->setTmpDir($dir);
+        }
         return $c;
     }
 }
