@@ -594,12 +594,17 @@ class CosyComposer
         $prs_named = [];
         $default_base = null;
         try {
-            $branches_flattened = $this->getPrClient()->getBranchesFlattened($branch_user, $user_repo);
-            $default_base = $this->getPrClient()->getDefaultBase($branch_user, $user_repo, $default_branch);
             if ($default_base_upstream = $this->privateClient->getDefaultBase($user_name, $user_repo, $default_branch)) {
                 $default_base = $default_base_upstream;
             }
             $prs_named = $this->privateClient->getPrsNamed($user_name, $user_repo);
+            // These can fail if we have not yet created a fork, and the repo is public. That is why we have them at the
+            // end of this try/catch, so we can still know the default base for the original repo, and its pull
+            // requests.
+            if (!$default_base) {
+                $default_base = $this->getPrClient()->getDefaultBase($branch_user, $user_repo, $default_branch);
+            }
+            $branches_flattened = $this->getPrClient()->getBranchesFlattened($branch_user, $user_repo);
         } catch (RuntimeException $e) {
             // Safe to ignore.
             $this->log('Had a runtime exception with the fetching of branches and Prs: ' . $e->getMessage());
