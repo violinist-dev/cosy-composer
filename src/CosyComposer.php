@@ -437,7 +437,6 @@ class CosyComposer
             if (count($hour_parts) != 2) {
                 throw new \Exception('Timeframe disallowed is in the wrong format');
             }
-            $current_hour = $date->format('H');
             $low_time_object = new \DateTime($hour_parts[0], $timezone);
             $high_time_object = new \DateTime($hour_parts[1], $timezone);
             if ($date->format('U') > $low_time_object->format('U') && $date->format('U') < $high_time_object->format('U')) {
