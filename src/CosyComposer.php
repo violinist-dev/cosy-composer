@@ -605,10 +605,10 @@ class CosyComposer
             'packages' => $data,
         ]);
         $this->client = $this->getClient($this->slug);
-        // Get the default branch of the repo.
         $this->privateClient = $this->getClient($this->slug);
         $this->privateClient->authenticate($this->userToken, null);
         $this->isPrivate = $this->privateClient->repoIsPrivate($user_name, $user_repo);
+        // Get the default branch of the repo.
         $default_branch = $this->privateClient->getDefaultBranch($user_name, $user_repo);
         // Try to see if we have already dealt with this (i.e already have a branch for all the updates.
         $branch_user = $this->forkUser;
