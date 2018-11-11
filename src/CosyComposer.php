@@ -157,6 +157,19 @@ class CosyComposer
     private $isPrivate = false;
 
     /**
+     * @var SecurityCheckerFactory
+     */
+    private $checkerFactory;
+
+    /**
+     * @return SecurityCheckerFactory
+     */
+    public function getCheckerFactory()
+    {
+        return $this->checkerFactory;
+    }
+
+    /**
      * @param string $tokenUrl
      */
     public function setTokenUrl($tokenUrl)
@@ -311,6 +324,7 @@ class CosyComposer
         $this->app = $app;
         $this->output = $output;
         $this->executer = $executer;
+        $this->checkerFactory = new SecurityCheckerFactory();
     }
 
     public function setUrl($url = null)
@@ -509,7 +523,7 @@ class CosyComposer
             // And do a quick security check in there as well.
             try {
                 $this->log('Checking for security issues in project.');
-                $checker = new SecurityChecker();
+                $checker = $this->checkerFactory->getChecker();
                 $result = $checker->check($lock_file, 'json');
                 $alerts = json_decode((string) $result, true);
             } catch (\Exception $e) {

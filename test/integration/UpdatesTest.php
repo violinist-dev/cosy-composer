@@ -204,7 +204,7 @@ class UpdatesTest extends Base
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals('Caught an exception: Did not find the requested package (eiriksm/fake-package) in the lockfile. This is probably an error', $output[9]->getMessage());
+        $this->assertEquals('Caught an exception: Did not find the requested package (eiriksm/fake-package) in the lockfile. This is probably an error', $output[10]->getMessage());
         $this->assertEquals(true, $called);
     }
 
@@ -270,7 +270,7 @@ class UpdatesTest extends Base
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals('Package psr/log with the constraint ^1.0 can not be updated to 2.0.1.', $output[9]->getMessage());
+        $this->assertEquals('Package psr/log with the constraint ^1.0 can not be updated to 2.0.1.', $output[10]->getMessage());
         $this->assertEquals(true, $called);
     }
 
@@ -342,7 +342,7 @@ class UpdatesTest extends Base
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals('Caught an exception: Composer update did not complete successfully', $output[13]->getMessage());
+        $this->assertEquals('Caught an exception: Composer update did not complete successfully', $output[14]->getMessage());
         $this->assertEquals(true, $called);
         $this->assertEquals(true, $composer_update_called);
     }
@@ -411,7 +411,7 @@ class UpdatesTest extends Base
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals('psr/log was not updated running composer update', $output[12]->getMessage());
+        $this->assertEquals('psr/log was not updated running composer update', $output[13]->getMessage());
         $this->assertEquals(true, $called);
     }
 
@@ -484,7 +484,7 @@ class UpdatesTest extends Base
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals('Caught an exception: Error committing the composer files. They are probably not changed.', $output[12]->getMessage());
+        $this->assertEquals('Caught an exception: Error committing the composer files. They are probably not changed.', $output[13]->getMessage());
         $this->assertEquals(true, $called);
     }
 
@@ -557,7 +557,7 @@ class UpdatesTest extends Base
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals('Caught an exception: Could not push to psrlog100102', $output[12]->getMessage());
+        $this->assertEquals('Caught an exception: Could not push to psrlog100102', $output[13]->getMessage());
         $this->assertEquals(true, $called);
     }
 
@@ -633,8 +633,8 @@ class UpdatesTest extends Base
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals($fake_pr_url, $output[15]->getMessage());
-        $this->assertEquals(Message::PR_URL, $output[15]->getType());
+        $this->assertEquals($fake_pr_url, $output[16]->getMessage());
+        $this->assertEquals(Message::PR_URL, $output[16]->getType());
         $this->assertEquals(true, $called);
     }
 
@@ -709,8 +709,8 @@ class UpdatesTest extends Base
         $c->setGithubAuth('test', 'pass');
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals($fake_pr_url, $output[16]->getMessage());
-        $this->assertEquals(Message::PR_URL, $output[16]->getType());
+        $this->assertEquals($fake_pr_url, $output[17]->getMessage());
+        $this->assertEquals(Message::PR_URL, $output[17]->getType());
         $this->assertEquals(true, $called);
     }
 
@@ -782,7 +782,7 @@ class UpdatesTest extends Base
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals('Creating pull request from psrlog100102', $output[14]->getMessage());
+        $this->assertEquals('Creating pull request from psrlog100102', $output[15]->getMessage());
         $this->assertEquals(true, $called);
         $this->assertEquals(true, $install_called);
     }
@@ -855,8 +855,8 @@ class UpdatesTest extends Base
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals($fake_pr_url, $output[15]->getMessage());
-        $this->assertEquals(Message::PR_URL, $output[15]->getType());
+        $this->assertEquals($fake_pr_url, $output[16]->getMessage());
+        $this->assertEquals(Message::PR_URL, $output[16]->getType());
         $this->assertEquals(true, $called);
     }
 
@@ -940,7 +940,7 @@ This is an automated pull request from [Violinist](https://violinist.io/): Conti
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals($fake_pr_url, $output[16]->getMessage());
+        $this->assertEquals($fake_pr_url, $output[17]->getMessage());
         $this->assertEquals(true, $called);
     }
 }

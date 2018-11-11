@@ -6,6 +6,7 @@ use Composer\Console\Application;
 use eiriksm\ArrayOutput\ArrayOutput;
 use eiriksm\CosyComposer\CommandExecuter;
 use eiriksm\CosyComposer\CosyComposer;
+use SensioLabs\Security\SecurityChecker;
 use violinist\ProjectData\ProjectData;
 
 trait GetCosyTrait
@@ -24,6 +25,8 @@ trait GetCosyTrait
             mkdir($dir);
             $c->setTmpDir($dir);
         }
+        $mock_checker = $this->createMock(SecurityChecker::class);
+        $c->getCheckerFactory()->setChecker($mock_checker);
         return $c;
     }
 }
