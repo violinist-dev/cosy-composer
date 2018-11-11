@@ -512,8 +512,7 @@ class CosyComposer
                 $checker = new SecurityChecker();
                 $result = $checker->check($lock_file, 'json');
                 $alerts = json_decode((string) $result, true);
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $this->log('Caught exception while looking for security updates:');
                 $this->log($e->getMessage());
             }
