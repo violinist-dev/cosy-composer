@@ -23,6 +23,7 @@ use Github\ResultPager;
 use GuzzleHttp\Psr7\Request;
 use League\Flysystem\Adapter\Local;
 use Psr\Log\LoggerInterface;
+use SensioLabs\Security\SecurityChecker;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -501,9 +502,21 @@ class CosyComposer
         $this->handleTimeIntervalSetting($cdata);
         $lock_file = $this->tmpDir . '/composer.lock';
         $lock_file_contents = false;
+        $alerts = [];
         if (@file_exists($lock_file)) {
             // We might want to know whats in here.
             $lock_file_contents = json_decode(file_get_contents($lock_file));
+            // And do a quick security check in there as well.
+            try {
+                $this->log('Checking for security issues in project.');
+                $checker = new SecurityChecker();
+                $result = $checker->check($lock_file, 'json');
+                $alerts = json_decode((string) $result, true);
+            }
+            catch (\Exception $e) {
+                $this->log('Caught exception while looking for security updates:');
+                $this->log($e->getMessage());
+            }
         }
         $app = $this->app;
         $d = $app->getDefinition();
@@ -636,7 +649,12 @@ class CosyComposer
                             $fake_post_update = (object) [
                                 'version' => $item->latest,
                             ];
-                            if ($prs_named[$branch_name]['title'] != $this->createTitle($item, $fake_post_update)) {
+                            $security_update = false;
+                            $package_name_in_composer_json = self::getComposerJsonName($cdata, $item->name);
+                            if (isset($alerts[$package_name_in_composer_json])) {
+                                $security_update = true;
+                            }
+                            if ($prs_named[$branch_name]['title'] != $this->createTitle($item, $fake_post_update, $security_update)) {
                                 continue;
                             }
                         }
@@ -670,6 +688,7 @@ class CosyComposer
         $lockdata = json_decode(file_get_contents($this->tmpDir . '/composer.lock'));
         foreach ($data as $item) {
             try {
+                $security_update = false;
                 $package_name = $item->name;
                 $pre_update_data = $this->getPackageData($package_name, $lockdata);
                 $version_from = $item->version;
@@ -677,6 +696,9 @@ class CosyComposer
                 // See where this package is.
                 $req_command = 'require';
                 $package_name_in_composer_json = self::getComposerJsonName($cdata, $package_name);
+                if (isset($alerts[$package_name_in_composer_json])) {
+                    $security_update = true;
+                }
                 $lockfile_key = 'require';
                 if (!empty($cdata->{'require-dev'}->{$package_name_in_composer_json})) {
                     $lockfile_key = 'require-dev';
@@ -853,11 +875,11 @@ class CosyComposer
                 if ($this->isPrivate) {
                     $head = $branch_name;
                 }
-                $body = $this->createBody($item, $post_update_data, $changelog);
+                $body = $this->createBody($item, $post_update_data, $changelog, $security_update);
                 $pr_params = [
                     'base'  => $default_branch,
                     'head'  => $head,
-                    'title' => $this->createTitle($item, $post_update_data),
+                    'title' => $this->createTitle($item, $post_update_data, $security_update),
                     'body'  => $body,
                 ];
                 $pullRequest = $this->getPrClient()->createPullRequest($user_name, $user_repo, $pr_params);
@@ -972,12 +994,13 @@ class CosyComposer
    * @return string
    *   A string ready to use.
    */
-    protected function createTitle($item, $post_update_data)
+    protected function createTitle($item, $post_update_data, $security_update = false)
     {
         $update = new ViolinistUpdate();
         $update->setName($item->name);
         $update->setCurrentVersion($item->version);
         $update->setNewVersion($post_update_data->version);
+        $update->setSecurityUpdate($security_update);
         return trim($this->messageFactory->getPullRequestTitle($update));
     }
 
@@ -986,12 +1009,13 @@ class CosyComposer
    *
    * @return string
    */
-    public function createBody($item, $post_update_data, $changelog = null)
+    public function createBody($item, $post_update_data, $changelog = null, $security_update = false)
     {
         $update = new ViolinistUpdate();
         $update->setName($item->name);
         $update->setCurrentVersion($item->version);
         $update->setNewVersion($post_update_data->version);
+        $update->setSecurityUpdate($security_update);
         if ($changelog) {
           /** @var \eiriksm\GitLogFormat\ChangeLogData $changelog */
             $update->setChangelog($changelog->getAsMarkdown());
