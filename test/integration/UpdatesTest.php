@@ -10,9 +10,6 @@ use eiriksm\CosyComposer\ProviderFactory;
 use eiriksm\CosyComposer\Providers\Github;
 use eiriksm\CosyComposer\Providers\PublicGithubWrapper;
 use Github\Exception\RuntimeException;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use Http\Adapter\Guzzle6\Client;
 use Symfony\Component\Console\Input\InputDefinition;
 
 class UpdatesTest extends Base
@@ -138,9 +135,9 @@ class UpdatesTest extends Base
         $this->assertEquals(false, $called);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals(Message::PR_EXISTS, $output[9]->getType());
-        $this->assertEquals('Skipping eiriksm/fake-package because a pull request already exists', $output[9]->getMessage());
-        $this->assertEquals('eiriksm/fake-package', $output[9]->getContext()["package"]);
+        $this->assertEquals(Message::PR_EXISTS, $output[10]->getType());
+        $this->assertEquals('Skipping eiriksm/fake-package because a pull request already exists', $output[10]->getMessage());
+        $this->assertEquals('eiriksm/fake-package', $output[10]->getContext()["package"]);
         $this->assertEquals(true, $called);
     }
 

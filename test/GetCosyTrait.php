@@ -6,8 +6,8 @@ use Composer\Console\Application;
 use eiriksm\ArrayOutput\ArrayOutput;
 use eiriksm\CosyComposer\CommandExecuter;
 use eiriksm\CosyComposer\CosyComposer;
-use SensioLabs\Security\SecurityChecker;
 use violinist\ProjectData\ProjectData;
+use Violinist\SymfonyCloudSecurityChecker\SecurityChecker;
 
 trait GetCosyTrait
 {
