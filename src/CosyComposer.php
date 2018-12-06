@@ -519,16 +519,6 @@ class CosyComposer
         if (@file_exists($lock_file)) {
             // We might want to know whats in here.
             $lock_file_contents = json_decode(file_get_contents($lock_file));
-            // And do a quick security check in there as well.
-            try {
-                $this->log('Checking for security issues in project.');
-                $checker = $this->checkerFactory->getChecker();
-                $result = $checker->check($lock_file, 'json');
-                $alerts = json_decode((string) $result, true);
-            } catch (\Exception $e) {
-                $this->log('Caught exception while looking for security updates:');
-                $this->log($e->getMessage());
-            }
         }
         $app = $this->app;
         $d = $app->getDefinition();
@@ -538,6 +528,19 @@ class CosyComposer
         $app->setDefinition($d);
         $app->setAutoExit(false);
         $this->doComposerInstall();
+        // And do a quick security check in there as well.
+        try {
+            $this->log('Checking for security issues in project.');
+            $checker = $this->checkerFactory->getChecker();
+            $result = $checker->checkDirectory($this->tmpDir);
+            if (count($result)) {
+                $this->log('Found ' . count($result) . ' security advisories for packges installed.');
+                $alerts = $result;
+            }
+        } catch (\Exception $e) {
+            $this->log('Caught exception while looking for security updates:');
+            $this->log($e->getMessage());
+        }
         $i = new ArrayInput([
             'outdated',
             '-d' => $this->getCwd(),
