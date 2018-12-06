@@ -2,7 +2,6 @@
 
 namespace eiriksm\CosyComposer;
 
-
 use Violinist\SymfonyCloudSecurityChecker\SecurityChecker;
 
 class SecurityCheckerFactory
