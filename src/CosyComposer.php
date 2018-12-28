@@ -533,8 +533,8 @@ class CosyComposer
             $this->log('Checking for security issues in project.');
             $checker = $this->checkerFactory->getChecker();
             $result = $checker->checkDirectory($this->tmpDir);
+            $this->log('Found ' . count($result) . ' security advisories for packges installed.');
             if (count($result)) {
-                $this->log('Found ' . count($result) . ' security advisories for packges installed.');
                 $alerts = $result;
             }
         } catch (\Exception $e) {
