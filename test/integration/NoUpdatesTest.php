@@ -140,7 +140,7 @@ class NoUpdatesTest extends Base
         $c->run();
         $this->assertEquals(true, $called);
         $msgs = $c->getOutput();
-        $this->assertEquals('Skipping update of eiriksm/fake-package because it is blacklisted', $msgs[8]->getMessage());
-        $this->assertEquals('No updates found', $msgs[9]->getMessage());
+        $this->assertEquals('Skipping update of eiriksm/fake-package because it is blacklisted', $msgs[9]->getMessage());
+        $this->assertEquals('No updates found', $msgs[10]->getMessage());
     }
 }
