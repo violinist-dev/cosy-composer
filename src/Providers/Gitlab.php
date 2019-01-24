@@ -72,11 +72,18 @@ class Gitlab implements ProviderInterface
         $prs = $pager->fetchAll($api, $method, [$this->getProjectId($user, $repo)]);
         $prs_named = [];
         foreach ($prs as $pr) {
+            if ($pr['state'] != 'opened') {
+                continue;
+            }
+            // Now get the last commits for this branch.
+            $commits = $this->client->api('repo')->commits($this->getProjectId($user, $repo), [
+                'ref_name' => $pr['source_branch'],
+            ]);
             $prs_named[$pr['source_branch']] = [
                 'title' => $pr['title'],
                 'number' => $pr["iid"],
                 'base' => [
-                    'sha' => $pr['sha'],
+                    'sha' => !empty($commits[1]["id"]) ? $commits[1]["id"] : $pr['sha'],
                 ],
             ];
         }
