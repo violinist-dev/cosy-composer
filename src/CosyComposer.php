@@ -537,7 +537,7 @@ class CosyComposer
             if (!$result) {
                 $result = [];
             }
-            $this->log('Found ' . count($result) . ' security advisories for packges installed.');
+            $this->log('Found ' . count($result) . ' security advisories for packages installed');
             if (count($result)) {
                 $alerts = $result;
             }
@@ -1113,7 +1113,7 @@ class CosyComposer
         if ($code = $this->execCommand('COMPOSER_DISCARD_CHANGES=true COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n --no-scripts', false, 1200)) {
             // Other status code than 0.
             $this->log($this->getLastStdOut(), Message::COMMAND);
-            $this->log($this->getLastStdErr(), Message::COMMAND);
+            $this->log($this->getLastStdErr());
             throw new ComposerInstallException('Composer install failed with exit code ' . $code);
         }
 
