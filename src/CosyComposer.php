@@ -788,7 +788,7 @@ class CosyComposer
                     $command = sprintf('COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi %s %s:%s%s %s', $req_command, $package_name, $constraint, $version_to, $with_dep_suffix);
                     $this->execCommand($command, false, 600);
                 } else {
-                    $command = sprintf('COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts %s %s', $package_name, $with_dep_suffix);
+                    $command = sprintf('COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n %s %s', $package_name, $with_dep_suffix);
                     $this->log('Running composer update for package ' . $package_name);
                     // If exit code is not 0, there was a problem.
                     if ($this->execCommand($command, false, 600)) {
@@ -985,7 +985,7 @@ class CosyComposer
     private function cleanUp()
     {
         // Run composer install again, so we can get rid of newly installed updates for next run.
-        $this->execCommand('COMPOSER_DISCARD_CHANGES=true COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n --no-scripts', false, 1200);
+        $this->execCommand('COMPOSER_DISCARD_CHANGES=true COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n', false, 1200);
         $this->chdir('/tmp');
         $this->log('Cleaning up after update check.');
         $this->log('Storing custom composer cache for later');
@@ -1110,7 +1110,7 @@ class CosyComposer
         }
         // @todo: Should probably use composer install command programatically.
         $this->log('Running composer install');
-        if ($code = $this->execCommand('COMPOSER_DISCARD_CHANGES=true COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n --no-scripts', false, 1200)) {
+        if ($code = $this->execCommand('COMPOSER_DISCARD_CHANGES=true COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n', false, 1200)) {
             // Other status code than 0.
             $this->log($this->getLastStdOut(), Message::COMMAND);
             $this->log($this->getLastStdErr());
