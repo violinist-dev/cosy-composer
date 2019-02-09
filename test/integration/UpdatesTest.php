@@ -21,7 +21,7 @@ class UpdatesTest extends Base
 
     private function createExpectedCommandForPackage($package)
     {
-        return "COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts $package --with-dependencies";
+        return "COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n $package --with-dependencies";
     }
 
     public function testUpdatesFoundButProviderDoesNotAuthenticate()
@@ -303,7 +303,7 @@ class UpdatesTest extends Base
             ->will($this->returnCallback(
                 function ($cmd) use (&$called, &$composer_update_called) {
                     $return = 0;
-                    if ($cmd == 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts psr/log --with-dependencies') {
+                    if ($cmd == $this->createExpectedCommandForPackage('psr/log')) {
                         $composer_update_called = true;
                         $return = 1;
                     }
@@ -443,7 +443,8 @@ class UpdatesTest extends Base
             ->will($this->returnCallback(
                 function ($cmd) use (&$called, $dir) {
                     $return = 0;
-                    if ($cmd == 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts psr/log --with-dependencies') {
+                    $command = $this->createExpectedCommandForPackage('psr/log');
+                    if ($cmd == $command) {
                         file_put_contents("$dir/composer.lock", file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock-updated'));
                     }
                     if ($cmd == 'GIT_AUTHOR_NAME="" GIT_AUTHOR_EMAIL="" GIT_COMMITTER_NAME="" GIT_COMMITTER_EMAIL="" git commit composer.* -m "Update psr/log"') {
@@ -516,7 +517,7 @@ class UpdatesTest extends Base
             ->will($this->returnCallback(
                 function ($cmd) use (&$called, $dir) {
                     $return = 0;
-                    if ($cmd == 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts psr/log --with-dependencies') {
+                    if ($cmd == $this->createExpectedCommandForPackage('psr/log')) {
                         file_put_contents("$dir/composer.lock", file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock-updated'));
                     }
                     if ($cmd == 'git push origin psrlog100102 --force') {
@@ -589,7 +590,7 @@ class UpdatesTest extends Base
             ->will($this->returnCallback(
                 function ($cmd) use (&$called, $dir) {
                     $return = 0;
-                    if ($cmd == 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts psr/log --with-dependencies') {
+                    if ($cmd == $this->createExpectedCommandForPackage('psr/log')) {
                         file_put_contents("$dir/composer.lock", file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock-updated'));
                     }
                     if (strpos($cmd, 'rm -rf /tmp/') === 0) {
@@ -664,7 +665,7 @@ class UpdatesTest extends Base
             ->will($this->returnCallback(
                 function ($cmd) use (&$called, $dir) {
                     $return = 0;
-                    if ($cmd == 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts psr/log --with-dependencies') {
+                    if ($cmd == $this->createExpectedCommandForPackage('psr/log')) {
                         file_put_contents("$dir/composer.lock", file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock-updated'));
                     }
                     if (strpos($cmd, 'rm -rf /tmp/') === 0) {
@@ -811,7 +812,7 @@ class UpdatesTest extends Base
         $mock_executer = $this->getMockExecuterWithReturnCallback(
             function ($cmd) use (&$called, $dir) {
                 $return = 0;
-                if ($cmd == 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n --no-scripts psr/log ') {
+                if ($cmd == 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n psr/log ') {
                     file_put_contents("$dir/composer.lock", file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock-updated'));
                 }
                 if (strpos($cmd, 'rm -rf /tmp/') === 0) {
