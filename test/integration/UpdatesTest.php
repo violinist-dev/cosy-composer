@@ -21,7 +21,7 @@ class UpdatesTest extends Base
 
     private function createExpectedCommandForPackage($package)
     {
-        return "COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n $package --with-dependencies";
+        return "composer update -n --no-ansi $package --with-dependencies";
     }
 
     public function testUpdatesFoundButProviderDoesNotAuthenticate()
@@ -339,7 +339,7 @@ class UpdatesTest extends Base
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
         $output = $c->getOutput();
-        $this->assertEquals('Caught an exception: Composer update did not complete successfully', $output[15]->getMessage());
+        $this->assertEquals('Caught an exception: Composer update exited with exit code 1', $output[15]->getMessage());
         $this->assertEquals(true, $called);
         $this->assertEquals(true, $composer_update_called);
     }
@@ -743,7 +743,7 @@ class UpdatesTest extends Base
         $mock_executer->method('executeCommand')
             ->will($this->returnCallback(
                 function ($cmd) use (&$called, &$install_called, $dir) {
-                    if ($cmd == 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi require psr/log:^2.0.1 --update-with-dependencies') {
+                    if ($cmd == 'composer require -n --no-ansi psr/log:2.0.1 --update-with-dependencies') {
                         $install_called = true;
                         file_put_contents("$dir/composer.lock", file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock-updated'));
                     }
@@ -812,7 +812,7 @@ class UpdatesTest extends Base
         $mock_executer = $this->getMockExecuterWithReturnCallback(
             function ($cmd) use (&$called, $dir) {
                 $return = 0;
-                if ($cmd == 'COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n psr/log ') {
+                if ($cmd == 'composer update -n --no-ansi psr/log ') {
                     file_put_contents("$dir/composer.lock", file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock-updated'));
                 }
                 if (strpos($cmd, 'rm -rf /tmp/') === 0) {

@@ -9,9 +9,10 @@ use eiriksm\CosyComposer\Exceptions\ChdirException;
 use eiriksm\CosyComposer\Exceptions\ComposerInstallException;
 use eiriksm\CosyComposer\Exceptions\GitCloneException;
 use eiriksm\CosyComposer\Exceptions\GitPushException;
-use eiriksm\CosyComposer\Exceptions\NotUpdatedException;
 use eiriksm\CosyComposer\Exceptions\OutsideProcessingHoursException;
 use eiriksm\CosyComposer\Providers\PublicGithubWrapper;
+use Violinist\ComposerUpdater\Exception\NotUpdatedException;
+use Violinist\ComposerUpdater\Updater;
 use Violinist\GitLogFormat\ChangeLogData;
 use eiriksm\ViolinistMessages\ViolinistMessages;
 use eiriksm\ViolinistMessages\ViolinistUpdate;
@@ -23,7 +24,6 @@ use Github\ResultPager;
 use GuzzleHttp\Psr7\Request;
 use League\Flysystem\Adapter\Local;
 use Psr\Log\LoggerInterface;
-use SensioLabs\Security\SecurityChecker;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -781,50 +781,22 @@ class CosyComposer
                         $update_with_deps = false;
                     }
                 }
+                $updater = new Updater($this->getCwd(), $package_name);
+                $updater->setProcessFactory($this->executer->getProcessFactory());
+                $cosy_logger = new CosyLogger();
+                $cosy_factory_wrapper = new ProcessFactoryWrapper();
+                $cosy_factory_wrapper->setExecutor($this->executer);
+                $cosy_logger->setLogger($this->getLogger());
+                $updater->setLogger($cosy_logger);
+                $updater->setProcessFactory($cosy_factory_wrapper);
+                $updater->setWithUpdate($update_with_deps);
                 if (!$lock_file_contents || ($should_update_beyond && $can_update_beyond)) {
-                    if ($update_with_deps) {
-                        $with_dep_suffix = '--update-with-dependencies';
-                    }
-                    $command = sprintf('COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi %s %s:%s%s %s', $req_command, $package_name, $constraint, $version_to, $with_dep_suffix);
-                    $this->execCommand($command, false, 600);
+                    $updater->executeRequire($version_to);
                 } else {
-                    $command = sprintf('COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_DISCARD_CHANGES=true composer --no-ansi update -n %s %s', $package_name, $with_dep_suffix);
                     $this->log('Running composer update for package ' . $package_name);
-                    // If exit code is not 0, there was a problem.
-                    if ($this->execCommand($command, false, 600)) {
-                        $this->log('Problem running composer update:');
-                        $this->log($this->getLastStdErr());
-                        throw new \Exception('Composer update did not complete successfully');
-                    }
+                    $updater->executeUpdate();
                 }
-                // Clean away the lock file if we are not supposed to use it. But first
-                // read it for use later.
-                $new_lockdata = @json_decode(@file_get_contents($this->tmpDir . '/composer.lock'));
-                if (!$new_lockdata) {
-                    $message = sprintf('No composer.lock found after updating %s', $package_name);
-                    $this->log($message);
-                    $this->log('This is the stdout:');
-                    $this->log($this->getLastStdOut());
-                    $this->log('This is the stderr:');
-                    $this->log($this->getLastStdErr());
-                    throw new \Exception($message);
-                }
-                $post_update_data = $this->getPackageData($package_name, $new_lockdata);
-                $version_to = $post_update_data->version;
-                if (isset($post_update_data->source) && $post_update_data->source->type == 'git' && isset($pre_update_data->source)) {
-                    $version_from = $pre_update_data->source->reference;
-                    $version_to = $post_update_data->source->reference;
-                }
-                if ($version_to === $version_from) {
-                    // Nothing has happened here. Although that can be alright (like we
-                    // have updated some dependencies of this package) this is not what
-                    // this service does, currently, and also the title of the PR would be
-                    // wrong.
-                    $this->log($this->getLastStdErr(), Message::MESSAGE, [
-                        'package' => $package_name,
-                    ]);
-                    throw new NotUpdatedException('The version installed is still the same after trying to update.');
-                }
+                $post_update_data = $updater->getPostUpdateData();
                 // Now, see if it the update was actually to the version we are expecting.
                 if ($post_update_data->version != $item->latest) {
                     $new_branch_name = $this->createBranchNameFromVersions(
@@ -942,7 +914,7 @@ class CosyComposer
                     $this->log('Will try to update the PR based on settings.');
                     $this->getPrClient()->updatePullRequest($user_name, $user_repo, $prs_named[$branch_name]['number'], $pr_params);
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 // @todo: Should probably handle this in some way.
                 $this->log('Caught an exception: ' . $e->getMessage(), 'error');
             }

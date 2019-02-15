@@ -27,6 +27,14 @@ class CommandExecuter
         $this->processFactory = $factory;
     }
 
+    /**
+     * @return ProcessFactory
+     */
+    public function getProcessFactory()
+    {
+        return $this->processFactory;
+    }
+
     public function executeCommand($command, $log = true, $timeout = 120)
     {
         if ($log) {
