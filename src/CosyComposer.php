@@ -782,7 +782,6 @@ class CosyComposer
                     }
                 }
                 $updater = new Updater($this->getCwd(), $package_name);
-                $updater->setProcessFactory($this->executer->getProcessFactory());
                 $cosy_logger = new CosyLogger();
                 $cosy_factory_wrapper = new ProcessFactoryWrapper();
                 $cosy_factory_wrapper->setExecutor($this->executer);
