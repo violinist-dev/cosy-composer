@@ -162,6 +162,16 @@ class CosyComposer
     private $checkerFactory;
 
     /**
+     * @var ProviderInterface
+     */
+    private $client;
+
+    /**
+     * @var ProviderInterface
+     */
+    private $privateClient;
+
+    /**
      * @return SecurityCheckerFactory
      */
     public function getCheckerFactory()
@@ -593,7 +603,7 @@ class CosyComposer
         }
         if (empty($data)) {
             $this->log('No updates found');
-            $this->cleanup();
+            $this->cleanUp();
             return;
         }
         // Try to log what updates are found.
@@ -691,7 +701,7 @@ class CosyComposer
         }
         if (empty($data)) {
             $this->log('No updates that have not already been pushed.');
-            $this->cleanup();
+            $this->cleanUp();
             return;
         }
 
