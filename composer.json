@@ -22,7 +22,9 @@
         "violinist-dev/project-data": "^1",
         "m4tthumphrey/php-gitlab-api": "^9.10",
         "peterpostmann/parse_uri": "^1.0",
-        "violinist-dev/composer-updater": "dev-master"
+        "violinist-dev/composer-updater": "dev-master",
+        "violinist-dev/process-factory": "^1.0",
+        "symfony/process": "^3"
     },
     "autoload": {
         "psr-4": {"eiriksm\\CosyComposer\\": "src"}
