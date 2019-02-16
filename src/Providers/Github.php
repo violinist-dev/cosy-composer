@@ -11,6 +11,8 @@ class Github implements ProviderInterface
 
     private $cache;
 
+    private $client;
+
     public function __construct(Client $client)
     {
         $this->client = $client;

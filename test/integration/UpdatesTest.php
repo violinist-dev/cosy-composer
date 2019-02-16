@@ -371,10 +371,9 @@ class UpdatesTest extends Base
         file_put_contents($composer_file, $composer_contents);
         $called = false;
         $mock_executer = $this->createMock(CommandExecuter::class);
-        $composer_update_called = false;
         $mock_executer->method('executeCommand')
             ->will($this->returnCallback(
-                function ($cmd) use (&$called, &$composer_update_called) {
+                function ($cmd) use (&$called) {
                     $return = 0;
                     if (strpos($cmd, 'rm -rf /tmp/') === 0) {
                         $called = true;

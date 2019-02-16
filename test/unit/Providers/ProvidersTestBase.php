@@ -12,7 +12,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 
-abstract class ProvidersTestBase extends TestCase
+abstract class ProvidersTestBase extends TestCase implements TestProviderInterface
 {
     protected $authenticateArguments = [];
 

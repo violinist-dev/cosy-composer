@@ -27,17 +27,17 @@ class GitlabProviderTest extends ProvidersTestBase
         $this->assertEquals(true, $provider->repoIsPrivate('testUser', 'testRepo'));
     }
 
-    protected function getProvider(Client $client)
+    public function getProvider($client)
     {
         return new Gitlab($client);
     }
 
-    protected function getMockClient()
+    public function getMockClient()
     {
         return $this->createMock(Client::class);
     }
 
-    protected function getBranchMethod()
+    public function getBranchMethod()
     {
         return 'projects';
     }

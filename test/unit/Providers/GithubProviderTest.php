@@ -157,18 +157,18 @@ class GithubProviderTest extends ProvidersTestBase
         $this->assertEquals($testresponse, $g->updatePullRequest($user, $repo, $id, $params));
     }
 
-    protected function getProvider(Client $client)
+    public function getProvider($client)
     {
         return new Github($client);
     }
 
 
-    protected function getMockClient()
+    public function getMockClient()
     {
         return $this->createMock(Client::class);
     }
 
-    protected function getBranchMethod()
+    public function getBranchMethod()
     {
         return 'repo';
     }
