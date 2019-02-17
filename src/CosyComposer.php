@@ -479,6 +479,8 @@ class CosyComposer
         }
         $hostname = $this->slug->getProvider();
         $url = null;
+        // Make sure we accept the fingerprint of whatever we are cloning.
+        $this->execCommand(sprintf('ssh-keyscan -t rsa,dsa %s >> ~/.ssh/known_hosts', $hostname));
         switch ($hostname) {
             case 'github.com':
                 $this->execCommand(
