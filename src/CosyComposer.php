@@ -62,7 +62,7 @@ class CosyComposer
     private $token;
 
     /**
-     * @var string
+     * @var Slug
      */
     private $slug;
 
