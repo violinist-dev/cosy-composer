@@ -463,6 +463,9 @@ class CosyComposer
      */
     public function run()
     {
+        // Always start by making sure the .ssh directory exists.
+        $directory = sprintf('%s/.ssh', getenv('HOME'));
+        @mkdir($directory, 0700);
         if (!empty($_SERVER['violinist_hostname'])) {
             $this->log(sprintf('Running update check on %s', $_SERVER['violinist_hostname']));
         }
@@ -484,6 +487,15 @@ class CosyComposer
         $url = null;
         // Make sure we accept the fingerprint of whatever we are cloning.
         $this->execCommand(sprintf('ssh-keyscan -t rsa,dsa %s >> ~/.ssh/known_hosts', $hostname));
+        if (!empty($_SERVER['private_key'])) {
+            $this->log('Checking for existing private key');
+            $filename = "$directory/id_rsa";
+            if (!file_exists($filename)) {
+                $this->log('Installing private key');
+                file_put_contents($filename, $_SERVER['private_key']);
+                $this->execCommand(sprintf('chmod 600 %s', $filename), false);
+            }
+        }
         switch ($hostname) {
             case 'github.com':
                 $this->execCommand(
