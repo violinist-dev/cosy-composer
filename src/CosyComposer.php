@@ -62,7 +62,7 @@ class CosyComposer
     private $token;
 
     /**
-     * @var string
+     * @var Slug
      */
     private $slug;
 
@@ -354,8 +354,8 @@ class CosyComposer
             }
         }
         $this->urlArray = $slug_url_obj;
+        $providers = Slug::getSupportedProviders();
         if (!empty($slug_url_obj['host'])) {
-            $providers = Slug::getSupportedProviders();
             $providers = array_merge($providers, [$slug_url_obj['host']]);
         }
         $this->slug = Slug::createFromUrlAndSupportedProviders($url, $providers);
