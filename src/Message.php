@@ -54,7 +54,6 @@ class Message
 
     /**
      * Message constructor.
-     * @param $message
      */
     public function __construct($message, $type = self::MESSAGE)
     {
