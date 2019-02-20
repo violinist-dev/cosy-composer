@@ -931,13 +931,13 @@ class CosyComposer
             } catch (ValidationFailedException $e) {
                 // @todo: Do some better checking. Could be several things, this.
                 $this->log('Had a problem with creating the pull request: ' . $e->getMessage(), 'error');
-                if ($one_pr_per_dependency && $prs_named[$branch_name] && $prs_named[$branch_name]['title'] != $pr_params['title']) {
-                    $this->log('Will try to update the PR based on settings.');
+                if (!empty($prs_named[$branch_name]['title']) && $prs_named[$branch_name]['title'] != $pr_params['title']) {
+                    $this->log('Will try to update the PR.');
                     $this->getPrClient()->updatePullRequest($user_name, $user_repo, $prs_named[$branch_name]['number'], $pr_params);
                 }
             } catch (\Gitlab\Exception\RuntimeException $e) {
                 $this->log('Had a problem with creating the pull request: ' . $e->getMessage(), 'error');
-                if ($prs_named[$branch_name] && $prs_named[$branch_name]['title'] != $pr_params['title']) {
+                if (!empty($prs_named[$branch_name]['title']) && $prs_named[$branch_name]['title'] != $pr_params['title']) {
                     $this->log('Will try to update the PR based on settings.');
                     $this->getPrClient()->updatePullRequest($user_name, $user_repo, $prs_named[$branch_name]['number'], $pr_params);
                 }
