@@ -654,20 +654,21 @@ class CosyComposer
                     }
                     // Is the pr up to date?
                     if ($prs_named[$branch_name]['base']['sha'] == $default_base) {
-                        // Only update one-per-dependency if the title matches the computed title for the dependency.
-                        if ($one_pr_per_dependency) {
-                            // Create a fake "post-update-data" object.
-                            $fake_post_update = (object) [
-                                'version' => $item->latest,
-                            ];
-                            $security_update = false;
-                            $package_name_in_composer_json = self::getComposerJsonName($cdata, $item->name);
-                            if (isset($alerts[$package_name_in_composer_json])) {
-                                $security_update = true;
-                            }
-                            if ($prs_named[$branch_name]['title'] != $this->createTitle($item, $fake_post_update, $security_update)) {
-                                continue;
-                            }
+                        // Create a fake "post-update-data" object.
+                        $fake_post_update = (object) [
+                            'version' => $item->latest,
+                        ];
+                        $security_update = false;
+                        $package_name_in_composer_json = self::getComposerJsonName($cdata, $item->name);
+                        if (isset($alerts[$package_name_in_composer_json])) {
+                            $security_update = true;
+                        }
+                        // If the title does not match, it means either has there arrived a security issue for the
+                        // update (new title), or we are doing "one-per-dependency", and the title should be something
+                        // else with this new update. Either way, we want to continue this.
+                        if ($prs_named[$branch_name]['title'] != $this->createTitle($item, $fake_post_update, $security_update)) {
+                            $this->log(sprintf('Updating the PR of %s since the computed title does not match the title.', $item->name), Message::MESSAGE);
+                            continue;
                         }
                         $context = [
                             'package' => $item->name,
@@ -894,13 +895,13 @@ class CosyComposer
             } catch (ValidationFailedException $e) {
                 // @todo: Do some better checking. Could be several things, this.
                 $this->log('Had a problem with creating the pull request: ' . $e->getMessage(), 'error');
-                if ($one_pr_per_dependency && $prs_named[$branch_name] && $prs_named[$branch_name]['title'] != $pr_params['title']) {
-                    $this->log('Will try to update the PR based on settings.');
+                if (!empty($prs_named[$branch_name]['title']) && $prs_named[$branch_name]['title'] != $pr_params['title']) {
+                    $this->log('Will try to update the PR.');
                     $this->getPrClient()->updatePullRequest($user_name, $user_repo, $prs_named[$branch_name]['number'], $pr_params);
                 }
             } catch (\Gitlab\Exception\RuntimeException $e) {
                 $this->log('Had a problem with creating the pull request: ' . $e->getMessage(), 'error');
-                if ($one_pr_per_dependency && $prs_named[$branch_name] && $prs_named[$branch_name]['title'] != $pr_params['title']) {
+                if (!empty($prs_named[$branch_name]['title']) && $prs_named[$branch_name]['title'] != $pr_params['title']) {
                     $this->log('Will try to update the PR based on settings.');
                     $this->getPrClient()->updatePullRequest($user_name, $user_repo, $prs_named[$branch_name]['number'], $pr_params);
                 }

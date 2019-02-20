@@ -91,7 +91,7 @@ class UpdatesTest extends Base
                 ]
             ]);
         $c->setOutput($mock_output);
-        $composer_contents = '{"require": {"drupal/core": "8.0.0"}}';
+        $composer_contents = '{"require": {"drupal/core": "8.0.0", "eiriksm/fake-package": "^1.0"}}';
         $composer_file = "$dir/composer.json";
         file_put_contents($composer_file, $composer_contents);
         $called = false;
@@ -126,6 +126,7 @@ class UpdatesTest extends Base
                     'base' => [
                         'sha' => $default_sha,
                     ],
+                    'title' => 'Update eiriksm/fake-package from 1.0.0 to 1.0.1',
                 ],
             ]);
         $mock_provider_factory->method('createFromHost')
