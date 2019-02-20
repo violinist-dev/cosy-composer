@@ -800,11 +800,9 @@ class CosyComposer
                         $constraint = '';
                         break;
                 }
-                $with_dep_suffix = '--with-dependencies';
                 $update_with_deps = true;
                 if (!empty($cdata->extra) && !empty($cdata->extra->violinist) && isset($cdata->extra->violinist->update_with_dependencies)) {
                     if (!(bool) $cdata->extra->violinist->update_with_dependencies) {
-                        $with_dep_suffix = '';
                         $update_with_deps = false;
                     }
                 }
@@ -816,6 +814,7 @@ class CosyComposer
                 $updater->setLogger($cosy_logger);
                 $updater->setProcessFactory($cosy_factory_wrapper);
                 $updater->setWithUpdate($update_with_deps);
+                $updater->setConstraint($constraint);
                 if (!$lock_file_contents || ($should_update_beyond && $can_update_beyond)) {
                     $updater->executeRequire($version_to);
                 } else {
