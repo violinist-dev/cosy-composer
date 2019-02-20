@@ -389,41 +389,6 @@ class CosyComposer
         $this->forkUser = $user;
     }
 
-    /**
-     * @throws \Http\Client\Exception
-     */
-    public function createTempToken()
-    {
-        if (empty($this->project)) {
-            throw new \Exception('No project data was found, so no temp token can be generated.');
-        }
-        if (empty($this->tokenUrl)) {
-            throw new \Exception('No token URL specified for project');
-        }
-        $request = new Request('GET', $this->tokenUrl . '/' . $this->project->getNid() . '?token=' . $this->userToken);
-        $resp = $this->getHttpClient()->sendRequest($request);
-        if ($resp->getStatusCode() != 200) {
-            throw new \Exception('Wrong status code on temp token request (' . $resp->getStatusCode() . ').');
-        }
-        if (!$json = @json_decode((string) $resp->getBody())) {
-            throw new \Exception('No json parsed in the temp token response');
-        }
-        $this->tempToken = $json;
-    }
-
-    private function deleteTempToken()
-    {
-        if (!$this->tempToken) {
-            return;
-        }
-        $request = new Request('GET', $this->tokenUrl . '/' . $this->project->getNid() . '?token=' . $this->userToken . '&action=delete');
-        $resp = $this->getHttpClient()->sendRequest($request);
-        if ($resp->getStatusCode() != 204) {
-            throw new \Exception('Wrong status code on temp token delete request.');
-        }
-        $this->tempToken = null;
-    }
-
     protected function handleTimeIntervalSetting($composer_json)
     {
         if (empty($composer_json->extra) ||
