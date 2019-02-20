@@ -702,6 +702,7 @@ class CosyComposer
                         // update (new title), or we are doing "one-per-dependency", and the title should be something
                         // else with this new update. Either way, we want to continue this.
                         if ($prs_named[$branch_name]['title'] != $this->createTitle($item, $fake_post_update, $security_update)) {
+                            $this->log(sprintf('Updating the PR of %s since the computed title does not match the title.', $item->name), Message::MESSAGE);
                             continue;
                         }
                         $context = [
