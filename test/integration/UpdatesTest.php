@@ -14,16 +14,6 @@ use Symfony\Component\Console\Input\InputDefinition;
 
 class UpdatesTest extends Base
 {
-    private function createUpdateJsonFromData($package, $version, $new_version)
-    {
-        return sprintf('{"installed": [{"name": "%s", "version": "%s", "latest": "%s", "latest-status": "semver-safe-update"}]}', $package, $version, $new_version);
-    }
-
-    private function createExpectedCommandForPackage($package)
-    {
-        return "composer update -n --no-ansi $package --with-dependencies";
-    }
-
     public function testUpdatesFoundButProviderDoesNotAuthenticate()
     {
         $c = $this->getMockCosy();
@@ -38,15 +28,9 @@ class UpdatesTest extends Base
         $mock_app->method('getDefinition')
             ->willReturn($mock_definition);
         $c->setApp($mock_app);
-        $mock_output = $this->createMock(ArrayOutput::class);
-        $mock_output->method('fetch')
-            ->willReturn([
-                [
-                    $this->createUpdateJsonFromData('eiriksm/fake-package', '1.0.0', '1.0.1'),
-                ]
-            ]);
+        $mock_output = $this->getMockOutputWithUpdate('eiriksm/fake-package', '1.0.0', '1.0.1');
         $c->setOutput($mock_output);
-        $composer_contents = '{"require": {"drupal/core": "8.0.0"}}';
+        $composer_contents = '{"require": {"eiriksm/fake-package": "1.0.0"}}';
         $composer_file = "$dir/composer.json";
         file_put_contents($composer_file, $composer_contents);
         $called = false;
