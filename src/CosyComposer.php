@@ -788,6 +788,10 @@ class CosyComposer
                     $updater->executeUpdate();
                 }
                 $post_update_data = $updater->getPostUpdateData();
+                if (isset($post_update_data->source) && $post_update_data->source->type == 'git' && isset($pre_update_data->source)) {
+                    $version_from = $pre_update_data->source->reference;
+                    $version_to = $post_update_data->source->reference;
+                }
                 // Now, see if it the update was actually to the version we are expecting.
                 if ($post_update_data->version != $item->latest) {
                     $new_branch_name = $this->createBranchNameFromVersions(
