@@ -9,6 +9,12 @@ use eiriksm\CosyComposer\Providers\Github;
 use eiriksm\CosyComposerTest\GetCosyTrait;
 use eiriksm\CosyComposerTest\integration\Base;
 
+/**
+ * Class Issue90Test.
+ *
+ * Issue 90 was the fact that after we switched the updating to the updater package, the changelogs might be empty,
+ * since we did not read the "after-lock-data" in the runner class.
+ */
 class Issue90Test extends Base
 {
     use GetCosyTrait;
@@ -23,9 +29,7 @@ class Issue90Test extends Base
         $c->setApp($mock_app);
         $mock_output = $this->getMockOutputWithUpdate('psr/log', '1.0.0', '1.0.2');
         $c->setOutput($mock_output);
-        $composer_contents = file_get_contents(__DIR__ . '/../../fixtures/composer-psr-log.json');
-        $composer_file = "$dir/composer.json";
-        file_put_contents($composer_file, $composer_contents);
+        $this->placeComposerContentsFromFixture('composer-psr-log.json', $dir);
         $mock_executer = $this->createMock(CommandExecuter::class);
         $called_one_line_correctly = false;
         $mock_executer->method('executeCommand')

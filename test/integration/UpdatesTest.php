@@ -333,27 +333,14 @@ class UpdatesTest extends Base
     {
         $c = $this->getMockCosy();
         $dir = '/tmp/' . uniqid();
-        mkdir($dir);
-        $c->setTmpDir($dir);
+        $this->setupDirectory($c, $dir);
         // Create a mock app, that can respond to things.
-        $mock_definition = $this->createMock(InputDefinition::class);
-        $mock_definition->method('getOptions')
-            ->willReturn([]);
-        $mock_app = $this->createMock(Application::class);
-        $mock_app->method('getDefinition')
-            ->willReturn($mock_definition);
+        $definition = $this->getMockDefinition();
+        $mock_app = $this->getMockApp($definition);
         $c->setApp($mock_app);
-        $mock_output = $this->createMock(ArrayOutput::class);
-        $mock_output->method('fetch')
-            ->willReturn([
-                [
-                    $this->createUpdateJsonFromData('psr/log', '1.0.0', '1.0.2'),
-                ]
-            ]);
+        $mock_output = $this->getMockOutputWithUpdate('psr/log', '1.0.0', '1.0.2');
         $c->setOutput($mock_output);
-        $composer_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.json');
-        $composer_file = "$dir/composer.json";
-        file_put_contents($composer_file, $composer_contents);
+        $this->placeComposerContentsFromFixture('composer-psr-log.json', $dir);
         $called = false;
         $mock_executer = $this->createMock(CommandExecuter::class);
         $mock_executer->method('executeCommand')

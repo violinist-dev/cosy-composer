@@ -6,6 +6,8 @@ use Composer\Console\Application;
 use eiriksm\ArrayOutput\ArrayOutput;
 use eiriksm\CosyComposer\CommandExecuter;
 use eiriksm\CosyComposer\CosyComposer;
+use eiriksm\CosyComposer\ProviderFactory;
+use eiriksm\CosyComposer\Providers\Github;
 use eiriksm\CosyComposerTest\GetCosyTrait;
 use eiriksm\CosyComposerTest\GetExecuterTrait;
 use PHPUnit\Framework\TestCase;
@@ -24,6 +26,56 @@ abstract class Base extends TestCase
     protected function createUpdateJsonFromData($package, $version, $new_version)
     {
         return sprintf('{"installed": [{"name": "%s", "version": "%s", "latest": "%s", "latest-status": "semver-safe-update"}]}', $package, $version, $new_version);
+    }
+
+    protected function registerProviderFactory($c)
+    {
+        $mock_provider_factory = $this->createMock(ProviderFactory::class);
+        $mock_provider = $this->createMock(Github::class);
+        $mock_provider->method('repoIsPrivate')
+            ->willReturn(true);
+        $mock_provider->method('getDefaultBranch')
+            ->willReturn('master');
+        $mock_provider->method('getBranchesFlattened')
+            ->willReturn([]);
+        $default_sha = 123;
+        $mock_provider->method('getDefaultBase')
+            ->willReturn($default_sha);
+        $mock_provider->method('getPrsNamed')
+            ->willReturn([]);
+        $mock_provider_factory->method('createFromHost')
+            ->willReturn($mock_provider);
+        /** @var CosyComposer $c */
+        $c->setProviderFactory($mock_provider_factory);
+    }
+
+    protected function assertOutputContainsMessage($message, $c)
+    {
+        /** @var CosyComposer $cosy */
+        $cosy = $c;
+        foreach ($cosy->getOutput() as $output_message) {
+            try {
+                $this->assertEquals($message, $output_message->getMessage());
+                $this->assertTrue(true, "Message '$message' was found in the output");
+                return;
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+        $this->fail("Message '$message' was not found in output");
+    }
+
+    protected function placeComposerLockContentsFromFixture($filename, $dir)
+    {
+        $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/' . $filename);
+        file_put_contents("$dir/composer.lock", $composer_lock_contents);
+    }
+
+    protected function placeComposerContentsFromFixture($filename, $dir)
+    {
+        $composer_contents = file_get_contents(__DIR__ . '/../fixtures/' . $filename);
+        $composer_file = "$dir/composer.json";
+        file_put_contents($composer_file, $composer_contents);
     }
 
     protected function createComposerFileFromFixtures($dir, $filename)
