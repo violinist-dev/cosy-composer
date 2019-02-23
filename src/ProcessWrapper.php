@@ -41,9 +41,13 @@ class ProcessWrapper extends Process
 
     public function getErrorOutput()
     {
-        if (!$this->isStarted()) {
-            return '';
-        }
-        return parent::getErrorOutput();
+        $output = $this->executor->getLastOutput();
+        return $output['stderr'];
+    }
+
+    public function getOutput()
+    {
+        $output = $this->executor->getLastOutput();
+        return $output['stdout'];
     }
 }
