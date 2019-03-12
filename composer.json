@@ -24,7 +24,8 @@
         "peterpostmann/parse_uri": "^1.0",
         "violinist-dev/composer-updater": "dev-master",
         "violinist-dev/process-factory": "^1.0",
-        "symfony/process": "^3"
+        "symfony/process": "^3",
+        "violinist-dev/composer-changelog-fetcher": "dev-master"
     },
     "autoload": {
         "psr-4": {"eiriksm\\CosyComposer\\": "src"}
