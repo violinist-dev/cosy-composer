@@ -1135,9 +1135,10 @@ class CosyComposer
      */
     public function retrieveChangeLog($package_name, $lockdata, $version_from, $version_to)
     {
-        $factory = new ProcessFactory();;
-        $retriever = new DependencyRepoRetriever($factory);
-        $fetcher = new ChangelogRetriever($retriever, $factory);
+        $cosy_factory_wrapper = new ProcessFactoryWrapper();
+        $cosy_factory_wrapper->setExecutor($this->executer);
+        $retriever = new DependencyRepoRetriever($cosy_factory_wrapper);
+        $fetcher = new ChangelogRetriever($retriever, $cosy_factory_wrapper);
         return $fetcher->retrieveChangelog($package_name, $lockdata, $version_from, $version_to);
     }
 
