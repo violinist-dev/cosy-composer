@@ -13,6 +13,7 @@ use eiriksm\CosyComposer\Exceptions\OutsideProcessingHoursException;
 use eiriksm\CosyComposer\Providers\PublicGithubWrapper;
 use Violinist\ChangelogFetcher\ChangelogRetriever;
 use Violinist\ChangelogFetcher\DependencyRepoRetriever;
+use Violinist\ComposerLockData\ComposerLockData;
 use Violinist\ComposerUpdater\Exception\NotUpdatedException;
 use Violinist\ComposerUpdater\Updater;
 use Violinist\GitLogFormat\ChangeLogData;
@@ -1017,7 +1018,7 @@ class CosyComposer
         $update->setNewVersion($post_update_data->version);
         $update->setSecurityUpdate($security_update);
         if ($changelog) {
-          /** @var \Violinist\GitLogFormat\ChangeLogData $changelog */
+            /** @var \Violinist\GitLogFormat\ChangeLogData $changelog */
             $update->setChangelog($changelog->getAsMarkdown());
         }
         return $this->messageFactory->getPullRequestBody($update);
@@ -1139,7 +1140,37 @@ class CosyComposer
         $cosy_factory_wrapper->setExecutor($this->executer);
         $retriever = new DependencyRepoRetriever($cosy_factory_wrapper);
         $fetcher = new ChangelogRetriever($retriever, $cosy_factory_wrapper);
-        return $fetcher->retrieveChangelog($package_name, $lockdata, $version_from, $version_to);
+        $log = $fetcher->retrieveChangelog($package_name, $lockdata, $version_from, $version_to);
+        $changelog_string = '';
+        $json = json_decode($log->getAsJson());
+        foreach ($json as $item) {
+            $changelog_string .= sprintf("%s %s\n", $item->hash, $item->message);
+        }
+        if (mb_strlen($changelog_string) > 60000) {
+            // Truncate it to 60K.
+            $changelog_string = mb_substr($changelog_string, 0, 60000);
+            // Then split it into lines.
+            $lines = explode("\n", $changelog_string);
+            // Cut off the last one, since it could be partial.
+            array_pop($lines);
+            // Then append a line saying the changelog was too long.
+            $lines[] = sprintf('%s ...more commits found, but message is too long for PR', $version_to);
+            $changelog_string = implode("\n", $lines);
+        }
+        $log = ChangeLogData::createFromString($changelog_string);
+        $lock_data_obj = new ComposerLockData();
+        $lock_data_obj->setData($lockdata);
+        $data = $lock_data_obj->getPackageData($package_name);
+        $git_url = preg_replace('/.git$/', '', $data->source->url);
+        if (!empty($repo_parsed)) {
+            switch ($repo_parsed['_protocol']) {
+                case 'git@github.com':
+                    $git_url = sprintf('https://github.com/%s', $repo_parsed['path']);
+                    break;
+            }
+        }
+        $log->setGitSource($git_url);
+        return $log;
     }
 
     private function getPackageData($package_name, $lockdata)
