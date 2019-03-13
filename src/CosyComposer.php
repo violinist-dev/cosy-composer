@@ -11,6 +11,9 @@ use eiriksm\CosyComposer\Exceptions\GitCloneException;
 use eiriksm\CosyComposer\Exceptions\GitPushException;
 use eiriksm\CosyComposer\Exceptions\OutsideProcessingHoursException;
 use eiriksm\CosyComposer\Providers\PublicGithubWrapper;
+use Violinist\ChangelogFetcher\ChangelogRetriever;
+use Violinist\ChangelogFetcher\DependencyRepoRetriever;
+use Violinist\ComposerLockData\ComposerLockData;
 use Violinist\ComposerUpdater\Exception\NotUpdatedException;
 use Violinist\ComposerUpdater\Updater;
 use Violinist\GitLogFormat\ChangeLogData;
@@ -1015,7 +1018,7 @@ class CosyComposer
         $update->setNewVersion($post_update_data->version);
         $update->setSecurityUpdate($security_update);
         if ($changelog) {
-          /** @var \Violinist\GitLogFormat\ChangeLogData $changelog */
+            /** @var \Violinist\GitLogFormat\ChangeLogData $changelog */
             $update->setChangelog($changelog->getAsMarkdown());
         }
         return $this->messageFactory->getPullRequestBody($update);
@@ -1133,17 +1136,16 @@ class CosyComposer
      */
     public function retrieveChangeLog($package_name, $lockdata, $version_from, $version_to)
     {
-        $data = $this->getPackageData($package_name, $lockdata);
-        $clone_path = $this->retrieveDependencyRepo($data);
-        // Then try to get the changelog.
-        $command = sprintf('git -C %s log %s..%s --oneline', $clone_path, $version_from, $version_to);
-        $this->execCommand($command, false);
-        $output = $this->executer->getLastOutput();
-        $changelog_string = $output['stdout'];
-        if (empty($changelog_string)) {
-            throw new \Exception('The changelog string was empty for package ' . $package_name);
+        $cosy_factory_wrapper = new ProcessFactoryWrapper();
+        $cosy_factory_wrapper->setExecutor($this->executer);
+        $retriever = new DependencyRepoRetriever($cosy_factory_wrapper);
+        $fetcher = new ChangelogRetriever($retriever, $cosy_factory_wrapper);
+        $log = $fetcher->retrieveChangelog($package_name, $lockdata, $version_from, $version_to);
+        $changelog_string = '';
+        $json = json_decode($log->getAsJson());
+        foreach ($json as $item) {
+            $changelog_string .= sprintf("%s %s\n", $item->hash, $item->message);
         }
-        // If the changelog is too long, truncate it.
         if (mb_strlen($changelog_string) > 60000) {
             // Truncate it to 60K.
             $changelog_string = mb_substr($changelog_string, 0, 60000);
@@ -1155,11 +1157,11 @@ class CosyComposer
             $lines[] = sprintf('%s ...more commits found, but message is too long for PR', $version_to);
             $changelog_string = implode("\n", $lines);
         }
-        // Then split it into lines that makes sense.
         $log = ChangeLogData::createFromString($changelog_string);
-        // Then assemble the git source.
+        $lock_data_obj = new ComposerLockData();
+        $lock_data_obj->setData($lockdata);
+        $data = $lock_data_obj->getPackageData($package_name);
         $git_url = preg_replace('/.git$/', '', $data->source->url);
-        $repo_parsed = parse_uri($git_url);
         if (!empty($repo_parsed)) {
             switch ($repo_parsed['_protocol']) {
                 case 'git@github.com':
@@ -1169,31 +1171,6 @@ class CosyComposer
         }
         $log->setGitSource($git_url);
         return $log;
-    }
-
-    private function retrieveDependencyRepo($data)
-    {
-        // First find the repo source.
-        if (!isset($data->source) || $data->source->type != 'git') {
-            throw new \Exception(sprintf('Unknown source or non-git source found for %s. Aborting.', $data->name));
-        }
-        // We could have this cached in the md5 of the package name.
-        $clone_path = '/tmp/' . md5($data->name);
-        $repo_path = $data->source->url;
-        $repo_parsed = parse_uri($repo_path);
-        if (!empty($repo_parsed)) {
-            switch ($repo_parsed['_protocol']) {
-                case 'git@github.com':
-                    $repo_path = sprintf('https://%s:%s@github.com/%s', $this->userToken, $this->githubPass, $repo_parsed['path']);
-                    break;
-            }
-        }
-        if (!file_exists($clone_path)) {
-            $this->execCommand(sprintf('git clone %s %s', $repo_path, $clone_path), false, 300);
-        } else {
-            $this->execCommand(sprintf('git -C %s pull', $clone_path), false, 300);
-        }
-        return $clone_path;
     }
 
     private function getPackageData($package_name, $lockdata)
