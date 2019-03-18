@@ -833,15 +833,9 @@ class UpdatesTest extends Base
     {
         $c = $this->getMockCosy();
         $dir = '/tmp/' . uniqid();
-        mkdir($dir);
-        $c->setTmpDir($dir);
-        // Create a mock app, that can respond to things.
-        $mock_definition = $this->createMock(InputDefinition::class);
-        $mock_definition->method('getOptions')
-            ->willReturn([]);
-        $mock_app = $this->createMock(Application::class);
-        $mock_app->method('getDefinition')
-            ->willReturn($mock_definition);
+        $this->setupDirectory($c, $dir);
+        $mock_definition = $this->getMockDefinition();
+        $mock_app = $this->getMockApp($mock_definition);
         $c->setApp($mock_app);
         $mock_output = $this->createMock(ArrayOutput::class);
         $mock_output->method('fetch')
@@ -884,7 +878,8 @@ class UpdatesTest extends Base
 
 ***
 This is an automated pull request from [Violinist](https://violinist.io/): Continuously and automatically monitor and update your composer dependencies. Have ideas on how to improve this message? All violinist messages are open-source, and [can be improved here](https://github.com/violinist-dev/violinist-messages).
-'
+',
+                'assignees' => [],
             ])
             ->willReturn([
                 'html_url' => $fake_pr_url,
@@ -908,8 +903,7 @@ This is an automated pull request from [Violinist](https://violinist.io/): Conti
         $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-drupal-847.lock');
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
-        $output = $c->getOutput();
-        $this->assertEquals($fake_pr_url, $output[18]->getMessage());
+        $this->assertOutputContainsMessage($fake_pr_url, $c);
         $this->assertEquals(true, $called);
     }
 }

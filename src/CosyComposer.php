@@ -865,11 +865,18 @@ class CosyComposer
                     $head = $branch_name;
                 }
                 $body = $this->createBody($item, $post_update_data, $changelog, $security_update);
+                $assignees = [];
+                if (!empty($cdata->extra->violinist->assignees)) {
+                    if (is_array($cdata->extra->violinist->assignees)) {
+                        $assignees = $cdata->extra->violinist->assignees;
+                    }
+                }
                 $pr_params = [
                     'base'  => $default_branch,
                     'head'  => $head,
                     'title' => $this->createTitle($item, $post_update_data, $security_update),
                     'body'  => $body,
+                    'assignees' => $assignees,
                 ];
                 $pullRequest = $this->getPrClient()->createPullRequest($user_name, $user_repo, $pr_params);
                 if (!empty($pullRequest['html_url'])) {
