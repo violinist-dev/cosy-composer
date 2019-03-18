@@ -3,6 +3,8 @@
 namespace eiriksm\CosyComposer\Providers;
 
 use eiriksm\CosyComposer\ProviderInterface;
+use Github\Api\Issue;
+use Github\Api\PullRequest;
 use Github\Client;
 use Github\ResultPager;
 
@@ -100,7 +102,23 @@ class Github implements ProviderInterface
 
     public function createPullRequest($user_name, $user_repo, $params)
     {
-        return $this->client->api('pull_request')->create($user_name, $user_repo, $params);
+        /** @var PullRequest $prs */
+        $prs = $this->client->api('pull_request');
+        $data = $prs->create($user_name, $user_repo, $params);
+        if (!empty($params['assignees'])) {
+            // Now try to update it with assignees.
+            try {
+                /** @var Issue $issues */
+                $issues = $this->client->api('issues');
+                $issues->update($user_name, $user_repo, $data['number'], [
+                    'assignees' => $params['assignees'],
+                ]);
+            } catch (\Exception $e) {
+                // Too bad.
+                //  @todo: Should be possible to inject a logger and log this.
+            }
+        }
+        return $data;
     }
 
     public function updatePullRequest($user_name, $user_repo, $id, $params)
