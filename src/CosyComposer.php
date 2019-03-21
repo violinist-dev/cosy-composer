@@ -1146,6 +1146,7 @@ class CosyComposer
         $cosy_factory_wrapper = new ProcessFactoryWrapper();
         $cosy_factory_wrapper->setExecutor($this->executer);
         $retriever = new DependencyRepoRetriever($cosy_factory_wrapper);
+        $retriever->setAuthToken($this->userToken);
         $fetcher = new ChangelogRetriever($retriever, $cosy_factory_wrapper);
         $log = $fetcher->retrieveChangelog($package_name, $lockdata, $version_from, $version_to);
         $changelog_string = '';
