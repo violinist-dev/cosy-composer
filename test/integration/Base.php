@@ -53,16 +53,24 @@ abstract class Base extends TestCase
     {
         /** @var CosyComposer $cosy */
         $cosy = $c;
-        foreach ($cosy->getOutput() as $output_message) {
+        if ($this->findMessage($message, $cosy)) {
+            $this->assertTrue(true, "Message '$message' was found in the output");
+            return;
+        }
+        $this->fail("Message '$message' was not found in output");
+    }
+
+    protected function findMessage($message, CosyComposer $c)
+    {
+        foreach ($c->getOutput() as $output_message) {
             try {
                 $this->assertEquals($message, $output_message->getMessage());
-                $this->assertTrue(true, "Message '$message' was found in the output");
-                return;
+                return $output_message;
             } catch (\Exception $e) {
                 continue;
             }
         }
-        $this->fail("Message '$message' was not found in output");
+        return false;
     }
 
     protected function placeComposerLockContentsFromFixture($filename, $dir)

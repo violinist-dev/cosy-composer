@@ -956,52 +956,27 @@ class CosyComposer
         $this->output = $output;
     }
 
-  /**
-   * Cleans up after the run.
-   */
+    /**
+     * Cleans up after the run.
+     */
     private function cleanUp()
     {
         // Run composer install again, so we can get rid of newly installed updates for next run.
         $this->execCommand('COMPOSER_DISCARD_CHANGES=true COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n', false, 1200);
         $this->chdir('/tmp');
         $this->log('Cleaning up after update check.');
-        $this->log('Storing custom composer cache for later');
-        $this->execCommand(
-            sprintf(
-                'rsync -az --exclude "composer.*" %s/* %s',
-                $this->tmpDir,
-                $this->createCacheDir()
-            ),
-            false,
-            300
-        );
         $this->execCommand('rm -rf ' . $this->tmpDir, false, 300);
     }
 
-  /**
-   * Returns the cache directory, and creates it if necessary.
-   *
-   * @return string
-   */
-    public function createCacheDir()
-    {
-        $dir_name = md5($this->slug->getSlug());
-        $path = sprintf('%s/%s', $this->getCacheDir(), $dir_name);
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
-        return $path;
-    }
-
-  /**
-   * Creates a title for a PR.
-   *
-   * @param object $item
-   *   The item in question.
-   *
-   * @return string
-   *   A string ready to use.
-   */
+    /**
+     * Creates a title for a PR.
+     *
+     * @param object $item
+     *   The item in question.
+     *
+     * @return string
+     *   A string ready to use.
+     */
     protected function createTitle($item, $post_update_data, $security_update = false)
     {
         $update = new ViolinistUpdate();
@@ -1080,11 +1055,6 @@ class CosyComposer
    */
     protected function doComposerInstall()
     {
-      // First copy the custom cache in here.
-        if (file_exists($this->createCacheDir())) {
-            $this->log('Found custom cache. using this for vendor folder.');
-            $this->execCommand(sprintf('rsync -a %s/* %s/', $this->createCacheDir(), $this->tmpDir), false, 300);
-        }
         // @todo: Should probably use composer install command programatically.
         $this->log('Running composer install');
         if ($code = $this->execCommand('COMPOSER_DISCARD_CHANGES=true COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n', false, 1200)) {
