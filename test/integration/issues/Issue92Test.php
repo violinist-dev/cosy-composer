@@ -3,8 +3,6 @@
 namespace eiriksm\CosyComposerTest\integration\issues;
 
 use eiriksm\CosyComposer\CommandExecuter;
-use eiriksm\CosyComposer\ProviderFactory;
-use eiriksm\CosyComposer\Providers\Github;
 use eiriksm\CosyComposerTest\integration\Base;
 
 /**
@@ -37,7 +35,6 @@ class Issue92Test extends Base
                     if ($cmd == $this->createExpectedCommandForPackage('psr/log')) {
                         $current_error_output = "Trying to update\nFailed to update";
                     }
-                    $a = 'b';
                     $return = 0;
                     if (strpos($cmd, 'rm -rf /tmp/') === 0) {
                         $called = true;
