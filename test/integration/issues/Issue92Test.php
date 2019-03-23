@@ -60,10 +60,9 @@ class Issue92Test extends Base
         $this->assertEquals(false, $called);
         $this->placeComposerLockContentsFromFixture('composer-psr-log.lock', $dir);
         $c->run();
-        $output = $c->getOutput();
         $this->assertOutputContainsMessage('Trying to update
 Failed to update', $c);
-        $this->assertEquals('psr/log was not updated running composer update', $output[16]->getMessage());
+        $this->assertOutputContainsMessage('psr/log was not updated running composer update', $c);
         $this->assertEquals(true, $called);
     }
 }
