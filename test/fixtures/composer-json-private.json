@@ -1,0 +1,13 @@
+{
+      "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:eiriksm/private-pack.git"
+        }
+
+    ],
+    "require": {
+        "psr/log": "^1.1",
+            "eirik/private-pack": "dev-master"
+    }
+}
