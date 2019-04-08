@@ -549,6 +549,7 @@ class CosyComposer
         ]);
         $app->run($i, $this->output);
         $raw_data = $this->output->fetch();
+        $data = null;
         foreach ($raw_data as $delta => $item) {
             if (empty($item) || empty($item[0])) {
                 continue;
@@ -570,6 +571,11 @@ class CosyComposer
                 $data = $json_update->installed;
                 break;
             }
+        }
+        if (!is_array($data)) {
+            $this->log('No updates found');
+            $this->cleanUp();
+            return;
         }
         // Remove blacklisted packages.
         if (!empty($cdata->extra) && !empty($cdata->extra->violinist) && !empty($cdata->extra->violinist->blacklist)) {
