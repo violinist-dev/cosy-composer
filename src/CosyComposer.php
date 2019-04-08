@@ -586,6 +586,18 @@ class CosyComposer
                 }
             }
         }
+        foreach ($data as $delta => $item) {
+            // Also unset those that are in an unexpected format. A new thing seen in the wild has been this:
+            // {
+            //    "name": "symfony/css-selector",
+            //    "version": "v2.8.49",
+            //    "description": "Symfony CssSelector Component"
+            // }
+            // They should ideally include a latest version and latest status.
+            if (!isset($item->latest) || !isset($item->{'latest-status'})) {
+                unset($data[$delta]);
+            }
+        }
         if (empty($data)) {
             $this->log('No updates found');
             $this->cleanUp();
