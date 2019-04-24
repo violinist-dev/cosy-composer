@@ -943,6 +943,9 @@ class CosyComposer
             }
             $this->log('Checking out default branch - ' . $default_branch);
             $this->execCommand('git checkout ' . $default_branch, false);
+            // Re-do composer install to make output better, and to make the lock file actually be there for
+            // consecutive updates, if it is a project without it.
+            $this->doComposerInstall();
         }
         // Clean up.
         $this->cleanUp();
