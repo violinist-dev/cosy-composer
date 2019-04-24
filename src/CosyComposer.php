@@ -1161,6 +1161,7 @@ class CosyComposer
         $lock_data_obj->setData($lockdata);
         $data = $lock_data_obj->getPackageData($package_name);
         $git_url = preg_replace('/.git$/', '', $data->source->url);
+        $repo_parsed = parse_uri($git_url);
         if (!empty($repo_parsed)) {
             switch ($repo_parsed['_protocol']) {
                 case 'git@github.com':
