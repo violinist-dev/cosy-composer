@@ -828,11 +828,12 @@ class CosyComposer
                 // This might have cleaned out the auth file, so we re-export it.
                 $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->userToken));
                 $command = sprintf(
-                    'GIT_AUTHOR_NAME="%s" GIT_AUTHOR_EMAIL="%s" GIT_COMMITTER_NAME="%s" GIT_COMMITTER_EMAIL="%s" git commit composer.* -m "Update %s"',
+                    'GIT_AUTHOR_NAME="%s" GIT_AUTHOR_EMAIL="%s" GIT_COMMITTER_NAME="%s" GIT_COMMITTER_EMAIL="%s" git commit %s -m "Update %s"',
                     $this->githubUserName,
                     $this->githubEmail,
                     $this->githubUserName,
                     $this->githubEmail,
+                    $lock_file_contents ? 'composer.json composer.lock' : 'composer.json',
                     $package_name
                 );
                 if ($this->execCommand($command, false)) {
