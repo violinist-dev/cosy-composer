@@ -946,6 +946,9 @@ class CosyComposer
             $this->execCommand('git checkout ' . $default_branch, false);
             // Re-do composer install to make output better, and to make the lock file actually be there for
             // consecutive updates, if it is a project without it.
+            if (!$lock_file_contents) {
+                $this->execCommand('rm composer.lock');
+            }
             $this->doComposerInstall();
         }
         // Clean up.
