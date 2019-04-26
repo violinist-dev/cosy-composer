@@ -146,13 +146,15 @@ class PublicGithubWrapper extends Github
         return $request;
     }
 
-    public function commitNewFiles($tmp_dir, $sha, $branch, $message)
+    public function commitNewFiles($tmp_dir, $sha, $branch, $message, $lock_file_contents)
     {
         // Get the contents of all composer related files.
         $files = [
-            'composer.lock',
             'composer.json',
         ];
+        if ($lock_file_contents) {
+            $files[] = 'composer.lock';
+        }
         $files_with_contents = [];
         foreach ($files as $file) {
             $filename = "$tmp_dir/$file";
