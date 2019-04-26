@@ -418,7 +418,7 @@ class UpdatesTest extends Base
                     if ($cmd == $command) {
                         file_put_contents("$dir/composer.lock", file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock-updated'));
                     }
-                    if ($cmd == 'GIT_AUTHOR_NAME="" GIT_AUTHOR_EMAIL="" GIT_COMMITTER_NAME="" GIT_COMMITTER_EMAIL="" git commit composer.* -m "Update psr/log"') {
+                    if ($cmd == 'GIT_AUTHOR_NAME="" GIT_AUTHOR_EMAIL="" GIT_COMMITTER_NAME="" GIT_COMMITTER_EMAIL="" git commit composer.json composer.lock -m "Update psr/log"') {
                         $return = 1;
                     }
                     if (strpos($cmd, 'rm -rf /tmp/') === 0) {
@@ -884,7 +884,8 @@ class UpdatesTest extends Base
 
 ***
 This is an automated pull request from [Violinist](https://violinist.io/): Continuously and automatically monitor and update your composer dependencies. Have ideas on how to improve this message? All violinist messages are open-source, and [can be improved here](https://github.com/violinist-dev/violinist-messages).
-'
+',
+              'assignees' => []
             ])
             ->willReturn([
                 'html_url' => $fake_pr_url,
