@@ -549,6 +549,7 @@ class CosyComposer
         ]);
         $app->run($i, $this->output);
         $raw_data = $this->output->fetch();
+        $data = null;
         foreach ($raw_data as $delta => $item) {
             if (empty($item) || empty($item[0])) {
                 continue;
@@ -571,6 +572,11 @@ class CosyComposer
                 break;
             }
         }
+        if (!is_array($data)) {
+            $this->log('No updates found');
+            $this->cleanUp();
+            return;
+        }
         // Remove blacklisted packages.
         if (!empty($cdata->extra) && !empty($cdata->extra->violinist) && !empty($cdata->extra->violinist->blacklist)) {
             if (!is_array($cdata->extra->violinist->blacklist)) {
@@ -584,6 +590,18 @@ class CosyComposer
                         unset($data[$delta]);
                     }
                 }
+            }
+        }
+        foreach ($data as $delta => $item) {
+            // Also unset those that are in an unexpected format. A new thing seen in the wild has been this:
+            // {
+            //    "name": "symfony/css-selector",
+            //    "version": "v2.8.49",
+            //    "description": "Symfony CssSelector Component"
+            // }
+            // They should ideally include a latest version and latest status.
+            if (!isset($item->latest) || !isset($item->{'latest-status'})) {
+                unset($data[$delta]);
             }
         }
         if (empty($data)) {
@@ -926,6 +944,9 @@ class CosyComposer
             }
             $this->log('Checking out default branch - ' . $default_branch);
             $this->execCommand('git checkout ' . $default_branch, false);
+            // Re-do composer install to make output better, and to make the lock file actually be there for
+            // consecutive updates, if it is a project without it.
+            $this->doComposerInstall();
         }
         // Clean up.
         $this->cleanUp();
@@ -957,52 +978,27 @@ class CosyComposer
         $this->output = $output;
     }
 
-  /**
-   * Cleans up after the run.
-   */
+    /**
+     * Cleans up after the run.
+     */
     private function cleanUp()
     {
         // Run composer install again, so we can get rid of newly installed updates for next run.
         $this->execCommand('COMPOSER_DISCARD_CHANGES=true COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n', false, 1200);
         $this->chdir('/tmp');
         $this->log('Cleaning up after update check.');
-        $this->log('Storing custom composer cache for later');
-        $this->execCommand(
-            sprintf(
-                'rsync -az --exclude "composer.*" %s/* %s',
-                $this->tmpDir,
-                $this->createCacheDir()
-            ),
-            false,
-            300
-        );
         $this->execCommand('rm -rf ' . $this->tmpDir, false, 300);
     }
 
-  /**
-   * Returns the cache directory, and creates it if necessary.
-   *
-   * @return string
-   */
-    public function createCacheDir()
-    {
-        $dir_name = md5($this->slug->getSlug());
-        $path = sprintf('%s/%s', $this->getCacheDir(), $dir_name);
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
-        return $path;
-    }
-
-  /**
-   * Creates a title for a PR.
-   *
-   * @param object $item
-   *   The item in question.
-   *
-   * @return string
-   *   A string ready to use.
-   */
+    /**
+     * Creates a title for a PR.
+     *
+     * @param object $item
+     *   The item in question.
+     *
+     * @return string
+     *   A string ready to use.
+     */
     protected function createTitle($item, $post_update_data, $security_update = false)
     {
         $update = new ViolinistUpdate();
@@ -1081,11 +1077,6 @@ class CosyComposer
    */
     protected function doComposerInstall()
     {
-      // First copy the custom cache in here.
-        if (file_exists($this->createCacheDir())) {
-            $this->log('Found custom cache. using this for vendor folder.');
-            $this->execCommand(sprintf('rsync -a %s/* %s/', $this->createCacheDir(), $this->tmpDir), false, 300);
-        }
         // @todo: Should probably use composer install command programatically.
         $this->log('Running composer install');
         if ($code = $this->execCommand('COMPOSER_DISCARD_CHANGES=true COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n', false, 1200)) {
@@ -1147,6 +1138,7 @@ class CosyComposer
         $cosy_factory_wrapper = new ProcessFactoryWrapper();
         $cosy_factory_wrapper->setExecutor($this->executer);
         $retriever = new DependencyRepoRetriever($cosy_factory_wrapper);
+        $retriever->setAuthToken($this->userToken);
         $fetcher = new ChangelogRetriever($retriever, $cosy_factory_wrapper);
         $log = $fetcher->retrieveChangelog($package_name, $lockdata, $version_from, $version_to);
         $changelog_string = '';
@@ -1170,6 +1162,7 @@ class CosyComposer
         $lock_data_obj->setData($lockdata);
         $data = $lock_data_obj->getPackageData($package_name);
         $git_url = preg_replace('/.git$/', '', $data->source->url);
+        $repo_parsed = parse_uri($git_url);
         if (!empty($repo_parsed)) {
             switch ($repo_parsed['_protocol']) {
                 case 'git@github.com':

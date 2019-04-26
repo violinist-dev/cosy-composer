@@ -3,8 +3,6 @@
 namespace eiriksm\CosyComposerTest\integration\issues;
 
 use eiriksm\CosyComposer\CommandExecuter;
-use eiriksm\CosyComposer\ProviderFactory;
-use eiriksm\CosyComposer\Providers\Github;
 use eiriksm\CosyComposerTest\integration\Base;
 
 /**
@@ -37,7 +35,6 @@ class Issue92Test extends Base
                     if ($cmd == $this->createExpectedCommandForPackage('psr/log')) {
                         $current_error_output = "Trying to update\nFailed to update";
                     }
-                    $a = 'b';
                     $return = 0;
                     if (strpos($cmd, 'rm -rf /tmp/') === 0) {
                         $called = true;
@@ -60,10 +57,9 @@ class Issue92Test extends Base
         $this->assertEquals(false, $called);
         $this->placeComposerLockContentsFromFixture('composer-psr-log.lock', $dir);
         $c->run();
-        $output = $c->getOutput();
         $this->assertOutputContainsMessage('Trying to update
 Failed to update', $c);
-        $this->assertEquals('psr/log was not updated running composer update', $output[16]->getMessage());
+        $this->assertOutputContainsMessage('psr/log was not updated running composer update', $c);
         $this->assertEquals(true, $called);
     }
 }

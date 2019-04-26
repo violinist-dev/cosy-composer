@@ -119,10 +119,10 @@ class UpdatesTest extends Base
         $c->setProviderFactory($mock_provider_factory);
         $this->assertEquals(false, $called);
         $c->run();
-        $output = $c->getOutput();
-        $this->assertEquals(Message::PR_EXISTS, $output[11]->getType());
-        $this->assertEquals('Skipping eiriksm/fake-package because a pull request already exists', $output[11]->getMessage());
-        $this->assertEquals('eiriksm/fake-package', $output[11]->getContext()["package"]);
+        $message = $this->findMessage('Skipping eiriksm/fake-package because a pull request already exists', $c);
+        $this->assertEquals(Message::PR_EXISTS, $message->getType());
+        $this->assertTrue(!empty($message));
+        $this->assertEquals('eiriksm/fake-package', $message->getContext()["package"]);
         $this->assertEquals(true, $called);
     }
 
@@ -185,8 +185,7 @@ class UpdatesTest extends Base
         $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock');
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
-        $output = $c->getOutput();
-        $this->assertEquals('Caught an exception: Did not find the requested package (eiriksm/fake-package) in the lockfile. This is probably an error', $output[11]->getMessage());
+        $this->assertOutputContainsMessage('Caught an exception: Did not find the requested package (eiriksm/fake-package) in the lockfile. This is probably an error', $c);
         $this->assertEquals(true, $called);
     }
 
@@ -251,8 +250,7 @@ class UpdatesTest extends Base
         $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock');
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
-        $output = $c->getOutput();
-        $this->assertEquals('Package psr/log with the constraint ^1.0 can not be updated to 2.0.1.', $output[11]->getMessage());
+        $this->assertOutputContainsMessage('Package psr/log with the constraint ^1.0 can not be updated to 2.0.1.', $c);
         $this->assertEquals(true, $called);
     }
 
@@ -323,8 +321,7 @@ class UpdatesTest extends Base
         $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock');
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
-        $output = $c->getOutput();
-        $this->assertEquals('Caught an exception: Composer update exited with exit code 1', $output[15]->getMessage());
+        $this->assertOutputContainsMessage('Caught an exception: Composer update exited with exit code 1', $c);
         $this->assertEquals(true, $called);
         $this->assertEquals(true, $composer_update_called);
     }
@@ -378,8 +375,7 @@ class UpdatesTest extends Base
         $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock');
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
-        $output = $c->getOutput();
-        $this->assertEquals('psr/log was not updated running composer update', $output[16]->getMessage());
+        $this->assertOutputContainsMessage('psr/log was not updated running composer update', $c);
         $this->assertEquals(true, $called);
     }
 
@@ -452,8 +448,7 @@ class UpdatesTest extends Base
         $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock');
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
-        $output = $c->getOutput();
-        $this->assertEquals('Caught an exception: Error committing the composer files. They are probably not changed.', $output[14]->getMessage());
+        $this->assertOutputContainsMessage('Caught an exception: Error committing the composer files. They are probably not changed.', $c);
         $this->assertEquals(true, $called);
     }
 
@@ -525,8 +520,7 @@ class UpdatesTest extends Base
         $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock');
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
-        $output = $c->getOutput();
-        $this->assertEquals('Caught an exception: Could not push to psrlog100102', $output[14]->getMessage());
+        $this->assertOutputContainsMessage('Caught an exception: Could not push to psrlog100102', $c);
         $this->assertEquals(true, $called);
     }
 
@@ -601,9 +595,8 @@ class UpdatesTest extends Base
         $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock');
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
-        $output = $c->getOutput();
-        $this->assertEquals($fake_pr_url, $output[17]->getMessage());
-        $this->assertEquals(Message::PR_URL, $output[17]->getType());
+        $this->assertOutputContainsMessage($fake_pr_url, $c);
+        $this->assertEquals(Message::PR_URL, $this->findMessage($fake_pr_url, $c)->getType());
         $this->assertEquals(true, $called);
     }
 
@@ -677,9 +670,8 @@ class UpdatesTest extends Base
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->setGithubAuth('test', 'pass');
         $c->run();
-        $output = $c->getOutput();
-        $this->assertEquals($fake_pr_url, $output[18]->getMessage());
-        $this->assertEquals(Message::PR_URL, $output[18]->getType());
+        $this->assertOutputContainsMessage($fake_pr_url, $c);
+        $this->assertEquals(Message::PR_URL, $this->findMessage($fake_pr_url, $c)->getType());
         $this->assertEquals(true, $called);
     }
 
@@ -750,8 +742,7 @@ class UpdatesTest extends Base
         $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock');
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
-        $output = $c->getOutput();
-        $this->assertEquals('Creating pull request from psrlog100102', $output[16]->getMessage());
+        $this->assertOutputContainsMessage('Creating pull request from psrlog100102', $c);
         $this->assertEquals(true, $called);
         $this->assertEquals(true, $install_called);
     }
@@ -823,9 +814,8 @@ class UpdatesTest extends Base
         $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-psr-log.lock');
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
-        $output = $c->getOutput();
-        $this->assertEquals($fake_pr_url, $output[17]->getMessage());
-        $this->assertEquals(Message::PR_URL, $output[17]->getType());
+        $this->assertOutputContainsMessage($fake_pr_url, $c);
+        $this->assertEquals(Message::PR_URL, $this->findMessage($fake_pr_url, $c)->getType());
         $this->assertEquals(true, $called);
     }
 
@@ -833,15 +823,9 @@ class UpdatesTest extends Base
     {
         $c = $this->getMockCosy();
         $dir = '/tmp/' . uniqid();
-        mkdir($dir);
-        $c->setTmpDir($dir);
-        // Create a mock app, that can respond to things.
-        $mock_definition = $this->createMock(InputDefinition::class);
-        $mock_definition->method('getOptions')
-            ->willReturn([]);
-        $mock_app = $this->createMock(Application::class);
-        $mock_app->method('getDefinition')
-            ->willReturn($mock_definition);
+        $this->setupDirectory($c, $dir);
+        $mock_definition = $this->getMockDefinition();
+        $mock_app = $this->getMockApp($mock_definition);
         $c->setApp($mock_app);
         $mock_output = $this->createMock(ArrayOutput::class);
         $mock_output->method('fetch')
@@ -885,7 +869,7 @@ class UpdatesTest extends Base
 ***
 This is an automated pull request from [Violinist](https://violinist.io/): Continuously and automatically monitor and update your composer dependencies. Have ideas on how to improve this message? All violinist messages are open-source, and [can be improved here](https://github.com/violinist-dev/violinist-messages).
 ',
-              'assignees' => []
+                'assignees' => [],
             ])
             ->willReturn([
                 'html_url' => $fake_pr_url,
@@ -909,8 +893,7 @@ This is an automated pull request from [Violinist](https://violinist.io/): Conti
         $composer_lock_contents = file_get_contents(__DIR__ . '/../fixtures/composer-drupal-847.lock');
         file_put_contents("$dir/composer.lock", $composer_lock_contents);
         $c->run();
-        $output = $c->getOutput();
-        $this->assertEquals($fake_pr_url, $output[18]->getMessage());
+        $this->assertOutputContainsMessage($fake_pr_url, $c);
         $this->assertEquals(true, $called);
     }
 }
