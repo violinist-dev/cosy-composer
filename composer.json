@@ -25,7 +25,8 @@
         "violinist-dev/composer-updater": "dev-master",
         "violinist-dev/process-factory": "^1.0",
         "symfony/process": "^3",
-        "violinist-dev/composer-changelog-fetcher": "dev-master"
+        "violinist-dev/composer-changelog-fetcher": "dev-master",
+        "violinist-dev/violinist-config": "dev-master"
     },
     "autoload": {
         "psr-4": {"eiriksm\\CosyComposer\\": "src"}
