@@ -19,13 +19,14 @@
         "wa72/simplelogger": "^1.0",
         "league/flysystem": "^1.0",
         "eiriksm/symfony-console-array-output": "^1.0",
-        "violinist-dev/project-data": "^1",
+        "violinist-dev/project-data": "^1.1.0",
         "m4tthumphrey/php-gitlab-api": "^9.10",
         "peterpostmann/parse_uri": "^1.0",
         "violinist-dev/composer-updater": "dev-master",
         "violinist-dev/process-factory": "^1.0",
         "symfony/process": "^3",
-        "violinist-dev/composer-changelog-fetcher": "dev-master"
+        "violinist-dev/composer-changelog-fetcher": "dev-master",
+        "violinist-dev/violinist-config": "dev-master"
     },
     "autoload": {
         "psr-4": {"eiriksm\\CosyComposer\\": "src"}
@@ -36,7 +37,7 @@
         }
     },
     "scripts": {
-        "test": "@composer lint && phpunit && phpstan analyse src test",
+        "test": "@composer lint && phpunit && phpstan analyse src test --level=1",
         "lint": "phpcs -p -n"
     }
 }
