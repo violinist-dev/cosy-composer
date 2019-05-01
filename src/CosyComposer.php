@@ -730,9 +730,9 @@ class CosyComposer
         // Now read the lockfile.
         $lockdata = json_decode(file_get_contents($this->tmpDir . '/composer.lock'));
         foreach ($data as $item) {
+            $security_update = false;
+            $package_name = $item->name;
             try {
-                $security_update = false;
-                $package_name = $item->name;
                 $pre_update_data = $this->getPackageData($package_name, $lockdata);
                 $version_from = $item->version;
                 $version_to = $item->latest;
@@ -788,6 +788,7 @@ class CosyComposer
                 $version = (string) $req_item;
                 // @todo: This is not nearly something that covers the world of constraints. Pobably possible to use
                 // something from composer itself here.
+                $constraint = '';
                 if (!empty($version[0])) {
                     switch ($version[0]) {
                         case '^':
@@ -959,13 +960,13 @@ class CosyComposer
             } catch (ValidationFailedException $e) {
                 // @todo: Do some better checking. Could be several things, this.
                 $this->log('Had a problem with creating the pull request: ' . $e->getMessage(), 'error');
-                if (!empty($prs_named[$branch_name]['title']) && $prs_named[$branch_name]['title'] != $pr_params['title']) {
+                if (isset($branch_name) && isset($pr_params) && !empty($prs_named[$branch_name]['title']) && $prs_named[$branch_name]['title'] != $pr_params['title']) {
                     $this->log('Will try to update the PR.');
                     $this->getPrClient()->updatePullRequest($user_name, $user_repo, $prs_named[$branch_name]['number'], $pr_params);
                 }
             } catch (\Gitlab\Exception\RuntimeException $e) {
                 $this->log('Had a problem with creating the pull request: ' . $e->getMessage(), 'error');
-                if (!empty($prs_named[$branch_name]['title']) && $prs_named[$branch_name]['title'] != $pr_params['title']) {
+                if (isset($branch_name) && isset($pr_params) && !empty($prs_named[$branch_name]['title']) && $prs_named[$branch_name]['title'] != $pr_params['title']) {
                     $this->log('Will try to update the PR based on settings.');
                     $this->getPrClient()->updatePullRequest($user_name, $user_repo, $prs_named[$branch_name]['number'], $pr_params);
                 }
