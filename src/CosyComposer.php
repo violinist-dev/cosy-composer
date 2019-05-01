@@ -16,6 +16,7 @@ use Violinist\ChangelogFetcher\DependencyRepoRetriever;
 use Violinist\ComposerLockData\ComposerLockData;
 use Violinist\ComposerUpdater\Exception\NotUpdatedException;
 use Violinist\ComposerUpdater\Updater;
+use Violinist\Config\Config;
 use Violinist\GitLogFormat\ChangeLogData;
 use eiriksm\ViolinistMessages\ViolinistMessages;
 use eiriksm\ViolinistMessages\ViolinistUpdate;
@@ -506,6 +507,7 @@ class CosyComposer
         if (false == $cdata) {
             throw new \InvalidArgumentException('Invalid composer.json file');
         }
+        $config = Config::createFromComposerData($cdata);
         $this->handleTimeIntervalSetting($cdata);
         $lock_file = $this->tmpDir . '/composer.lock';
         $lock_file_contents = false;
@@ -588,6 +590,15 @@ class CosyComposer
                         ]);
                         unset($data[$delta]);
                     }
+                }
+            }
+        }
+        // Remove dev dependencies, if indicated.
+        if (!$config->shouldUpdateDevDependencies()) {
+            foreach ($data as $delta => $item) {
+                $cname = self::getComposerJsonName($cdata, $item->name, $this->tmpDir);
+                if (isset($cdata->{'require-dev'}->{$cname})) {
+                    unset($data[$delta]);
                 }
             }
         }
