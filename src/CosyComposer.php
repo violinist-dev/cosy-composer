@@ -679,7 +679,7 @@ class CosyComposer
                             'version' => $item->latest,
                         ];
                         $security_update = false;
-                        $package_name_in_composer_json = self::getComposerJsonName($cdata, $item->name);
+                        $package_name_in_composer_json = self::getComposerJsonName($cdata, $item->name, $this->tmpDir);
                         if (isset($alerts[$package_name_in_composer_json])) {
                             $security_update = true;
                         }
@@ -727,17 +727,21 @@ class CosyComposer
                 $version_to = $item->latest;
                 // See where this package is.
                 $req_command = 'require';
-                $package_name_in_composer_json = self::getComposerJsonName($cdata, $package_name);
+                $package_name_in_composer_json = self::getComposerJsonName($cdata, $package_name, $this->tmpDir);
                 if (isset($alerts[$package_name_in_composer_json])) {
                     $security_update = true;
                 }
                 $lockfile_key = 'require';
+                $req_item = '';
                 if (!empty($cdata->{'require-dev'}->{$package_name_in_composer_json})) {
                     $lockfile_key = 'require-dev';
                     $req_command = 'require --dev';
                     $req_item = $cdata->{'require-dev'}->{$package_name_in_composer_json};
                 } else {
-                    $req_item = $cdata->{'require'}->{$package_name_in_composer_json};
+                    // @todo: Support getting req item from a merge plugin as well.
+                    if (isset($cdata->{'require'}->{$package_name_in_composer_json})) {
+                        $req_item = $cdata->{'require'}->{$package_name_in_composer_json};
+                    }
                 }
                 $can_update_beyond = true;
                 $should_update_beyond = false;
@@ -1212,7 +1216,7 @@ class CosyComposer
         return $lockdata->{$lockfile_key}[$key];
     }
 
-    public static function getComposerJsonName($cdata, $name)
+    public static function getComposerJsonName($cdata, $name, $tmp_dir)
     {
         if (!empty($cdata->{'require-dev'}->{$name})) {
             return $name;
@@ -1233,6 +1237,37 @@ class CosyComposer
             foreach ($cdata->{$type} as $package => $version) {
                 if (strtolower($package) == strtolower($name)) {
                     return $package;
+                }
+            }
+        }
+        if (!empty($cdata->extra->{"merge-plugin"})) {
+            $keys = [
+                'include',
+                'require'
+            ];
+            foreach ($keys as $key) {
+                if (isset($cdata->extra->{"merge-plugin"}->{$key})) {
+                    foreach ($cdata->extra->{"merge-plugin"}->{$key} as $extra_json) {
+                        $files = glob(sprintf('%s/%s', $tmp_dir, $extra_json));
+                        if (!$files) {
+                            continue;
+                        }
+                        foreach ($files as $file) {
+                            $contents = @file_get_contents($file);
+                            if (!$contents) {
+                                continue;
+                            }
+                            $json = @json_decode($contents);
+                            if (!$json) {
+                                continue;
+                            }
+                            try {
+                                return self::getComposerJsonName($json, $name, $tmp_dir);
+                            } catch (\Exception $e) {
+                              // Fine.
+                            }
+                        }
+                    }
                 }
             }
         }
