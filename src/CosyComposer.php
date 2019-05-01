@@ -138,7 +138,6 @@ class CosyComposer
      */
     protected $project;
 
-
     /**
      * @var \Http\Adapter\Guzzle6\Client
      */
@@ -889,6 +888,21 @@ class CosyComposer
                     if (is_array($cdata->extra->violinist->assignees)) {
                         $assignees = $cdata->extra->violinist->assignees;
                     }
+                }
+                $assignees_allowed_roles = [
+                    'agency',
+                    'enterprise',
+                ];
+                $assignees_allowed = false;
+                if ($this->project && $this->project->getRoles()) {
+                    foreach ($this->project->getRoles() as $role) {
+                        if (in_array($role, $assignees_allowed_roles)) {
+                            $assignees_allowed = true;
+                        }
+                    }
+                }
+                if (!$assignees_allowed) {
+                    $assignees = [];
                 }
                 $pr_params = [
                     'base'  => $default_branch,
