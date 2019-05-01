@@ -777,18 +777,20 @@ class CosyComposer
                 $version = (string) $req_item;
                 // @todo: This is not nearly something that covers the world of constraints. Pobably possible to use
                 // something from composer itself here.
-                switch ($version[0]) {
-                    case '^':
-                        $constraint = '^';
-                        break;
+                if (!empty($version[0])) {
+                    switch ($version[0]) {
+                        case '^':
+                            $constraint = '^';
+                            break;
 
-                    case '~':
-                        $constraint = '~';
-                        break;
+                        case '~':
+                            $constraint = '~';
+                            break;
 
-                    default:
-                        $constraint = '';
-                        break;
+                        default:
+                            $constraint = '';
+                            break;
+                    }
                 }
                 $update_with_deps = true;
                 if (!empty($cdata->extra) && !empty($cdata->extra->violinist) && isset($cdata->extra->violinist->update_with_dependencies)) {
