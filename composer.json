@@ -19,7 +19,7 @@
         "wa72/simplelogger": "^1.0",
         "league/flysystem": "^1.0",
         "eiriksm/symfony-console-array-output": "^1.0",
-        "violinist-dev/project-data": "^1",
+        "violinist-dev/project-data": "^1.1.0",
         "m4tthumphrey/php-gitlab-api": "^9.10",
         "peterpostmann/parse_uri": "^1.0",
         "violinist-dev/composer-updater": "dev-master",
