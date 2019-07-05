@@ -113,12 +113,16 @@ class Gitlab implements ProviderInterface
         /** @var MergeRequests $mr */
         $mr = $this->client->api('mr');
         $assignee = null;
-        if (!empty($params['assignees'][0])) {
-            $assignee = $params['assignees'][0];
-        }
         $data = $mr->create($this->getProjectId($user_name, $user_repo), $params['head'], $params['base'], $params['title'], $assignee, null, $params['body']);
         if (!empty($data['web_url'])) {
             $data['html_url'] = $data['web_url'];
+        }
+        // Try to update with assignees.
+        if (!empty($params['assignees'])) {
+            $new_data = [
+                'assignee_ids' => $params['assignees'],
+            ];
+            $mr->update($this->getProjectId($user_name, $user_repo), $data["iid"], $new_data);
         }
         return $data;
     }
