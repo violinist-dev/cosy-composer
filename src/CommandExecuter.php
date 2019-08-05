@@ -32,7 +32,7 @@ class CommandExecuter
         if ($log) {
             $this->logger->log('info', new Message('Creating command ' . $command, Message::COMMAND));
         }
-        $process = $this->processFactory->getProcess($command, $this->getCwd());
+        $process = $this->processFactory->getProcess($command, $this->getCwd(), $this->getEnv());
         $process->setTimeout($timeout);
         $process->run();
         $this->output[] = [
@@ -46,6 +46,14 @@ class CommandExecuter
     {
         $last_index = count($this->output) - 1;
         return $this->output[$last_index];
+    }
+
+    protected function getEnv()
+    {
+        return [
+            'COMPOSER_DISCARD_CHANGES' => 'true',
+            'COMPOSER_ALLOW_SUPERUSER' => 'true',
+        ];
     }
 
     /**
