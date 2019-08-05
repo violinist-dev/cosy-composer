@@ -39,7 +39,16 @@ use function peterpostmann\uri\parse_uri;
 
 class CosyComposer
 {
+    const UPDATE_ALL = 'update_all';
+
+    const UPDATE_INDIVIDUAL = 'update_individual';
+
     private $urlArray;
+
+    /**
+     * @var bool|string
+     */
+    private $lockFileContents;
 
     /**
      * @var ProviderFactory
@@ -534,6 +543,7 @@ class CosyComposer
             // We might want to know whats in here.
             $lock_file_contents = json_decode(file_get_contents($lock_file));
         }
+        $this->lockFileContents = $lock_file_contents;
         $app = $this->app;
         $d = $app->getDefinition();
         $opts = $d->getOptions();
@@ -765,6 +775,51 @@ class CosyComposer
         }
         // Now read the lockfile.
         $lockdata = json_decode(file_get_contents($this->tmpDir . '/composer.lock'));
+        $update_type = $this->project && $this->project->shouldUpdateAll() ? self::UPDATE_ALL : self::UPDATE_INDIVIDUAL;
+        switch ($update_type) {
+            case self::UPDATE_INDIVIDUAL:
+                $this->handleIndividualUpdates($data, $lockdata, $cdata, $one_pr_per_dependency, $lock_file_contents, $prs_named, $default_base, $hostname, $default_branch, $user_name, $user_repo);
+                break;
+
+            case self::UPDATE_ALL:
+                $this->handleUpdateAll();
+                break;
+        }
+        // Clean up.
+        $this->cleanUp();
+    }
+
+    protected function handleUpdateAll()
+    {
+        try {
+            $this->execCommand('composer update');
+            $this->commitFiles('all dependencies');
+        }
+        catch (\Throwable $e) {
+            $this->log('Caught exception while running update all');
+        }
+    }
+
+    protected function commitFiles($package_name)
+    {
+        // Clean up the composer.lock file if it was not part of the repo.
+        $this->execCommand('git clean -f composer.*');
+        $command = sprintf(
+            'GIT_AUTHOR_NAME="%s" GIT_AUTHOR_EMAIL="%s" GIT_COMMITTER_NAME="%s" GIT_COMMITTER_EMAIL="%s" git commit %s -m "Update %s"',
+            $this->githubUserName,
+            $this->githubEmail,
+            $this->githubUserName,
+            $this->githubEmail,
+            $this->lockFileContents ? 'composer.json composer.lock' : 'composer.json',
+            $package_name
+        );
+        if ($this->execCommand($command, false)) {
+            throw new \Exception('Error committing the composer files. They are probably not changed.');
+        }
+    }
+
+    protected function handleIndividualUpdates($data, $lockdata, $cdata, $one_pr_per_dependency, $lock_file_contents, $prs_named, $default_base, $hostname, $default_branch, $user_name, $user_repo)
+    {
         foreach ($data as $item) {
             $security_update = false;
             $package_name = $item->name;
