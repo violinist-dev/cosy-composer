@@ -794,8 +794,7 @@ class CosyComposer
         try {
             $this->execCommand('composer update');
             $this->commitFiles('all dependencies');
-        }
-        catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             $this->log('Caught exception while running update all');
         }
     }
