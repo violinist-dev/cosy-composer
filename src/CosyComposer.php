@@ -1048,7 +1048,9 @@ class CosyComposer
                 }
             } catch (\Throwable $e) {
                 // @todo: Should probably handle this in some way.
-                $this->log('Caught an exception: ' . $e->getMessage(), 'error');
+                $this->log('Caught an exception: ' . $e->getMessage(), 'error', [
+                    'package' => $package_name,
+                ]);
             }
             $this->log('Checking out default branch - ' . $default_branch);
             $this->execCommand('git checkout ' . $default_branch, false);
