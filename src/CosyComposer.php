@@ -775,7 +775,7 @@ class CosyComposer
         }
         // Now read the lockfile.
         $lockdata = json_decode(file_get_contents($this->tmpDir . '/composer.lock'));
-        $update_type = $this->project && $this->project->shouldUpdateAll() ? self::UPDATE_ALL : self::UPDATE_INDIVIDUAL;
+        $update_type = self::UPDATE_INDIVIDUAL;
         switch ($update_type) {
             case self::UPDATE_INDIVIDUAL:
                 $this->handleIndividualUpdates($data, $lockdata, $cdata, $one_pr_per_dependency, $lock_file_contents, $prs_named, $default_base, $hostname, $default_branch, $user_name, $user_repo);
