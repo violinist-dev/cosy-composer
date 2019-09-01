@@ -1052,7 +1052,6 @@ class CosyComposer
                     'type' => 'exit_code_output',
                     'package' => $package_name,
                 ]);
-
             } catch (\Throwable $e) {
                 // @todo: Should probably handle this in some way.
                 $this->log('Caught an exception: ' . $e->getMessage(), 'error', [
