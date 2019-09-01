@@ -15,6 +15,7 @@ use eiriksm\CosyComposer\Providers\PublicGithubWrapper;
 use Violinist\ChangelogFetcher\ChangelogRetriever;
 use Violinist\ChangelogFetcher\DependencyRepoRetriever;
 use Violinist\ComposerLockData\ComposerLockData;
+use Violinist\ComposerUpdater\Exception\ComposerUpdateProcessFailedException;
 use Violinist\ComposerUpdater\Exception\NotUpdatedException;
 use Violinist\ComposerUpdater\Updater;
 use Violinist\Config\Config;
@@ -1046,6 +1047,12 @@ class CosyComposer
                     $this->log('Will try to update the PR based on settings.');
                     $this->getPrClient()->updatePullRequest($user_name, $user_repo, $prs_named[$branch_name]['number'], $pr_params);
                 }
+            } catch (ComposerUpdateProcessFailedException $e) {
+                $this->log('Caught an exception: ' . $e->getMessage(), 'error');
+                $this->log($e->getErrorOutput(), Message::COMMAND, [
+                    'type' => 'exit_code_output',
+                    'package' => $package_name,
+                ]);
             } catch (\Throwable $e) {
                 // @todo: Should probably handle this in some way.
                 $this->log('Caught an exception: ' . $e->getMessage(), 'error', [
