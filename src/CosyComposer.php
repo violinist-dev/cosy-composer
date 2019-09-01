@@ -1048,6 +1048,7 @@ class CosyComposer
                     $this->getPrClient()->updatePullRequest($user_name, $user_repo, $prs_named[$branch_name]['number'], $pr_params);
                 }
             } catch (ComposerUpdateProcessFailedException $e) {
+                $this->log('Caught an exception: ' . $e->getMessage(), 'error');
                 $this->log($e->getErrorOutput(), Message::COMMAND, [
                     'type' => 'exit_code_output',
                     'package' => $package_name,
