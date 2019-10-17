@@ -1061,12 +1061,18 @@ class CosyComposer
             }
             $this->log('Checking out default branch - ' . $default_branch);
             $this->execCommand('git checkout ' . $default_branch, false);
+            // Also do a git checkout of the files, since we want them in the state they were on the default branch
+            $this->execCommand('git checkout .', false);
             // Re-do composer install to make output better, and to make the lock file actually be there for
             // consecutive updates, if it is a project without it.
             if (!$lock_file_contents) {
                 $this->execCommand('rm composer.lock');
             }
-            $this->doComposerInstall();
+            try {
+                $this->doComposerInstall();
+            } catch (\Throwable $e) {
+                $this->log('Rolling back state on the default branch was not successful. Subsequent updates may be affected');
+            }
         }
     }
 
