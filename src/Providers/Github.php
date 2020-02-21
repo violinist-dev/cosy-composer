@@ -22,7 +22,7 @@ class Github implements ProviderInterface
 
     public function authenticate($user, $token)
     {
-        $this->client->authenticate($user, null, Client::AUTH_URL_TOKEN);
+        $this->client->authenticate($user, null, Client::AUTH_HTTP_TOKEN);
     }
 
     public function authenticatePrivate($user, $token)
