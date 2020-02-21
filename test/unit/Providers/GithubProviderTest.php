@@ -14,7 +14,7 @@ class GithubProviderTest extends ProvidersTestBase
     protected $repoClass = Repo::class;
 
     protected $authenticateArguments = [
-        'testUser', null, Client::AUTH_URL_TOKEN,
+        'testUser', null, Client::AUTH_HTTP_TOKEN,
     ];
 
     protected $authenticatePrivateArguments = [
