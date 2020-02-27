@@ -155,7 +155,11 @@ class PublicGithubWrapper extends Github
         }
         $files_with_contents = [];
         foreach ($files as $file) {
-            $filename = "$tmp_dir/$file";
+            $subdir = '';
+            if ($this->project->getComposerJsonDir()) {
+                $subdir = $this->project->getComposerJsonDir() . '/';
+            }
+            $filename = "$tmp_dir/$subdir$file";
             if (!file_exists($filename)) {
                 continue;
             }
