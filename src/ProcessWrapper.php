@@ -31,7 +31,7 @@ class ProcessWrapper extends Process
 
     public function run($callback = null/*, array $env = array()*/)
     {
-        $this->ourExitCode = $this->executor->executeCommand($this->getCommandLine(), false, 600);
+        $this->ourExitCode = $this->executor->executeCommand($this->getCommandLine(), false, $this->getTimeout());
     }
 
     public function getExitCode()
