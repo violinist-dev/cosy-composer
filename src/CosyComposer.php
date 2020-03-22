@@ -912,6 +912,12 @@ class CosyComposer
                 $cosy_factory_wrapper = new ProcessFactoryWrapper();
                 $cosy_factory_wrapper->setExecutor($this->executer);
                 $cosy_logger->setLogger($this->getLogger());
+                // See if this package has any bundled updates.
+                $config = Config::createFromComposerData($cdata);
+                $bundled_packages = $config->getBundledPackagesForPackage($package_name);
+                if (!empty($bundled_packages)) {
+                    $updater->setBundledPackages($bundled_packages);
+                }
                 $updater->setLogger($cosy_logger);
                 $updater->setProcessFactory($cosy_factory_wrapper);
                 $updater->setWithUpdate($update_with_deps);
