@@ -502,9 +502,8 @@ class CosyComposer
                 break;
 
             case 'gitlab.com':
-                // @todo: Not sure what this is on gitlab yet.
                 $this->execCommand(
-                    sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->userToken),
+                    sprintf('composer config --auth gitlab-oauth.gitlab.com %s', $this->userToken),
                     false
                 );
                 $url = sprintf('https://oauth2:%s@gitlab.com/%s', $this->userToken, $this->slug->getSlug());
@@ -515,6 +514,10 @@ class CosyComposer
                 break;
 
             default:
+                $this->execCommand(
+                    sprintf('composer config --auth gitlab-oauth.%s %s', $this->userToken, $hostname),
+                    false
+                );
                 $url = sprintf('%s://oauth2:%s@%s:%d/%s', $this->urlArray['scheme'], $this->userToken, $hostname, $this->urlArray['port'], $this->slug->getSlug());
                 break;
         }
@@ -975,9 +978,15 @@ class CosyComposer
                 }
                 $this->log('Successfully ran command composer update for package ' . $package_name);
                 $this->commitFiles($package_name);
-                if ($hostname == 'github.com') {
+                if ($hostname === 'github.com') {
                     // This might have cleaned out the auth file, so we re-export it.
-                    $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->userToken));
+                    $this->execCommand(sprintf('composer config --auth github-oauth.github.com %s', $this->userToken));
+                }
+                if ($hostname === 'gitlab.com') {
+                    $this->execCommand(
+                        sprintf('composer config --auth gitlab-oauth.gitlab.com %s', $this->userToken),
+                        false
+                    );
                 }
                 $origin = 'fork';
                 if ($this->isPrivate) {
