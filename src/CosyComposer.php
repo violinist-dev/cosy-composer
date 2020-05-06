@@ -494,18 +494,10 @@ class CosyComposer
         }
         switch ($hostname) {
             case 'github.com':
-                $this->execCommand(
-                    sprintf('COMPOSER_ALLOW_SUPERUSER=1 composer config --auth github-oauth.github.com %s', $this->userToken),
-                    false
-                );
                 $url = sprintf('https://%s:%s@github.com/%s', $this->userToken, $this->githubPass, $this->slug->getSlug());
                 break;
 
             case 'gitlab.com':
-                $this->execCommand(
-                    sprintf('composer config --auth gitlab-oauth.gitlab.com %s', $this->userToken),
-                    false
-                );
                 $url = sprintf('https://oauth2:%s@gitlab.com/%s', $this->userToken, $this->slug->getSlug());
                 break;
 
@@ -514,10 +506,6 @@ class CosyComposer
                 break;
 
             default:
-                $this->execCommand(
-                    sprintf('composer config --auth gitlab-oauth.%s %s', $this->userToken, $hostname),
-                    false
-                );
                 $url = sprintf('%s://oauth2:%s@%s:%d/%s', $this->urlArray['scheme'], $this->userToken, $hostname, $this->urlArray['port'], $this->slug->getSlug());
                 break;
         }
@@ -538,6 +526,7 @@ class CosyComposer
         if (!$this->chdir($this->compserJsonDir)) {
             throw new ChdirException('Problem with changing dir to the clone dir.');
         }
+        $this->runAuthExport($hostname);
         $local_adapter = new Local($this->compserJsonDir);
         $this->composerGetter = new ComposerFileGetter($local_adapter);
         if (!$this->composerGetter->hasComposerFile()) {
@@ -831,6 +820,37 @@ class CosyComposer
         }
     }
 
+    protected function runAuthExport($hostname)
+    {
+
+        switch ($hostname) {
+            case 'github.com':
+                $this->execCommand(
+                    sprintf('composer config --auth github-oauth.github.com %s', $this->userToken),
+                    false
+                );
+                break;
+
+            case 'gitlab.com':
+                $this->execCommand(
+                    sprintf('composer config --auth gitlab-oauth.gitlab.com %s', $this->userToken),
+                    false
+                );
+                break;
+
+            case 'bitbucket.org':
+                // @todo: Find out?
+                break;
+
+            default:
+                $this->execCommand(
+                    sprintf('composer config --auth gitlab-oauth.%s %s', $this->userToken, $hostname),
+                    false
+                );
+                break;
+        }
+    }
+
     protected function handleIndividualUpdates($data, $lockdata, $cdata, $one_pr_per_dependency, $lock_file_contents, $prs_named, $default_base, $hostname, $default_branch, $alerts, $user_name, $user_repo)
     {
         foreach ($data as $item) {
@@ -978,16 +998,7 @@ class CosyComposer
                 }
                 $this->log('Successfully ran command composer update for package ' . $package_name);
                 $this->commitFiles($package_name);
-                if ($hostname === 'github.com') {
-                    // This might have cleaned out the auth file, so we re-export it.
-                    $this->execCommand(sprintf('composer config --auth github-oauth.github.com %s', $this->userToken));
-                }
-                if ($hostname === 'gitlab.com') {
-                    $this->execCommand(
-                        sprintf('composer config --auth gitlab-oauth.gitlab.com %s', $this->userToken),
-                        false
-                    );
-                }
+                $this->runAuthExport($hostname);
                 $origin = 'fork';
                 if ($this->isPrivate) {
                     $origin = 'origin';
