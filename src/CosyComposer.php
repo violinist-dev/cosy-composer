@@ -851,7 +851,10 @@ class CosyComposer
                 break;
 
             case 'bitbucket.org':
-                // @todo: Find out?
+                $this->execCommand(
+                    sprintf('composer config --auth http-basic.bitbucket.org x-token-auth %s', $token),
+                    false
+                );
                 break;
 
             default:
@@ -1281,7 +1284,7 @@ class CosyComposer
    */
     protected function doComposerInstall()
     {
-        // @todo: Should probably use composer install command programatically.
+        // @todo: Should probably use composer install command programmatically.
         $this->log('Running composer install');
         if ($code = $this->execCommand('COMPOSER_DISCARD_CHANGES=true COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n', false, 1200)) {
             // Other status code than 0.
