@@ -713,6 +713,16 @@ class CosyComposer
             // way, if a person configures this wrong, several parts will fail spectacularly anyway.
             $default_branch = $config->getDefaultBranch();
         }
+        // Now make sure we are actually on that branch.
+        if ($this->execCommand('git remote set-branches origin "*"')) {
+            throw new \Exception('There was an error trying to configure default branch');
+        }
+        if ($this->execCommand('git fetch origin ' . $default_branch)) {
+            throw new \Exception('There was an error trying to fetch default branch');
+        }
+        if ($this->execCommand('git checkout ' . $default_branch)) {
+            throw new \Exception('There was an error trying to switch to default branch');
+        }
         // Try to see if we have already dealt with this (i.e already have a branch for all the updates.
         $branch_user = $this->forkUser;
         if ($this->isPrivate) {
@@ -1147,7 +1157,9 @@ class CosyComposer
                 ]);
             }
             $this->log('Checking out default branch - ' . $default_branch);
-            $this->execCommand('git checkout ' . $default_branch, false);
+            if ($this->execCommand('git checkout ' . $default_branch, false)) {
+                throw new \Exception('There was an error trying to check out the default branch');
+            }
             // Also do a git checkout of the files, since we want them in the state they were on the default branch
             $this->execCommand('git checkout .', false);
             // Re-do composer install to make output better, and to make the lock file actually be there for
@@ -1204,7 +1216,7 @@ class CosyComposer
     private function cleanUp()
     {
         // Run composer install again, so we can get rid of newly installed updates for next run.
-        $this->execCommand('COMPOSER_DISCARD_CHANGES=true COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n', false, 1200);
+        $this->execCommand('composer install --no-ansi -n', false, 1200);
         $this->chdir('/tmp');
         $this->log('Cleaning up after update check.');
         $this->execCommand('rm -rf ' . $this->tmpDir, false, 300);
