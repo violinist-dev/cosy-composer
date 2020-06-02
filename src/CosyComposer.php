@@ -486,6 +486,9 @@ class CosyComposer
         if (!empty($_SERVER['queue_runner_revision'])) {
             $this->log(sprintf('Queue runner revision %s', $_SERVER['queue_runner_revision']));
         }
+        // Try to get the composer version as well.
+        $this->execCommand('composer --version');
+        $this->log($this->getLastStdOut());
         $this->log(sprintf('Starting update check for %s', $this->slug->getSlug()));
         $user_name = $this->slug->getUserName();
         $user_repo = $this->slug->getUserRepo();
@@ -1121,7 +1124,7 @@ class CosyComposer
                 // Not updated because of the composer command, not the
                 // restriction itself.
                 $command = sprintf('composer why-not %s:%s', $item->name, $item->latest);
-                $this->execCommand(sprintf('COMPOSER_ALLOW_SUPERUSER=1 %s', $command), false);
+                $this->execCommand(sprintf('%s', $command), false);
                 $this->log($this->getLastStdErr(), Message::COMMAND, [
                     'command' => $command,
                     'package' => $item->name,
@@ -1314,11 +1317,11 @@ class CosyComposer
     {
         // @todo: Should probably use composer install command programmatically.
         $this->log('Running composer install');
-        $run_scipts_suffix = '';
+        $run_scripts_suffix = '';
         if (!$config->shouldRunScripts()) {
-            $run_scipts_suffix = ' --no-scripts';
+            $run_scripts_suffix = ' --no-scripts';
         }
-        if ($code = $this->execCommand('COMPOSER_DISCARD_CHANGES=true COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi -n' . $run_scipts_suffix, false, 1200)) {
+        if ($code = $this->execCommand('composer install --no-ansi -n' . $run_scripts_suffix, false, 1200)) {
             // Other status code than 0.
             $this->log($this->getLastStdOut(), Message::COMMAND);
             $this->log($this->getLastStdErr());
@@ -1332,9 +1335,14 @@ class CosyComposer
         $this->log('composer install completed successfully');
     }
 
-  /**
-   * Changes to a different directory.
-   */
+    private function getComposerPath()
+    {
+        return __DIR__ . '/../../../bin/composer';
+    }
+
+   /**
+    * Changes to a different directory.
+    */
     private function chdir($dir)
     {
         if (!file_exists($dir)) {
