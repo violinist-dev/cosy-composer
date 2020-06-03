@@ -31,10 +31,12 @@ class ProcessWrapper extends Process
 
     public function run($callback = null/*, array $env = array()*/)
     {
-        $env = $this->getEnv();
-        if (!$env) {
+        if (empty($env)) {
             $env = [];
         }
+        $env = array_merge($this->getEnv() ? $this->getEnv() : [], [
+            'PATH' => __DIR__ . '/../../../../vendor/bin' . ':' . getenv('PATH'),
+        ]);
         $this->ourExitCode = $this->executor->executeCommand($this->getCommandLine(), false, $this->getTimeout(), $env);
         return $this->ourExitCode;
     }
