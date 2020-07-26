@@ -1370,11 +1370,6 @@ class CosyComposer
         $this->log('composer install completed successfully');
     }
 
-    private function getComposerPath()
-    {
-        return __DIR__ . '/../../../bin/composer';
-    }
-
    /**
     * Changes to a different directory.
     */
