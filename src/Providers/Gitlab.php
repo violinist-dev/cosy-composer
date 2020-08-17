@@ -136,7 +136,7 @@ class Gitlab implements ProviderInterface
             'source_branch' => $params['head'],
             'target_branch' => $params['base'],
             'title' => $params['title'],
-            'assignee_id' => $params['assignees'],
+            'assignee_ids' => $params['assignees'],
             'target_project_id' => null,
             'description' => $params['body'],
         ];
