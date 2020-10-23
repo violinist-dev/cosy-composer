@@ -488,6 +488,7 @@ class CosyComposer
         }
         // Try to get the php version as well.
         $this->execCommand('php --version');
+        $this->log($this->getLastStdOut());
         // Try to get the composer version as well.
         $this->execCommand('composer --version');
         $this->log($this->getLastStdOut());
